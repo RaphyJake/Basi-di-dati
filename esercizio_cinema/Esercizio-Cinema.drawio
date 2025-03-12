@@ -1023,7 +1023,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="HIMUeJtdiO78zuvZQd-g" name="Page-4">
-    <mxGraphModel dx="682" dy="423" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="969" dy="601" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1259,12 +1259,6 @@
         <mxCell id="RbC3UA0efnElvZtwd4mH-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=oval;endFill=0;" edge="1" parent="1" source="FvkAKlchX_mRfrSd4GCf-54" target="FvkAKlchX_mRfrSd4GCf-70">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="cChi0JPCN77l710h_rvQ-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1730.0000000000002" y="426" as="sourcePoint" />
-            <mxPoint x="1805.0000000000002" y="393" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="cChi0JPCN77l710h_rvQ-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=oval;endFill=0;" edge="1" parent="1" source="FvkAKlchX_mRfrSd4GCf-54" target="cChi0JPCN77l710h_rvQ-9">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
@@ -1416,6 +1410,12 @@
         </mxCell>
         <mxCell id="cChi0JPCN77l710h_rvQ-52" value="(0,1)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="1130" y="530" width="30" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="cChi0JPCN77l710h_rvQ-55" value="voto: { x appartiene a N | x &amp;lt;= 5 }" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="74.94" y="780" width="265.06" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cChi0JPCN77l710h_rvQ-56" value="dimensione schermo: { piccolo, medio, grande}" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="99.94" y="810" width="290.06" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
