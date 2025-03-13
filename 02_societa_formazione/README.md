@@ -12,15 +12,15 @@ dom
 ## Dizionario delle entità
 |Nome|Descrizione|Attributi|Identificatori|
 |---|---|---|---|
-|nome|descr|attr1, attr2|identificatore1, identificatore2|
-
+|corsi|Contiene i corsi disponibili a catalogo|codice, titolo, durata, area|codice|
+|edizioni|Contiene le edizioni programmate dei corsi|data inizio, data fine, orario inizio|{corsi, data inizio, data fine, orario inizio, luogo}|
 
 ## Dizionario delle associazioni
 |Nome|Descrizione|Attributi|Entità collegate|
 |---|---|---|---|
-|nome|descr|attr1, attr2|entita1, entita2|
+|fanno parte di|I corsi possono far parte di 0 o più edizioni|-|corsi, edizioni|
 
 ## Gerarchia di generalizzazione
 |Entità padre|Entità figlie|Tipologia|
 |---|---|---|
-|padre|figlie|tipo|
+|-|-|-|
