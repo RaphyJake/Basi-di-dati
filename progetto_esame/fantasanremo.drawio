@@ -185,7 +185,7 @@
           <mxGeometry x="900" y="430" width="60" height="20" as="geometry" />
         </mxCell>
         <mxCell id="RozXBAHihKl0km1OtIzw-61" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Nota&lt;/h1&gt;&lt;div&gt;Potevo evitarmi questo sbatti, al momento l&#39;ho impostato.&lt;/div&gt;&lt;div&gt;Musicisti per me sono tutte le persone che lavorano con la musica, se trovate un&#39;entità che meglio descrive tutti loro, cambiamola&lt;/div&gt;&lt;div&gt;Non ho introdotto gerarchie perchè un musicista potrebbe essere direttore d&#39;orchestra, autore, ecc... ma non ho trovato informazioni aggiuntive per ciascuna specializzazione.&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Aggiunta nota da ER 22/03/2025.&lt;/div&gt;&lt;div&gt;Secondo me come concetto ci sta, fa parte della direzione del festival e quindi come tale la lascerei&lt;/div&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;align=right;" parent="1" vertex="1">
-          <mxGeometry x="1390" y="-290" width="360" height="360" as="geometry" />
+          <mxGeometry x="1140" y="-120" width="360" height="360" as="geometry" />
         </mxCell>
         <mxCell id="RozXBAHihKl0km1OtIzw-64" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;per Ettore/Ugo&lt;/h1&gt;&lt;div&gt;Non ho messo giuria perchè non la possiamo conoscere (intanto il voto è anonimo). Sicuramente lato applicativo ci sarà un controllo che i voti saranno limitati per SMS inviato e per un sistema che non conosco utilizzato dalla giuria stampa/radio, ecc..&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Ho inserito l&#39;entità voti per memorizzarli&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Non ho messo la tabella con le serate, ma ho buttato tutto nelle esibizioni (intanto metterei solo la data invece di un codice che la identifica). Se invece riteniamo che per ogni serata vogliamo avere più dettagli la possiamo aggiungere! Ditemi voi&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Tipo voto intendo giuria oppure pubblico, definiamo poi il dominio varchar con una lettera (i vincoli di limite massimo vengono gestiti lato applicativo tramite qualcosa che non so...sessione?&lt;/div&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="40" y="1100" width="640" height="253" as="geometry" />
@@ -668,12 +668,12 @@
         </mxCell>
         <mxCell id="HswMagJ_g5aPzKQwqyJ4-35" value="" style="endArrow=oval;html=1;rounded=0;endFill=0;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="1460" y="-405" as="sourcePoint" />
-            <mxPoint x="1540" y="-405" as="targetPoint" />
+            <mxPoint x="1460" y="-425" as="sourcePoint" />
+            <mxPoint x="1540" y="-425" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="HswMagJ_g5aPzKQwqyJ4-36" value="IsTitolare" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;" vertex="1" parent="1">
-          <mxGeometry x="1550" y="-425" width="90" height="30" as="geometry" />
+          <mxGeometry x="1550" y="-439" width="90" height="30" as="geometry" />
         </mxCell>
         <mxCell id="HswMagJ_g5aPzKQwqyJ4-38" value="(1,n)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="1">
           <mxGeometry x="660" y="-360" as="geometry">
@@ -684,6 +684,57 @@
           <mxGeometry x="60" y="-60" as="geometry">
             <mxPoint x="25" y="2" as="offset" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="YS-OXuYIb99MSW1FlFO4-1" value="Sono&lt;div&gt;valutati&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1690" y="-175" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="YS-OXuYIb99MSW1FlFO4-2" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1460" y="-390" as="sourcePoint" />
+            <mxPoint x="1730" y="-390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="YS-OXuYIb99MSW1FlFO4-3" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1728" y="-175" as="sourcePoint" />
+            <mxPoint x="1728" y="-390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="YS-OXuYIb99MSW1FlFO4-4" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1730" y="510" as="sourcePoint" />
+            <mxPoint x="1730" y="-95" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="YS-OXuYIb99MSW1FlFO4-5" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="810" y="510" as="sourcePoint" />
+            <mxPoint x="810" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="YS-OXuYIb99MSW1FlFO4-6" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="810" y="510" as="sourcePoint" />
+            <mxPoint x="1730" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="YS-OXuYIb99MSW1FlFO4-7" value="" style="endArrow=oval;html=1;rounded=0;endFill=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1753" y="-150" as="sourcePoint" />
+            <mxPoint x="1780" y="-180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="YS-OXuYIb99MSW1FlFO4-8" value="Bonus" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;" vertex="1" parent="1">
+          <mxGeometry x="1790" y="-200" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="YS-OXuYIb99MSW1FlFO4-9" value="" style="endArrow=oval;html=1;rounded=0;endFill=0;" edge="1" parent="1" source="YS-OXuYIb99MSW1FlFO4-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1670" y="-160" as="sourcePoint" />
+            <mxPoint x="1697" y="-190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="YS-OXuYIb99MSW1FlFO4-10" value="Malus" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="-220" width="90" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
