@@ -23,12 +23,12 @@ Il proprietario e gli amministratori hanno il compito di gestire la lega e appro
 * V3: una squadra, per ciascuna serata, può avere al massimo 7 partecipanti alla formazione (se durante la giornata la formazione cambia più volte nella fascia oraria concessa, sarà sovrascritta ed aggiornata la data di modifica). 
 * V4: per ciascuna data, per ciascuna squadra potremo avere al massimo 4 titolari, 2 riserve, 1 capitano all'interno della formazione
 * V4: se la tipologia di lega è pubblica il tipo approvazione dell'associazione partecipano è valorizzato ad APPROVATA
+* V5: se l'artista ha il nome gruppo allora non può scrivere, comporre e dirigere brani
 
 ## Dettagli a livello applicativo
 * la squadra può essere modificata entro un determinato termine (a livello applicativo)
 * la squadra, durante il festival, può essere modificata in determinate fasce orarie (a livello applicativo)
 * nell'entità delle formazioni, ogni serata del festival prevede che vengano replicati i dati della formazione della squadra (la data di modifica viene aggiornata solo in caso di modifiche)
-* nei cantanti consideriamo anche i gruppi musicali?? come gestirlo?
 
 ## Domini
 * (tipo, voti) = tipo_voto
@@ -49,7 +49,8 @@ Il proprietario e gli amministratori hanno il compito di gestire la lega e appro
 ## Dizionario delle entità
 |Nome|Descrizione|Attributi|Identificatori|
 |---|---|---|---|
-|artisti|gli artisti sono tutti coloro che lavorano per l'arte (compositori, scrittori, cantanti, direttori d'orchestra, ecc...)|nome, cognome, data nascita, luogo nascita| {nome, cognome, data nascita}|
+|artisti|gli artisti sono tutti coloro che lavorano per l'arte (compositori, scrittori, cantanti, direttori d'orchestra, ecc...)|nome, cognome, data nascita, luogo nascita| {nome, cognome, data nascita} {nome gruppo}|
+|cantanti|specializzazione di artista|biografia, genere musicale, edizioni passate, costo in baudi| ereditato|
 |brani|tutti i brani che possono essere eseguiti durante le serate|titolo, genere musicale, durata|{artista scrittore, titolo}|
 |esibizioni|informazioni relative alle esibizioni|orario, ordine di esibizione| {cantante, brano, serata}|
 |voti|informazioni relative al voto del pubblico/giuria|codVoto, tipo, data/ora|codVoto|
