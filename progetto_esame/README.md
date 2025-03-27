@@ -1,6 +1,6 @@
 # Progetto Fantasanremo - progettazione concettuale
 
-# Testo disanbiguato
+# Testo disambiguato
 
 Si richiede la progettazione e realizzazione di una base di dati a supporto della piattaforma social di FantaSanremo, un gioco di fantasia ispirato al Festival di Sanremo.
 
@@ -19,11 +19,15 @@ Il proprietario e gli amministratori hanno il compito di gestire la lega e appro
 
 ## Vincoli
 * V1: un utente con le proprie squadre non può partecipare a più di 25 leghe
-* V2: ogni utente, per ciascuna squadra, ha a disposizione 100 baudi
-* V3: una squadra, per ciascun giorno, può avere al massimo 7 partecipanti alla formazione (se durante la giornata la formazione cambia più volte nella fascia oraria concessa, sarà sovrascritta). 
-* V4: per ciascuna data, per ciascuna squadra potremo avere al massimo 4 titolari, 2 riserve, 1 capitano
-* V5: la squadra può essere modificata entro un determinato termine (a livello applicativo)
-* V6: la squadra, durante il festival, può essere modificata in determinate fasce orarie (a livello applicativo)
+* V2: ogni utente, per ciascuna formazione di una squadra, ha a disposizione 100 baudi
+* V3: una squadra, per ciascuna serata, può avere al massimo 7 partecipanti alla formazione (se durante la giornata la formazione cambia più volte nella fascia oraria concessa, sarà sovrascritta ed aggiornata la data di modifica). 
+* V4: per ciascuna data, per ciascuna squadra potremo avere al massimo 4 titolari, 2 riserve, 1 capitano all'interno della formazione
+* V4: se la tipologia di lega è pubblica il tipo approvazione dell'associazione partecipano è valorizzato ad APPROVATA
+
+## Dettagli a livello applicativo
+* la squadra può essere modificata entro un determinato termine (a livello applicativo)
+* la squadra, durante il festival, può essere modificata in determinate fasce orarie (a livello applicativo)
+* nell'entità delle formazioni, ogni serata del festival prevede che vengano replicati i dati della formazione della squadra (la data di modifica viene aggiornata solo in caso di modifiche)
 
 ## Domini
 * (tipo, voti) = tipo_voto
@@ -32,8 +36,10 @@ Il proprietario e gli amministratori hanno il compito di gestire la lega e appro
     * tipo_voto: {pubblica, privata, segreta}
 * (username, utenti) = stringa (con @ perchè corrisponde all'indirizzo email dell'utente}
 * (proprietario, gestiscono) = bool
+* (stato approvazione, partecipano) = tipo_approvazione
+    * tipo_approvazione = {IN_APPROVAZIONE, RIFIUTATA, APPROVATA}
 * (tipo, bonus malus) = tipo_bonusmalus
-    * tipo_bonusmalus = {MI AIUTATE A CENSIRLI?}
+    * tipo_bonusmalus = {extra,standard}
 * (valore, bonus malus) = real (può essere negativo per i malus)
 * (ruolo, compone) = ruolo_compone
     * ruolo_compone = {capitano, titolare, riserva}
@@ -44,32 +50,33 @@ Il proprietario e gli amministratori hanno il compito di gestire la lega e appro
 |---|---|---|---|
 |artisti|gli artisti sono tutti coloro che lavorano per l'arte (compositori, scrittori, cantanti, direttori d'orchestra, ecc...)|nome, cognome, data nascita, luogo nascita| {nome, cognome, data nascita}|
 |brani|tutti i brani che possono essere eseguiti durante le serate|titolo, genere musicale, durata|{artista scrittore, titolo}|
-|esibizioni|informazioni relative alle esibizioni| orario, ordine di esibizione| {cantante, brano, serata}|
-|voti|informazioni relative al voto del pubblico, giuria|codVoto, voto, tipo, data/ora|codVoto|
+|esibizioni|informazioni relative alle esibizioni|orario, ordine di esibizione| {cantante, brano, serata}|
+|voti|informazioni relative al voto del pubblico/giuria|codVoto, voto, tipo, data/ora|codVoto|
 |serata|informazioni delle serate, esiste una serata speciale dedicata agli "extra punteggi" senza alcuna data|nome, data|{nome}|
 |utenti|informazioni di base degli utenti iscritti al FantaSanremo|username, nome, cognome|username|
 |leghe|informazioni relative alle leghe|codLega, nome, tipo|codLega|
 |squadre|informazioni relative alle squadre create dai partecipanti al FantaSanremo|codSquadra, nome|codSquadra|
-|formazione|le formazioni delle squadre, modificabili ogni giorno risiedono in questa entità|data| {squadra, cantante, data}|
+|formazione|le formazioni delle squadre, modificabili ogni giorno risiedono in questa entità|data modifica| {squadra, cantante, serata}|
 |bonus malus|descrizione di tutti i bonus-malus previsti dal regolamento|codBonusMalus, descrizione, valore, tipo|{codBonusMalus}|
 
 
 ## Dizionario delle associazioni
 |Nome|Descrizione|Attributi|Entità collegate|
 |---|---|---|---|
-|gestiscono|Gli utenti si occupano di creare/gestire le leghe. Se sono proprietari l'attributo proprietario è "vero" altrimenti vengono considerati gli amministratori delegati di quelle leghe|proprietario|utenti, leghe|codLega
-|partecipano|Le squadre possono partecipare a delle leghe||squadre, leghe|codLega
-|possiedono|Gli utenti possiedono le squadre||utenti,squadre|informazioni|
-|formate da| Le squadre sono formate da una formazione| |squadre, formazioni|
-|compone|Le formazioni hanno dei cantanti|ruolo| cantanti, formazioni|
-|guadagna| Un cantante in una serata guadagna dei bonus| cantanti, bonus-malus, serate|nome
-|scritto| Un artista scrive un brano||artisti, brano|
-|composto| Un artista compone un brano|artisti, brano|
-|diretto| Un artista dirige un brano| artisti, brano|
-|si esibiscono| Un artista si esibisce in un'esibizizione||cantanti, esibizioni|
-|esecuzione| Un bravo viene eseguito in un'esibizione| brano, esibizioni|
-|sono giudicate| Un'esibizionie è giudicata da voti espressi da pubblico/giuria|
-|si svolge| Un'esibizione si svolge in una serata|
+|gestiscono|Gli utenti si occupano di creare/gestire le leghe. Se sono proprietari l'attributo proprietario è "vero" altrimenti vengono considerati come amministratori delegati di quelle leghe|proprietario|utenti, leghe|
+|partecipano|Le squadre possono partecipare a delle leghe|stato approvazione|squadre, leghe|
+|possiedono|Gli utenti possiedono le squadre||utenti, squadre|
+|schierano|Le squadre schierano formazioni| |squadre, formazioni|
+|fa parte di|I cantanti fanno parte di una formazione|ruolo|cantanti, formazioni|
+|appartengono|Le formazioni appartengono alle serate||formazioni, serate|
+|ottengono|Le formazioni ottengono dei bonus/malus| valore effetivo| bonus-malus, formazioni|
+|scritto|Un artista scrive un brano||artisti, brani|
+|composto|Un artista compone un brano|artisti, brani|
+|diretto|Un artista dirige un brano| artisti, brani|
+|si esibiscono| Un cantante si esibisce in un'esibizizione||cantanti, esibizioni|
+|esecuzione|Un bravo viene eseguito in un'esibizione| brano, esibizioni|
+|sono giudicate| Un'esibizionie è giudicata da voti espressi da pubblico/giuria||esibizioni,voti|
+|si svolge| Un'esibizione si svolge in una serata||serate, esibizioni|
 
 ## Gerarchia di generalizzazione
 |Entità padre|Entità figlie|Tipologia|Attributi aggiuntivi|
