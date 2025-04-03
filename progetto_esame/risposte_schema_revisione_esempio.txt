@@ -1,0 +1,12 @@
+## Correttezza sintattica: lo schema non è corretto sintatticamente perchè non indica secondo lo standard quali sono le chiavi primarie
+
+## Completezza sintattica: sono presenti i vincoli di cardinalità.
+Non sono presenti gli identificatori per partecipante ed area. C'è un errore di sintassi (forse) in quanto i corsi devono essere identificati da un codice: sono le edizioni che possono essere identificate da un corso (insieme a qualche altro attributo:dataInizio e dataFine). I tipi delle gerarchie sono ok.
+
+## Correttezza semantica - indiduazione di entità ed associazioni: Le entità principali sono state evidenziate. Non sono state rappresentate correttamente le associazioni: i partecipanti partecipano ad un'edizione del corso e non al corso. I docenti non insegnano un corso, ma un'edizione del corso. I docenti invece possono essere abilitati o meno ad insegnare ad un corso. I partecipanti giudicano le edizioni dei corsi (non i corsi).
+
+## Completezza dello schema: non possiamo sapere quali sono i partecipanti dell'edizione di un corso (l'associazione è errata). Se l'associazione insegnamento si intende come "docente abilitato ad insegnare un corso" può andare bene. In questo non è presente l'informazione di quale docente insegna quale edizione del corso.
+
+## Vincoli non specificabili nello schema (correttezza e completezza): non si evince che il giudizio dell'edizione del corso è obbligatorio per i corsi conclusi da più di un mese
+
+## Leggibilità: lo schema è leggibile, ma è privo di documentazione a corredo. Non sono specificati i domini di alcuni attributi come il livello dei dipendenti, la duranta dei corsi, la sede di svolgimento dell'edizione.
