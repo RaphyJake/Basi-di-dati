@@ -1,4 +1,4 @@
---Gruppo Molinas Alessio, Romano Ettore, Botto Ugo
+--Gruppo Botto Ugo, Molinas Alessio, Romano Ettore
 CREATE SCHEMA corsi;
 set search_path to corsi;
 
@@ -17,14 +17,23 @@ INSERT INTO Professori VALUES (54662, 'catania','barbara', 12000.78, FALSE);
 INSERT INTO Professori VALUES (54663, 'chiola','giovanni');
 
 INSERT INTO Professori VALUES (54664);
-manca errore
+--NotNullViolation: null value in column "cognome" of relation "professori" violates not-null constraint
+--DETAIL:  Failing row contains (54664, null, null, 15000.00, f).
+
+
 
 INSERT INTO Professori VALUES (54665, 'chiola','giovanni'); -- errore per (cognome,nome) duplicato
--- UniqueViolation: duplicate key value violates unique constraint "professori_nome_cognome_key" 
+--  UniqueViolation: duplicate key value violates unique constraint "professori_nome_cognome_key"
+--DETAIL:  Key (nome, cognome)=(giovanni, chiola) already exists.
+
+
 
 
 INSERT INTO Professori VALUES (54661, 'camminata','alessio', 123456.78, FALSE); -- errore per chiave duplicata
--- UniqueViolation: duplicate key value violates unique constraint "professori_pkey" 
+--  UniqueViolation: duplicate key value violates unique constraint "professori_pkey"
+--DETAIL:  Key (id)=(54661) already exists.
+
+
 
 INSERT INTO Professori VALUES (54664, 'camminata','alessio',10000,FALSE);
 
@@ -52,6 +61,6 @@ SELECT * FROM  Corsi where Professori_Id=64661;
 -- Update eseguito
 
 -- TEST 2
-DELETE FROM Professori WHERE id = 54661;
-SELECT * FROM  Professori where Id=64661;
--- Cancellazione non avvenuta
+DELETE FROM Professori WHERE id = 64661;
+-- ForeignKeyViolation: update or delete on table "professori" violates foreign key constraint "corsi_professori_id_fkey" on table "corsi"
+--DETAIL:  Key (id)=(64661) is still referenced from table "corsi".
