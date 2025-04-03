@@ -16,8 +16,10 @@ INSERT INTO Professori VALUES (54661, 'guerrini','giovanna', 123456.78, FALSE);
 INSERT INTO Professori VALUES (54662, 'catania','barbara', 12000.78, FALSE); 
 INSERT INTO Professori VALUES (54663, 'chiola','giovanni');
 
-set search_path to corsi;
-INSERT INTO Professori VALUES (54664, 'chiola','giovanni'); -- errore per (cognome,nome) duplicato
+INSERT INTO Professori VALUES (54664);
+manca errore
+
+INSERT INTO Professori VALUES (54665, 'chiola','giovanni'); -- errore per (cognome,nome) duplicato
 -- UniqueViolation: duplicate key value violates unique constraint "professori_nome_cognome_key" 
 
 

@@ -1,12 +1,27 @@
-## Correttezza sintattica: lo schema non è corretto sintatticamente perchè non indica secondo lo standard quali sono le chiavi primarie
+## 1 Correttezza sintattica: lo schema è corretto sintatticamente?
+Lo schema non è corretto sintatticamente perchè non indica secondo lo standard quali sono le chiavi primarie (e gli identificatori esterni (vedi edizione/corso)
+Voto 2/5
 
-## Completezza sintattica: sono presenti i vincoli di cardinalità.
+## 2 Completezza sintattica: lo schema contiene l'indicazione di vincoli di cardinalità, identificatori, tipi delle gerachie?
+Sono presenti i vincoli di cardinalità.
 Non sono presenti gli identificatori per partecipante ed area. C'è un errore di sintassi (forse) in quanto i corsi devono essere identificati da un codice: sono le edizioni che possono essere identificate da un corso (insieme a qualche altro attributo:dataInizio e dataFine). I tipi delle gerarchie sono ok.
+Voto 3/5
 
-## Correttezza semantica - indiduazione di entità ed associazioni: Le entità principali sono state evidenziate. Non sono state rappresentate correttamente le associazioni: i partecipanti partecipano ad un'edizione del corso e non al corso. I docenti non insegnano un corso, ma un'edizione del corso. I docenti invece possono essere abilitati o meno ad insegnare ad un corso. I partecipanti giudicano le edizioni dei corsi (non i corsi).
+## 3 Correttezza semantica - identificazione di entità e associazioni: Lo schema identifica correttamente le principali entità e associazioni relative al dominio?
+Le entità principali sono state evidenziate. Non sono state rappresentate correttamente le associazioni: i partecipanti partecipano ad un'edizione del corso e non al corso. I docenti non insegnano un corso, ma un'edizione del corso. I docenti invece possono essere abilitati o meno ad insegnare ad un corso. I partecipanti giudicano le edizioni dei corsi (non i corsi).
 
-## Completezza dello schema: non possiamo sapere quali sono i partecipanti dell'edizione di un corso (l'associazione è errata). Se l'associazione insegnamento si intende come "docente abilitato ad insegnare un corso" può andare bene. In questo non è presente l'informazione di quale docente insegna quale edizione del corso.
+Voto 3/5
+## 4 Correttezza semantica - cardinalità e identificatori. Le cardinalità e gli identificatori indicati sono corretti?
+Gli identificatori dell'entità "area" e entità "partecipante" non sono presenti. Per quanto riguarda il corso la chiave canditata ad essere primaria è codice (ma non è stata specificata).
+Voto 2/5
 
-## Vincoli non specificabili nello schema (correttezza e completezza): non si evince che il giudizio dell'edizione del corso è obbligatorio per i corsi conclusi da più di un mese
+## 5 Completezza dello schema: non possiamo sapere quali sono i partecipanti dell'edizione di un corso (l'associazione è errata). Se l'associazione insegnamento si intende come "docente abilitato ad insegnare un corso" può andare bene. In questo non è presente l'informazione di quale docente insegna quale edizione del corso.
+Voto 3/5
+## 6 Vincoli non specificabili nello schema (correttezza e completezza): non si evince che il giudizio dell'edizione del corso è obbligatorio per i corsi conclusi da più di un mese
+Voto 0/5
 
-## Leggibilità: lo schema è leggibile, ma è privo di documentazione a corredo. Non sono specificati i domini di alcuni attributi come il livello dei dipendenti, la duranta dei corsi, la sede di svolgimento dell'edizione.
+## 7 Leggibilità: lo schema è leggibile, ma è privo di documentazione a corredo. Non sono specificati i domini di alcuni attributi come il livello dei dipendenti, la duranta dei corsi, la sede di svolgimento dell'edizione.
+Voto 3/5
+
+Feedback complessivo per l'autore
+Lo schema EER non è documentato sufficientemente: non sono presenti i vincoli, i domini degli attributi, alcuni attributi non hanno abbastanza dettagli (il nome contiene il nome o si intende anche il cognome?, il luogo cosa contiene?, il luogo di nascita cosa contiene?). Lo schema non descrive ciò che viene richiesto dalle specifiche disambiguate (presenti su AulaWeb). Bisogna rivedere la teoria per quanto riguarda come indicare le chiavi primarie e le chiavi esterne.
