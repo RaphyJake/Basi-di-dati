@@ -106,7 +106,9 @@ DELETE FROM Professori WHERE id = 54661;
 ---- 4.1 Modificare la tabella Corsi aggiungendo un attributo opzionale MutuaDa alfanumerico di 10 caratteri che costituisce una chiave esterna su Corsi e rappresenta l’identificatore del corso da cui il corso è eventualmente mutuato. Specificare il comportamento che si ritiene più opportuno in caso di violazioni dell’integrità referenziale. Inserire una nuova tupla corrispondente al corso di Basi di dati per Smid che mutua da Basi di dati per Informatica.
 
 -- Aggiungo la colonna MutuaDa alla tabella Corsi (chiave esterna con Id della tabella stessa): l'update del record riferito aggiorna il valore nel record referente. Se viene cancellato il record riferito, cancello l'informazione nel record referente.
-ALTER TABLE Corsi ADD COLUMN MutuaDa CHAR(10) DEFAULT NULL, REFERENCES Corsi ON UPDATE CASCADE ON DELETE SET DEFAULT;
+ALTER TABLE Corsi ADD COLUMN MutuaDa CHAR(10) DEFAULT NULL;
+ALTER TABLE Corsi ADD FOREIGN KEY (MutuaDa) REFERENCES Corsi ON UPDATE CASCADE ON DELETE SET DEFAULT;
+
 INSERT INTO Corsi VALUES ('BASDATSMID','SMID','BASI DI DATI per SMID', 54661,TRUE, 'BASDAT1_25');
 
 ---- 4.2 Modificare la tabella Professori modificando la colonna Stipendio in modo che possa contenere dati con 9 cifre totali (di cui 2 decimali).
