@@ -48,7 +48,9 @@ UNION ALL
 Select Nome, Cognome, 'professore' FROM Professori;
 
 /***** Ho scritto alla proff per chiarimenti *****/
-/**** 2. gli studenti di informatica che hanno passato basi di dati 1 ma non interfacce grafiche nel giugno del 2010.  ****/
+/**** 2. gli studenti di informatica che hanno passato basi di dati 1 ma non interfacce grafiche nel giugno del 2010.  
+nella nostra interpretazione, non avere passato IG  include anche non averlo proprio sostenuto (o essersi ritirati) non necessariamente avere una registrazione con voto < 18
+****/
 set search_path to 'unicorsi';
 
 SELECT s.Matricola FROM Studenti s
@@ -56,8 +58,8 @@ JOIN CorsiDiLaurea cdl ON s.CorsoDiLaurea = cdl.id
 WHERE cdl.Denominazione = 'Informatica'
 AND s.Matricola IN (SELECT e.studente FROM Esami e JOIN Corsi c ON e.corso = c.id
 WHERE e.Data >='2010-06-01' and e.Data <='2010-06-30' and c.Denominazione = 'Basi Di Dati 1' and e.voto >=18)
-AND s.Matricola IN (SELECT e.studente FROM Esami e JOIN Corsi c ON e.corso = c.id
-WHERE e.Data >='2010-06-01' and e.Data <='2010-06-30' and c.Denominazione = 'Interfacce Grafiche' and e.voto <18)
+AND s.Matricola NOT IN (SELECT e.studente FROM Esami e JOIN Corsi c ON e.corso = c.id
+WHERE e.Data >='2010-06-01' and e.Data <='2010-06-30' and c.Denominazione = 'Interfacce Grafiche' and e.voto >=18)
 
 /**** 3. gli studenti di informatica che hanno passato sia basi di dati 1 che interfacce grafiche nel giugno del 2010. ****/
 set search_path to 'unicorsi';
