@@ -82,7 +82,7 @@ WHERE e.Data >='2010-06-01' AND e.Data <='2010-06-30' AND c.Denominazione = 'Int
 
 /**** 1. la matricola dello studente ‘Mario Rossi’, iscritto nell’anno accademico 2009/2010; ****/
 set search_path to 'unicorsi';
-select matricola from Studenti WHERE Nome ='Mario' AND Cognome = 'Rossi' AND iscrizione = 2009;
+SELECT matricola from Studenti WHERE Nome ='Mario' AND Cognome = 'Rossi' AND iscrizione = 2009;
 
 /**** 2. l’elenco alfabetico dei comuni, diversi da Genova, in cui risiedono studenti (senza duplicati); ****/
 set search_path to 'unicorsi';
@@ -112,7 +112,7 @@ set search_path to 'unicorsi';
 SELECT c.Denominazione, c.CorsoDiLaurea, p.Cognome 
 FROM Professori p, Corsi c
 WHERE p.Id=c.Professore and c.Attivato IS TRUE
-order by c.CorsoDiLaurea, c.Denominazione
+ORDER BY c.CorsoDiLaurea, c.Denominazione
 
 /**** 3. l’elenco dei corsi attivi nell’anno accademico corrente presso il corso di laurea di informatica, il cui nome abbia, come terza lettera, la lettera ‘s’ ; ****/
 set search_path to 'unicorsi';
@@ -144,7 +144,7 @@ AND cdl.Denominazione = 'Matematica';
 set search_path to 'unicorsi';
 SELECT Nome, Cognome FROM Studenti
 UNION
-Select Nome, Cognome FROM Professori;
+SELECT Nome, Cognome FROM Professori;
 
 /**** 2. i professori  che hanno omonimi tra gli studenti (cioè studenti con lo stesso nome e cognome dei professori). ****/
 set search_path to 'unicorsi';
