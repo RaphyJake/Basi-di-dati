@@ -19,7 +19,7 @@ SELECT matricola, cognome, nome FROM Studenti WHERE Residenza IN ('Genova','La S
 ---------------------------------------------
 /**** 1. la matricola degli studenti laureatisi in informatica prima del novembre 2009; ****/
 set search_path to 'unicorsi';
-SELECT Matricola FROM Studenti JOIN CorsiDiLaurea ON CorsoDiLaurea = CorsiDiLaurea.Id where Laurea < '01-11-2009' and Denominazione = 'Informatica'
+SELECT Matricola FROM Studenti, CorsiDiLaurea where CorsoDiLaurea = CorsiDiLaurea.Id  and Laurea < '01-11-2009' and Denominazione = 'Informatica'
 
 /**** 2. l’elenco in ordine alfabetico dei nominativi degli studenti, con, per ognuno, il cognome del relatore associato; ****/
 set search_path to 'unicorsi';
@@ -47,6 +47,8 @@ SELECT Nome, Cognome, 'studente' FROM Studenti
 UNION ALL
 Select Nome, Cognome, 'professore' FROM Professori;
 
+
+---------------DA RIVEDERE
 /***** Ho scritto alla proff per chiarimenti *****/
 /**** 2. gli studenti di informatica che hanno passato basi di dati 1 ma non interfacce grafiche nel giugno del 2010.  
 nella nostra interpretazione, non avere passato IG  include anche non averlo proprio sostenuto (o essersi ritirati) non necessariamente avere una registrazione con voto < 18
@@ -71,6 +73,10 @@ WHERE e.Data >='2010-06-01' AND e.Data <='2010-06-30' AND c.Denominazione = 'Bas
 AND s.Matricola IN (SELECT e.studente FROM Esami e JOIN Corsi c ON e.corso = c.id
 WHERE e.Data >='2010-06-01' AND e.Data <='2010-06-30' AND c.Denominazione = 'Interfacce Grafiche' AND e.voto >=18)
 
+
+
+
+
 /**** Ulteriori attività di laboratorio su SQL - query SPJ e operazioni insiemistiche (se volete esercitarvi ulteriormente su questa parte)****/
 /**** INTERROGAZIONI SU SINGOLA RELAZIONE ****/
 
@@ -86,8 +92,7 @@ SELECT DISTINCT Residenza from Studenti WHERE residenza <> 'Genova' ORDER BY Res
 set search_path to 'unicorsi';
 SELECT DISTINCT e.Studente FROM Esami e WHERE e.Data >= '2009-02-02';
 
-/**** 4. gli identificativi dei professori il cui nome contenga la stringa ‘te’ che abbiano uno stipendio compreso tra i 12500 e i 16000 euro l’anno.
- ****/
+/**** 4. gli identificativi dei professori il cui nome contenga la stringa ‘te’ che abbiano uno stipendio compreso tra i 12500 e i 16000 euro l’anno. ****/
 set search_path to 'unicorsi';
 SELECT Id FROM Professori WHERE Nome LIKE '%te%' AND Stipendio BETWEEN 12500 and 16000;
 
@@ -103,10 +108,32 @@ WHERE p.Id=c.Professore
 ORDER BY c.id DESC;
 
 /**** 2. l’elenco alfabetico dei corsi, con i nominativi dei professori titolari, ordinati per corso di laurea, attivati; ****/
+set search_path to 'unicorsi';
+SELECT c.Denominazione, c.CorsoDiLaurea, p.Cognome 
+FROM Professori p, Corsi c
+WHERE p.Id=c.Professore and c.Attivato IS TRUE
+order by c.CorsoDiLaurea, c.Denominazione
 
 /**** 3. l’elenco dei corsi attivi nell’anno accademico corrente presso il corso di laurea di informatica, il cui nome abbia, come terza lettera, la lettera ‘s’ ; ****/
+set search_path to 'unicorsi';
+SELECT *
+FROM Corsi c
+INNER JOIN CorsiDiLaurea cdl ON c.CorsoDiLaurea=cdl.id
+WHERE c.Attivato IS TRUE
+AND cdl.Attivazione=anno in corso
+and cdl.Denominazione='Informatica'
+and c.Denominazione like '__s%'
 
 /**** 4. la matricola degli studenti di matematica che hanno registrato voti sufficienti per l’esame di ‘Informatica Generale’ svoltosi il 15 febbraio 2012; ****/
+set search_path to 'unicorsi';
+SELECT e.Studente
+FROM Esami e
+JOIN Corsi c ON e.Corso=e.Id
+JOIN CorsiDiLaurea cdl ON c.CorsoDiLaurea = cdl.id
+WHERE e.voto>=18
+AND e.data ='2012-02-15'
+AND c.Denominazione = 'Informatica Generale'
+AND cdl.Denominazione = 'Matematica';
 
 
 ---------------------------------------------
@@ -114,7 +141,19 @@ ORDER BY c.id DESC;
 ---------------------------------------------
 
 /**** 1. cognome e nome di studenti e professori. ****/
+set search_path to 'unicorsi';
+SELECT Nome, Cognome FROM Studenti
+UNION
+Select Nome, Cognome FROM Professori;
 
 /**** 2. i professori  che hanno omonimi tra gli studenti (cioè studenti con lo stesso nome e cognome dei professori). ****/
+set search_path to 'unicorsi';
+SELECT p.Nome, p.cognome FROM Professori p
+INTERSECT
+SELECT s.Nome, s.cognome FROM Studenti s;
 
 /**** 3. gli studenti che NON hanno omonimi tra i professori. ****/
+set search_path to 'unicorsi';
+SELECT s.Nome, s.cognome FROM Studenti s
+EXCEPT
+SELECT p.Nome, p.cognome FROM Professori p;
