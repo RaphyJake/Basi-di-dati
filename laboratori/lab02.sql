@@ -67,6 +67,54 @@ SELECT s.Matricola FROM Studenti s
 JOIN CorsiDiLaurea cdl ON s.CorsoDiLaurea = cdl.id
 WHERE cdl.Denominazione = 'Informatica'
 AND s.Matricola IN (SELECT e.studente FROM Esami e JOIN Corsi c ON e.corso = c.id
-WHERE e.Data >='2010-06-01' and e.Data <='2010-06-30' and c.Denominazione = 'Basi Di Dati 1' and e.voto >=18)
+WHERE e.Data >='2010-06-01' AND e.Data <='2010-06-30' AND c.Denominazione = 'Basi Di Dati 1' AND e.voto >=18)
 AND s.Matricola IN (SELECT e.studente FROM Esami e JOIN Corsi c ON e.corso = c.id
-WHERE e.Data >='2010-06-01' and e.Data <='2010-06-30' and c.Denominazione = 'Interfacce Grafiche' and e.voto >=18)
+WHERE e.Data >='2010-06-01' AND e.Data <='2010-06-30' AND c.Denominazione = 'Interfacce Grafiche' AND e.voto >=18)
+
+/**** Ulteriori attività di laboratorio su SQL - query SPJ e operazioni insiemistiche (se volete esercitarvi ulteriormente su questa parte)****/
+/**** INTERROGAZIONI SU SINGOLA RELAZIONE ****/
+
+/**** 1. la matricola dello studente ‘Mario Rossi’, iscritto nell’anno accademico 2009/2010; ****/
+set search_path to 'unicorsi';
+select matricola from Studenti WHERE Nome ='Mario' AND Cognome = 'Rossi' AND iscrizione = 2009;
+
+/**** 2. l’elenco alfabetico dei comuni, diversi da Genova, in cui risiedono studenti (senza duplicati); ****/
+set search_path to 'unicorsi';
+SELECT DISTINCT Residenza from Studenti WHERE residenza <> 'Genova' ORDER BY Residenza;
+
+/**** 3. la matricola degli studenti che hanno registrato dei voti dal 2 febbraio del 2009; ****/
+set search_path to 'unicorsi';
+SELECT DISTINCT e.Studente FROM Esami e WHERE e.Data >= '2009-02-02';
+
+/**** 4. gli identificativi dei professori il cui nome contenga la stringa ‘te’ che abbiano uno stipendio compreso tra i 12500 e i 16000 euro l’anno.
+ ****/
+set search_path to 'unicorsi';
+SELECT Id FROM Professori WHERE Nome LIKE '%te%' AND Stipendio BETWEEN 12500 and 16000;
+
+---------------------------------------------
+-- Interrogazioni su più relazioni.        --
+---------------------------------------------
+
+/**** 1. l’elenco dei nominativi dei professori, con, per ognuno, i corsi di cui sono titolari, in ordine decrescente di identificativo di corso; ****/
+set search_path to 'unicorsi';
+SELECT p.Cognome, p.Nome, c.Denominazione, c.id AS corso
+FROM Professori p, Corsi c
+WHERE p.Id=c.Professore
+ORDER BY c.id DESC;
+
+/**** 2. l’elenco alfabetico dei corsi, con i nominativi dei professori titolari, ordinati per corso di laurea, attivati; ****/
+
+/**** 3. l’elenco dei corsi attivi nell’anno accademico corrente presso il corso di laurea di informatica, il cui nome abbia, come terza lettera, la lettera ‘s’ ; ****/
+
+/**** 4. la matricola degli studenti di matematica che hanno registrato voti sufficienti per l’esame di ‘Informatica Generale’ svoltosi il 15 febbraio 2012; ****/
+
+
+---------------------------------------------
+-- Operazioni insiemistiche                --
+---------------------------------------------
+
+/**** 1. cognome e nome di studenti e professori. ****/
+
+/**** 2. i professori  che hanno omonimi tra gli studenti (cioè studenti con lo stesso nome e cognome dei professori). ****/
+
+/**** 3. gli studenti che NON hanno omonimi tra i professori. ****/
