@@ -99,7 +99,7 @@ set search_path to 'unicorsi';
 SELECT Id FROM Professori WHERE Nome LIKE '%te%' AND Stipendio BETWEEN 12500 and 16000;
 
 ---------------------------------------------
--- Interrogazioni su più relazioni.        --
+-- INTERROGAZIONI CHE COINVOLGONO PIU' RELAZIONI --
 ---------------------------------------------
 
 /**** 1. l’elenco dei nominativi dei professori, con, per ognuno, i corsi di cui sono titolari, in ordine decrescente di identificativo di corso; ****/
@@ -159,3 +159,63 @@ set search_path to 'unicorsi';
 SELECT s.Nome, s.cognome FROM Studenti s
 EXCEPT
 SELECT p.Nome, p.cognome FROM Professori p;
+
+
+/**** Ulteriori attività di laboratorio su SQL - outer join, group by e prime sottointerrogazioni (se volete esercitarvi ulteriormente su questa parte) ****/
+/**** OUTER JOIN ****/
+/**** l’elenco dei cognomi, in ordine di codice identificativo, dei professori con l’indicazione del cognome, del nome e della matricola degli studenti di cui sono relatori, laddove seguano degli studenti per la tesi ****/
+set search_path to 'unicorsi';
+SELECT p.Id, p.cognome, s.cognome, s.nome, s.matricola
+FROM professori p LEFT JOIN studenti s ON p.Id=s.relatore
+ORDER BY p.Id;
+
+/**** FUNZIONI DI GRUPPO ****/
+/**** 1. lo stipendio massimo, minimo e medio dei professori; ****/
+set search_path to 'unicorsi';
+SELECT MAX(stipendio), MIN(stipendio), AVG(stipendio)
+FROM Professori;
+
+/**** 2. il voto massimo registrato in ogni corso di laurea; ****/
+set search_path to 'unicorsi';
+SELECT cdl.Facolta, cdl.Denominazione, MAX(voto)
+FROM CorsiDiLaurea cdl JOIN Corsi c ON cdl.Id=c.CorsoDiLaurea JOIN Esami e ON e.Corso = c.Id
+GROUP by cdl.Facolta, cdl.Denominazione;
+
+/****3. i nomi dei corsi del corso di studio in informatica per i quali sono stati registrati meno di 5 esami a partire dal 1 aprile 2012 [(*) includendo anche i corsi per cui non sono stati registrati esami a partire dal 1 aprile 2012]; ****/
+--- DA FAREEEEE
+
+
+/**** SOTTOINTERROGAZIONI SEMPLICI ****/
+/**** 1. (manca risultato) il professore titolare del corso in cui ́è stata assegnata la votazione più alta; ****/
+set search_path to 'unicorsi';
+SELECT p.cognome, p.nome
+FROM Professori p
+INNER JOIN Corsi c ON c.Professore = p.Id
+INNER JOIN ESAMI e ON e.Corso = c.Id
+WHERE e.voto = (SELECT MAX(voto) FROM Esami)
+
+/**** 2. la matricola degli studenti che si sono laureati in informatica prima del novembre 2009 - formulare usando una sotto-interrogazione e non join nè prodotto Cartesiano. ****/
+set search_path to 'unicorsi';
+SELECT s.Matricola
+FROM Studenti s
+WHERE s.Laurea < '2009-11-01' and s.CorsoDiLaurea IN (SELECT id FROM CorsiDiLaurea WHERE Denominazione = 'Informatica')
+
+/**** 3. la matricola la matricola degli studenti di informatica che nel mese di giugno 2010 hanno registrato voti per il corso di basi di dati 1 ma non per quello di interfacce grafiche - formulare senza usare operatori insiemistici. ****/
+set search_path to 'unicorsi';
+SELECT s.Matricola FROM Studenti s
+JOIN CorsiDiLaurea cdl ON s.CorsoDiLaurea = cdl.id
+WHERE cdl.Denominazione = 'Informatica'
+and s.Matricola IN(SELECT e.studente FROM Esami e JOIN Corsi c ON e.corso = c.id
+WHERE e.Data >='2010-06-01' AND e.Data <='2010-06-30' AND c.Denominazione = 'Basi Di Dati 1' AND e.voto >=18)
+and s.Matricola NOT IN(SELECT e.studente FROM Esami e JOIN Corsi c ON e.corso = c.id
+WHERE e.Data >='2010-06-01' AND e.Data <='2010-06-30' AND c.Denominazione = 'Interfacce Grafiche' AND e.voto >=18)
+
+/**** 4. (il risultato è riportato come ultima  interrogazione di quelle proposte per il laboratorio 3) la matricola la matricola degli studenti di informatica che nel mese di giugno 2010 hanno registrato voti sia per il corso di basi di dati 1 che per quello di interfacce grafiche - formulare senza usare operatori insiemistici. ****/
+set search_path to 'unicorsi';
+SELECT s.Matricola FROM Studenti s
+JOIN CorsiDiLaurea cdl ON s.CorsoDiLaurea = cdl.id
+WHERE cdl.Denominazione = 'Informatica'
+and s.Matricola IN(SELECT e.studente FROM Esami e JOIN Corsi c ON e.corso = c.id
+WHERE e.Data >='2010-06-01' AND e.Data <='2010-06-30' AND c.Denominazione = 'Basi Di Dati 1' AND e.voto >=18)
+and s.Matricola IN(SELECT e.studente FROM Esami e JOIN Corsi c ON e.corso = c.id
+WHERE e.Data >='2010-06-01' AND e.Data <='2010-06-30' AND c.Denominazione = 'Interfacce Grafiche' AND e.voto >=18)

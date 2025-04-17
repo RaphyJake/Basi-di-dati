@@ -35,23 +35,26 @@ HAVING COUNT(*) >2
 ORDER BY p.cognome, p.nome
 
 /**** 3. l’elenco, in ordine alfabetico, dei professori con l’indicazione del numero di studenti di cui sono relatori [(*) indicando 0 se non seguono alcuno studente per la tesi]; ****/
-
 /**** ATTENZIONE: bisogna eseguire il count sulla matricola: in caso di NULL viene contanto 0 
  se vuoi che il conteggio restituisca 0 per i professori senza studenti, devi usare COUNT(s.matricola)***/
-
 SELECT p.cognome, p.nome, COUNT(s.matricola)
 FROM Professori p
 LEFT JOIN Studenti s ON s.Relatore = p.Id
 GROUP BY p.cognome, p.nome
 ORDER BY p.cognome, p.nome
 
----- MANCA LA QUARTA DEL SECONDO Gruppo
+/**** 4. (*) la matricola degli studenti iscritti al corso di studi in informatica che hanno registrato (almeno) due voti per corsi diversi nello stesso mese, con la media dei voti riportati [suggerimento: utilizzare la funzione extract per il tipo di dato DATE - ad esempio, per estrarre l'anno  EXTRACT (YEAR FROM Data). verificare sul manuale PostgreSQL] ****/
+
+----- DA FARE ----
 
 --- SOTTOINTERROGAZIONI SEMPLICI
----- MANCA LA PRIMA DEL TERZO GRUPPO
 
+/**** 1. (* e’ più difficile della 2, iniziare dalla 2) l’elenco dei corsi di laurea che nell’A.A. 2010/2011 hanno meno iscritti di quelli che si sono avuti ad informatica nello stesso A.A. (per filtrare sull'anno accademico di iscrizione utilizzare l'attributo Iscrizione della relazione Studenti);
+[Suggerimento: ritrovare tramite un'interrogazione il numero di studenti iscritti a informatica nell'A.A.2010/2011 e utilizzare tale (sotto)interrogazione nella formula della clausola WHERE dell'interrogazione principale] ****/
 
-/**** la matricola dello studente di informatica che ha conseguito la votazione più alta; ****/
+----- DA FARE ----
+
+/**** 2. la matricola dello studente di informatica che ha conseguito la votazione più alta; ****/
 SELECT s.Matricola
 FROM Esami e
 JOIN studenti s ON e.Studente=s.matricola
