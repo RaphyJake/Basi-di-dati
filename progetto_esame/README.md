@@ -23,9 +23,8 @@ Il proprietario e gli amministratori hanno il compito di gestire la lega e appro
 * V3: una squadra, per ciascuna serata, può avere al massimo 7 partecipanti alla formazione (se durante la giornata la formazione cambia più volte nella fascia oraria concessa, sarà sovrascritta ed aggiornata la data di modifica). 
 * V4: per ciascuna data, per ciascuna squadra potremo avere al massimo 4 titolari, 2 riserve, 1 capitano all'interno della formazione
 * V4: se la tipologia di lega è pubblica il tipo approvazione dell'associazione partecipano è valorizzato ad APPROVATA
-* V5: se l'artista ha il nome gruppo allora non può scrivere, comporre e dirigere brani
-* V6: se l'artista è un gruppo (nome gruppo valorizzato) non potrà scrivere, comporre, dirige brani
-* V7: se l'artista ha valorizzato il nome gruppo non potrà avere valorizzato nome, cognome, data di nascita e luogo di nascita e viceversa
+* V5: se l'artista è un gruppo (nome gruppo valorizzato) non potrà scrivere, comporre, dirige brani
+* V6: se l'artista ha valorizzato il nome gruppo non potrà avere valorizzato nome, cognome, data di nascita e luogo di nascita e viceversa
 
 ## Dettagli a livello applicativo
 * la formazione di una squadra può essere modificata entro un determinato termine (a livello applicativo)
@@ -78,7 +77,7 @@ Il proprietario e gli amministratori hanno il compito di gestire la lega e appro
 |composto|Un artista compone un brano||artisti, brani|
 |diretto|Un artista dirige un brano||artisti, brani|
 |si esibiscono| Un cantante si esibisce in un'esibizizione||cantanti, esibizioni|
-|esecuzione|Un bravo viene eseguito in un'esibizione|| brano, esibizioni|
+|vengono eseguiti|Un bravo viene eseguito in un'esibizione|| brano, esibizioni|
 |sono giudicate| Un'esibizionie è giudicata da voti espressi da pubblico/giuria||esibizioni,voti|
 |si svolge| Un'esibizione si svolge in una serata||serate, esibizioni|
 
@@ -86,3 +85,6 @@ Il proprietario e gli amministratori hanno il compito di gestire la lega e appro
 |Entità padre|Entità figlie|Tipologia|Attributi aggiuntivi|
 |---|---|---|---|
 |artisti|cantanti|associazione di sottoinsieme: parziale ed esclusiva|biografia, genere musicale, edizioni passate, costo in baudi|
+
+## Ulteriori note
+Come scelta implementativa abbiamo deciso di rappresentare nel database "il gruppo" come un oggetto unico e non come insieme di persone che lo compongono. Dal nostro punto di vista, il gruppo partecipa alla gara e non i singoli membri. I brani non vengono scritti/composti/diretti da un gruppo, ma da artisti (che eventualmente potrebbero fare parte di un gruppo, ma non teniamo traccia di questo elemento). In breve, lo schema non vuole tenere in considerazione la composizione dei gruppi.
