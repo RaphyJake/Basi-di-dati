@@ -125,4 +125,4 @@ WHERE cdl.Denominazione = 'Informatica'
 and s.Matricola IN(SELECT e.studente FROM Esami e JOIN Corsi c ON e.corso = c.id
 WHERE e.Data >='2010-06-01' AND e.Data <='2010-06-30' AND c.Denominazione = 'Basi Di Dati 1' AND e.voto >=18)
 and s.Matricola IN(SELECT e.studente FROM Esami e JOIN Corsi c ON e.corso = c.id
-WHERE e.Data >='2010-06-01' AND e.Data <='2010-06-30' AND c.Denominazione = 'Interfacce Grafiche' AND e.voto >=18)
+WHERE e.Data >='2010-06-01' AND e.Data <='2010-06-30' AND c.Denominazione = 'Interfacce Grafiche' AND e.voto >=18)	
