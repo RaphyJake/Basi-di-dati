@@ -45,7 +45,7 @@ ORDER BY 1;
 /* la matricola degli studenti iscritti al corso di studi in informatica che hanno registrato (almeno) due voti per corsi diversi nello stesso mese, 
 con la media dei voti riportati [suggerimento: utilizzare la funzione extract per il tipo di dato DATE - ad esempio, per estrarre l'anno  EXTRACT (YEAR FROM Data).
 verificare sul manuale PostgreSQL]*/
-SELECT s.matricola,EXTRACT(YEAR FROM e.data) AS anno,EXTRACT(MONTH FROM e.data) AS mese,AVG(e.voto) AS media_voti
+SELECT s.matricola, EXTRACT(YEAR FROM e.data) AS anno, EXTRACT(MONTH FROM e.data) AS mese,AVG(e.voto) AS media_voti
 FROM Studenti s
 inner JOIN CorsiDiLaurea cdl ON s.corsodilaurea = cdl.id
 inner JOIN Esami e ON e.studente = s.matricola
