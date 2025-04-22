@@ -1,6 +1,8 @@
 -- ####################################################################
 --  Gruppo Molinas Alessio, Romano Ettore
 -- #####################################################################
+set search_path to "unicorsi";
+
 -- OUTER JOIN
 /**** 1. l’elenco in ordine alfabetico (per denominazione) dei corsi, con eventuale nominativo del professore titolare; ****/
 SELECT c.id, c.denominazione, p.cognome, p.nome
@@ -10,7 +12,7 @@ ON c.Professore = p.ID
 ORDER BY c.denominazione
 
 /**** 2. l’elenco alfabetico degli studenti iscritti a matematica, con l’eventuale relatore che li segue per la tesi. ****/
-SELECT s.cognome, s.nome, p.cognome
+SELECT s.cognome, s.nome, p.cognome as relatore
 FROM Studenti s
 JOIN CorsiDiLaurea cdl ON s.CorsoDiLaurea = cdl.Id
 LEFT JOIN Professori p ON s.Relatore=p.Id
