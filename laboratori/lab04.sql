@@ -6,6 +6,24 @@ set search_path to "unicorsi";
 -- SOTTOINTERROGAZIONI
 /**** 1. (*) [questa interrogazione corrisponde a un'interrogazione già formulata in esercitazioni precedenti (con INTERSECT e IN), la richiesta è ora di formularla  IN DUE DIVERSI MODI: usando EXISTS e una sotto-interrogazione correlata E senza usare sotto-interrogazioni ma usando due alias sulle relazioni] la matricola degli studenti di informatica che nel mese di giugno 2010 hanno registrato voti sia per il corso di basi di dati 1 che per quello di interfacce grafiche; ****/
 
+--- VERSIONE 1
+SELECT DISTINCT e1.Studente FROM Esami e1 
+JOIN Corsi c1 ON e1.Corso = c1.id
+WHERE e1.Voto>=18 AND e1.Data BETWEEN '2010-06-01' AND '2010-06-30' and c1.Denominazione ='Basi Di Dati 1'
+AND EXISTS (SELECT * FROM Esami e2 JOIN Corsi c2 ON e2.Corso=c2.Id WHERE e2.Voto>=18 AND e2.Data BETWEEN '2010-06-01' AND '2010-06-30' and c2.Denominazione ='Interfacce Grafiche' and e1.Studente = e2.Studente)
+
+-- VERSIONE 2
+SELECT DISTINCT e1.Studente
+FROM Esami e1
+JOIN Esami e2 ON e1.Studente = e2.Studente and e1.Corso<>e2.Corso
+JOIN Corsi c1 ON e1.Corso=c1.Id
+JOIN Corsi c2 ON e2.Corso=c2.id
+WHERE e1.Voto>=18
+AND e1.Data BETWEEN '2010-06-01' AND '2010-06-30'
+AND e2.Voto>=18
+AND e2.Data BETWEEN '2010-06-01' AND '2010-06-30'
+AND c1.Denominazione = 'Basi Di Dati 1'
+AND c2.Denominazione='Interfacce Grafiche'
 
 /**** 2. la matricola degli studenti di informatica che hanno sostenuto basi di dati 1 con votazione superiore alla votazione media (per tale esame); ****/
 SELECT DISTINCT e1.Studente
@@ -22,8 +40,13 @@ JOIN Corsi c ON c.Professore = p.id
 GROUP BY p.Cognome, p.Nome
 HAVING COUNT (c.Professore)>= ALL (SELECT COUNT (Professore) FROM Corsi Group By Professore)
 
-
 /**** 4. i professori che sono titolari dei corsi i cui voti medi sono i più  alti; ****/
+SELECT p.Cognome, p.Nome, p.Id
+FROM Professori p
+JOIN Corsi c on c.Professore=p.Id
+JOIN Esami e ON e.Corso = c.Id
+GROUP BY p.Cognome,p.Nome, p.Id, c.Denominazione
+HAVING AVG(e.Voto)>=ALL (SELECT AVG(e1.Voto) FROM Esami e1 GROUP BY e1.Corso)
 
 /**** 5. per ogni corso, la matricola degli studenti che hanno ottenuto un voto sotto la votazione media del corso, indicando anche corso e voto; ****/
 SELECT e.Studente,e.Corso, e.Voto FROM Esami e 
@@ -58,7 +81,7 @@ WHERE c.Attivato IS TRUE and p1.Id=p.Id)
 /**** (*) [divisione] gli studenti non ancora in tesi che hanno passato tutti gli esami del proprio corso di laurea. ****/
 /*** Seleziono in maniera distinta gli studenti che sono senza relatore. Prendo tutti i corsi del corso di laurea dello studente della prima query e verifico che non esistano esami per quello studente, con voto superiore a 18 e per lo stesso corso
 ****/
-SELECT DISTINCT s1.Matricola FROM Studenti s1 WHERE s1.Relatore IS NULL AND NOT EXISTS
-(SELECT * FROM Corsi c1 WHERE c1.CorsoDiLaurea = s1.CorsoDiLaurea AND NOT EXISTS
-(SELECT * FROM Esami e1 WHERE e1.Studente = s1.Matricola AND e1.Corso = c1.Id and e1.Voto>=18)
-)
+SELECT DISTINCT s.Matricola
+FROM Studenti s
+WHERE s.Relatore IS NULL AND NOT EXISTS(
+SELECT * FROM Corsi c1 WHERE c1.CorsoDiLaurea=s.CorsoDiLaurea AND NOT EXISTS (SELECT * FROM Esami e1 WHERE e1.Studente=s.Matricola AND e1.Corso=c1.Id AND e1.Voto>=18))
