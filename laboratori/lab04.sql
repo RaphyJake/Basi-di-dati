@@ -56,3 +56,9 @@ JOIN Esami e ON e.Corso=c.id
 WHERE c.Attivato IS TRUE and p1.Id=p.Id)
 
 /**** (*) [divisione] gli studenti non ancora in tesi che hanno passato tutti gli esami del proprio corso di laurea. ****/
+/*** Seleziono in maniera distinta gli studenti che sono senza relatore. Prendo tutti i corsi del corso di laurea dello studente della prima query e verifico che non esistano esami per quello studente, con voto superiore a 18 e per lo stesso corso
+****/
+SELECT DISTINCT s1.Matricola FROM Studenti s1 WHERE s1.Relatore IS NULL AND NOT EXISTS
+(SELECT * FROM Corsi c1 WHERE c1.CorsoDiLaurea = s1.CorsoDiLaurea AND NOT EXISTS
+(SELECT * FROM Esami e1 WHERE e1.Studente = s1.Matricola AND e1.Corso = c1.Id and e1.Voto>=18)
+)
