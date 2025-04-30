@@ -105,3 +105,39 @@ where e.voto < (
 	from esami e1
 	where e1.corso = e.corso
 );
+
+/**
+	per ogni docente, i corsi 
+	correntemente attivati in cui ha attribuito una votazione media superiore 
+	alla votazione media assegnata da tale docente (indipendentemente dal corso);
+*/
+
+select p.id, c.id,avg(e.voto)
+from professori p inner join corsi c on c.professore = p.id
+inner join esami e on e.corso = c.id
+where c.attivato = true 
+group by p.id, c.id
+having avg(e.voto) > (select avg(voto)
+					  from esami e2 inner join corsi c2 on c2.id = e2.corso
+					  where c2.professore = p.id);
+					  
+
+/**
+(*) [divisione] gli studenti non ancora in tesi che hanno passato tutti gli esami del proprio corso di laurea.
+*/
+
+SELECT *
+FROM studenti s
+WHERE s.relatore IS NULL
+  AND NOT EXISTS (
+    SELECT *
+    FROM corsi c
+    WHERE c.corsodilaurea = s.corsodilaurea
+      AND NOT EXISTS (
+        SELECT *
+        FROM esami e
+        WHERE e.studente = s.matricola
+          AND e.corso = c.id
+          AND e.voto >= 18
+      )
+  );
