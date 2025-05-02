@@ -181,26 +181,19 @@ WHERE EXISTS(
 		AND s.CorsoDiLaurea <> c.CorsoDiLaurea)
 
 /**** 6. (*) la frequenza delle bocciature, suddivisa per sessione, ovvero per mesi (hint: si può raggruppare rispetto ad un’espressione; se serve potete usare tabelle temporanee - Fare riferimento al comando CREATE [TEMPORARY] TABLE AS, di cui trovate i dettagli sul manuale - Fare attenzione al fatto che la divisione tra interi restituisce un intero (cioè 3/4 fa 0). Un modo di ottenere 0.75 dovete fare CAST a float dei due numeri prima di effettuare la divisione); ****/
-
-drop table EsamiInsuff;
-CREATE TEMPORARY TABLE EsamiInsuff AS (
+CREATE TEMPORARY TABLE EsamiNonPassati AS (
 SELECT count(e.Voto)as insuf, EXTRACT(MONTH FROM e.Data) as mese
 FROM Esami e
 WHERE E.Voto <18
 group by EXTRACT(MONTH FROM e.Data));
 
-drop  table EsamiTot;
-CREATE TEMPORARY TABLE EsamiTot AS
+CREATE TEMPORARY TABLE EsamiTotali AS
 SELECT count(e.Voto)as tot, EXTRACT(MONTH FROM e.Data) as mese
 FROM Esami e
 group by EXTRACT(MONTH FROM e.Data);
 
-select (i.insuf::float/t.tot::float)*100 as percent, t.mese from EsamiTot t
-JOIN EsamiInsuff i ON i.mese=t.mese
-
-
-
-
+SELECT t.mese as session, (i.insuf::float/t.tot::float)*100 as perc  from EsamiTotali t
+JOIN EsamiNonPassati i ON i.mese=t.mese;
 
 
 
