@@ -95,8 +95,7 @@ HAVING AVG(e1.voto)> (
 	AND p1.Id=p.Id)
 
 /**** (*) [divisione] gli studenti non ancora in tesi che hanno passato tutti gli esami del proprio corso di laurea. ****/
-/*** Seleziono in maniera distinta gli studenti che sono senza relatore. Prendo tutti i corsi del corso di laurea dello studente della prima query e verifico che non esistano esami per quello studente, con voto superiore a 18 e per lo stesso corso
-****/
+/*** Seleziono in maniera distinta gli studenti che sono senza relatore. Prendo tutti i corsi del corso di laurea dello studente della prima query e verifico che non esistano esami per quello studente, con voto superiore a 18 e per lo stesso corso ****/
 SELECT DISTINCT s.Matricola
 FROM Studenti s
 WHERE s.Relatore IS NULL
@@ -161,17 +160,17 @@ HAVING (
 
 
 /****  4. i corsi in cui si ha il maggior numero di studenti con voti insufficienti; ****/
-SELECT e.Corso, c.Denominazione
+SELECT e.Corso, COUNT(e.voto) 
 FROM Esami e
 JOIN Corsi c ON c.Id = e.Corso
 WHERE e.Voto < 18
-GROUP BY e.Corso,c.Denominazione
+GROUP BY e.Corso
 HAVING COUNT(e.Studente) >= ALL (
 	SELECT COUNT(e1.Studente)
 	FROM Esami e1
 	WHERE e1.Voto<18
 	GROUP BY e1.Corso)
-
+	
 /**** 5. i corsi il cui professore titolare è relatore di qualche studente di un corso di laurea diverso da quello del corso; [è possibile formularla senza sottointerrogazioni, provate però a usare una sottointerrogazione per esercitarvi]****/
 SELECT c.Id, c.Denominazione
 FROM Corsi c
@@ -192,7 +191,7 @@ SELECT count(e.Voto)as tot, EXTRACT(MONTH FROM e.Data) as Mese
 FROM Esami e
 group by EXTRACT(MONTH FROM e.Data);
 
-SELECT t.Mese as session, (i.insuf::float/t.tot::float)*100 AS perc 
+SELECT t.Mese as session, (n.insuf::float/t.tot::float)*100 AS perc 
 FROM EsamiTotali t
 JOIN EsamiNonPassati n ON n.Mese=t.Mese;
 
