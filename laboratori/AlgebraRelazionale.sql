@@ -41,6 +41,7 @@
 
 -- E Determinare la pizza più venduta
 ---- mette male fare la somma, ecc... non esiste operatore dell'algebra relazionale
+
 -- F. Determinare le pizze che sono state ordinate almeno una volta da tutti i clienti
 πNome((πCodP,TelC(Ordine)÷(πTelC(Cliente)))⨝Pizza)
 
