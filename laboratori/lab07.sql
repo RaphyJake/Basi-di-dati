@@ -30,6 +30,8 @@ GRANT USAGE ON SCHEMA unicorsi TO yoda WITH GRANT OPTION.
 Questo comando permetterà all'utente yoda di utilizzare le tabelle presenti nello schema secondo i privilegi che gli verranno concessi.
 ****/
 GRANT USAGE ON SCHEMA unicorsi TO yoda5339413 WITH GRANT OPTION;
+---!!!!!! devo farlo per entrambi gli utenti !!!!!!
+GRANT USAGE ON SCHEMA unicorsi TO luke5339413 WITH GRANT OPTION;
 
 /**** 4. Siete collegati con le vostre credenziali.
 Attribuitevi il ruolo utente yodaX con il comando:
@@ -37,6 +39,8 @@ GRANT yodaX to <vostro_utente>;
 e poi, senza disconnettervi, cambiate il vostro ruolo/utente in yodaX (ricordate che in PostgreSQL ogni utente è anche un ruolo) con il comando SET ROLE yodaX.
 ****/
 GRANT yoda5339413 to s5339413;
+---!!!!!! devo farlo per entrambi gli utenti !!!!!!
+GRANT luke5339413 to s5339413;
 SET ROLE yoda5339413;
 
 /**** 5. Adesso rivestite il ruolo yodaX;
@@ -112,13 +116,6 @@ select * from information_schema.table_privileges where table_schema='unicorsi' 
 
 /**** 17.
 (*) Siete collegati con le vostre credenziali. Create i ruoli jediX e maestroJediX con il comando CREATE ROLE nomeruolo, dove X è il vostro numero di gruppo. Utilizzando la documentazione  di PostgreSQL, individuare ed eseguire i seguenti comandi:
-
-    revocate il privilegio di SELECT su corsi e studenti a jodaX e lukeX;
-    definire il ruolo maestroJediX come ruolo padre rispetto al ruolo jedi (quindi il maestroJediX può fare almeno tutto quello che può fare uno jedi);
-    attribuire al ruolo jediX tutti i privilegi sulla tabella studenti;
-    attribuire al maestroJediX tutti i privilegi sulla tabella corsi, oltre a tutti i privilegi sulla tabella studenti, sfruttando la gerachia precedentemente definita;
-    attribuire il ruolo jediX a lukeX e il ruolo maestroJediX a yodaX;
-    eseguendo opportune query (eventualmente anche sul catalogo) provare a capire se lukeX e yodaX hanno adesso i privilegi che vi aspettate.
 ****/
 SET ROLE s5339413;
 CREATE ROLE jedi35;
@@ -130,7 +127,19 @@ REVOKE SELECT ON corsi, studenti from yoda5339413,luke5339413;
 
 ---- da fare
 ---- definire il ruolo maestroJediX come ruolo padre rispetto al ruolo jedi (quindi il maestroJediX può fare almeno tutto quello che può fare uno jedi);
+GRANT jedi35 to maestroJedi35;
 ---- attribuire al ruolo jediX tutti i privilegi sulla tabella studenti;
+GRANT ALL PRIVILEGES ON studenti TO jedi35;
 ---- attribuire al maestroJediX tutti i privilegi sulla tabella corsi, oltre a tutti i privilegi sulla tabella studenti, sfruttando la gerachia precedentemente definita;
+GRANT ALL PRIVILEGES ON   TO maestroJedi35;
 ---- attribuire il ruolo jediX a lukeX e il ruolo maestroJediX a yodaX;
+GRANT jedi35 to luke5339413;
+GRANT maestroJedi35 to yoda5339413;
 ---- eseguendo opportune query (eventualmente anche sul catalogo) provare a capire se lukeX e yodaX hanno adesso i privilegi che vi aspettate.
+SET ROLE luke5339413;
+select * from studenti; -- OK
+select * from corsi; -- KO
+
+SET ROLE yoda5339413;
+select * from studenti; -- OK
+select * from corsi; -- OK
