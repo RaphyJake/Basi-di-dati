@@ -1,3 +1,7 @@
+-- ####################################################################
+--  Gruppo Molinas Alessio, Romano Ettore - Gruppo 35
+-- #####################################################################
+
 /*** Scrivere una interrogazione SQL per recuperare tutte le tuple contenute nella tabella catalogo information_schema.table_privileges, analizzarne lo schema e l'istanza. Cercate di comprendere il significato degli attributi (escluso l'attributo with_hierarchy).
 
 -- query select * from information_schema.table_privileges;
@@ -124,8 +128,6 @@ CREATE ROLE maestroJedi35;
 --select * from information_schema.table_privileges where table_schema='unicorsi' and (grantee='yoda5339413' or grantee='luke5339413');
 REVOKE SELECT ON corsi, studenti from yoda5339413,luke5339413;
 
-
----- da fare
 ---- definire il ruolo maestroJediX come ruolo padre rispetto al ruolo jedi (quindi il maestroJediX può fare almeno tutto quello che può fare uno jedi);
 GRANT jedi35 to maestroJedi35;
 ---- attribuire al ruolo jediX tutti i privilegi sulla tabella studenti;
