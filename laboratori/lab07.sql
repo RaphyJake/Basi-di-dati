@@ -120,3 +120,17 @@ select * from information_schema.table_privileges where table_schema='unicorsi' 
     attribuire il ruolo jediX a lukeX e il ruolo maestroJediX a yodaX;
     eseguendo opportune query (eventualmente anche sul catalogo) provare a capire se lukeX e yodaX hanno adesso i privilegi che vi aspettate.
 ****/
+SET ROLE s5339413;
+CREATE ROLE jedi35;
+CREATE ROLE maestroJedi35;
+--revocate il privilegio di SELECT su corsi e studenti a jodaX e lukeX;
+--select * from information_schema.table_privileges where table_schema='unicorsi' and (grantee='yoda5339413' or grantee='luke5339413');
+REVOKE SELECT ON corsi, studenti from yoda5339413,luke5339413;
+
+
+---- da fare
+---- definire il ruolo maestroJediX come ruolo padre rispetto al ruolo jedi (quindi il maestroJediX può fare almeno tutto quello che può fare uno jedi);
+---- attribuire al ruolo jediX tutti i privilegi sulla tabella studenti;
+---- attribuire al maestroJediX tutti i privilegi sulla tabella corsi, oltre a tutti i privilegi sulla tabella studenti, sfruttando la gerachia precedentemente definita;
+---- attribuire il ruolo jediX a lukeX e il ruolo maestroJediX a yodaX;
+---- eseguendo opportune query (eventualmente anche sul catalogo) provare a capire se lukeX e yodaX hanno adesso i privilegi che vi aspettate.
