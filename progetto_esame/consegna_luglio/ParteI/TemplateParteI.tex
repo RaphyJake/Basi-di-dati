@@ -142,7 +142,16 @@ Bisogna dire che se TIPO è valorizzato ad C (cantante) implica la valorizzazion
 
 \subsection{Schema Logico}
 [schema logico relazionale nella notazione vista a lezione]
-in modalità testo TABELLA (A1, A2, ecc chiavi esterne...)
+\item \textbf{ARTISTI}(\ul{codArtista}, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi)
+\item \textbf{UTENTI}(\ul{username}, nome, cognome)
+\item \textbf{LEGHE}(\ul{codLega}, nome, tipo)
+\item \textbf{BONUS_MALUS}(\ul{codBonusMalus}, descrizione, valore, tipo)
+\item \textbf{SQUADRE}(\ul{codSquadra}, nome)
+\item \textbf{BRANI}(\ul{titolo}, \underline{codArtista}, genereMusicale, durata)
+\item \textbf{SERATE}(\ul{nome}, data)
+\item \textbf{VOTI}(\ul{codVoto},tipo, dataOra)
+\item \textbf{FORMAZIONI}(\underline(codArtista), \underline{codSquadra}, \underline(nomeSerata), dataModifica)
+
 \subsection{Verifica di Qualità dello Schema}
 [verifica delle forme normali ed eventuali ottimizzazioni applicate tenendo in considerazione il carico di lavoro]
 
