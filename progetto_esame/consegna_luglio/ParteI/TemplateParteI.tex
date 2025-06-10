@@ -143,14 +143,19 @@ Bisogna dire che se TIPO è valorizzato ad C (cantante) implica la valorizzazion
 \subsection{Schema Logico}
 [schema logico relazionale nella notazione vista a lezione]
 \item \textbf{ARTISTI}(\ul{codArtista}, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi)
-\item \textbf{UTENTI}(\ul{username}, nome, cognome)
+\item \textbf{UTENTI}(\ul{username}, nome, cognome, \underline{codSquadra})
 \item \textbf{LEGHE}(\ul{codLega}, nome, tipo)
 \item \textbf{BONUS_MALUS}(\ul{codBonusMalus}, descrizione, valore, tipo)
-\item \textbf{SQUADRE}(\ul{codSquadra}, nome)
+\item \textbf{SQUADRE}(\ul{codSquadra}, nome, \underline{usernameProprietario})
 \item \textbf{BRANI}(\ul{titolo}, \underline{codArtista}, genereMusicale, durata)
 \item \textbf{SERATE}(\ul{nome}, data)
-\item \textbf{VOTI}(\ul{codVoto},tipo, dataOra)
-\item \textbf{FORMAZIONI}(\underline(codArtista), \underline{codSquadra}, \underline(nomeSerata), dataModifica)
+\item \textbf{VOTI}(\ul{codVoto},tipo, dataOra, \ul{titoloBrano},\ul{codArtista})
+\item \textbf{FORMAZIONI}(\underline(codArtista), \underline{codSquadra}, \underline(nomeSerata), ruolo,dataModifica)
+\item \textbf{ESIBIZIONI}(\ul{titoloBrano},\ul{codArtista},orario, ordineEsibizione, \underline{nomeSerata})
+\item \textbf{GESTIONE_LEGA}(\underline{usernameAdmin}, \underline{codLega})
+\item \textbf{ANA_BRANO}(\ul{codArtista}, \ul{titolo}, composto, scritto, diretto)
+\item \textbf{SQUADRE_LEGA}(\ul{codSquadra}, \ul{codLega}, statoApprovazione)
+\item \textbf{BONUS_FORMAZIONI}(\ul{codSquadra}, \ul{codArtista}, \ul{nomeSerata}, \ul{codBonusMalus}, valoreEffettivo)
 
 \subsection{Verifica di Qualità dello Schema}
 [verifica delle forme normali ed eventuali ottimizzazioni applicate tenendo in considerazione il carico di lavoro]
