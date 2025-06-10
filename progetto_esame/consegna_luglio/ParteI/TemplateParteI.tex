@@ -100,26 +100,23 @@ Il proprietario e gli amministratori hanno il compito di gestire la lega e appro
 		
 		\item \textbf{(durata, brani)} = real (secondi durata brano)
 	\end{itemize}
-
+\newpage
 \subsection{Vincoli Non Esprimibili nel Diagramma}
-[Specificare i vincoli NON esprimibili nel diagramma ER, inclusi quelli relativi a attributi e associazioni ridondanti]
-
-\begin{table}[h!]
-    \centering
-    \begin{tabular}{|c|c|p{6cm}|}
-        \hline
-        \textbf{Numero Vincolo} & \textbf{Entità e/o Associazioni Coinvolte} & \textbf{Vincolo in Linguaggio Naturale} \\ \hline
-        1 & utenti, squadre, leghe, partecipano & Un utente con le proprie squadre non può partecipare a più di 25 leghe \\ \hline
-        2 & utenti, formazioni, squadre & Ogni utente, per ciascuna formazione di una squadra, ha a disposizione 100 baudi \\ \hline
-       	3 & squadre, formazioni, serate & Una squadra, per ciascuna serata, può avere al massimo 7 partecipanti alla formazione (se durante la giornata la formazione cambia più volte nella fascia oraria concessa, sarà sovrascritta e aggiornata la data di modifica). \\ \hline
-        4 & squadre, formazioni, cantanti & Per ciascuna data, per ciascuna squadra, potremo avere al massimo 4 titolari, 2 riserve, 1 capitano all'interno della formazione. \\ \hline
-        5 & leghe, partecipano & Se la tipologia di lega è pubblica, il tipo di approvazione dell'associazione 'partecipano' è valorizzato ad "APPROVATA". \\ \hline
-        6 & artisti, scritto, composto, diretto & Se l'artista è un gruppo (attributo 'nome gruppo' valorizzato), non potrà scrivere, comporre o dirigere brani. \\ \hline
-        7 & artisti & Se l'artista ha valorizzato l'attributo 'nome gruppo', non potrà avere valorizzati 'nome', 'cognome', 'data nascita' e 'luogo nascita', e viceversa.  \\ \hline
-    \end{tabular}
-    \caption{Vincoli Non Esprimibili nel Diagramma ER}
-\end{table}
-
+	\begin{table}[h!]
+	    \centering
+	    \begin{tabular}{|c|c|p{6.5cm}|}
+	        \hline
+	        \textbf{Numero Vincolo} & \textbf{Entità e/o Associazioni Coinvolte} & \textbf{Vincolo in Linguaggio Naturale} \\ \hline
+	        1 & utenti, squadre, leghe, partecipano & Un utente con le proprie squadre non può partecipare a più di 25 leghe \\ \hline
+	        2 & utenti, formazioni, squadre & Ogni utente, per ciascuna formazione di una squadra, ha a disposizione 100 baudi \\ \hline
+	       	3 & squadre, formazioni, serate & Una squadra, per ciascuna serata, può avere al massimo 7 partecipanti alla formazione (se durante la giornata la formazione cambia più volte nella fascia oraria concessa, sarà sovrascritta e aggiornata la data di modifica). \\ \hline
+	        4 & squadre, formazioni, cantanti & Per ciascuna data, per ciascuna squadra, potremo avere al massimo 4 titolari, 2 riserve, 1 capitano all'interno della formazione. \\ \hline
+	        5 & leghe, partecipano & Se la tipologia di lega è pubblica, il tipo di approvazione dell'associazione 'partecipano' è valorizzato ad "APPROVATA". \\ \hline
+	        6 & artisti, scritto, composto, diretto & Se l'artista è un gruppo (attributo 'nome gruppo' valorizzato), non potrà scrivere, comporre o dirigere brani. \\ \hline
+	        7 & artisti & Se l'artista ha valorizzato l'attributo 'nome gruppo', non potrà avere valorizzati 'nome', 'cognome', 'data nascita' e 'luogo nascita', e viceversa.  \\ \hline
+	    \end{tabular}
+	    \caption{Vincoli Non Esprimibili nel Diagramma ER}
+	\end{table}
 \subsection{Commenti e Scelte Effettuate}
 \noindent
 Come scelta implementativa abbiamo deciso di rappresentare nel database "il gruppo" come un oggetto unico e non come insieme di persone che lo compongono. Dal nostro punto di vista, il gruppo partecipa alla gara e non i singoli membri. I brani non vengono scritti/composti/diretti da un gruppo, ma da artisti (che eventualmente potrebbero fare parte di un gruppo, ma non teniamo traccia di questo elemento). In breve, lo schema non vuole tenere in considerazione la composizione dei gruppi.
@@ -127,7 +124,10 @@ Come scelta implementativa abbiamo deciso di rappresentare nel database "il grup
 \newpage
 \section{PROGETTO LOGICO}
 \subsection{Schema ER Ristrutturato}
-[inserire qui il diagramma ER ristrutturato]
+%[inserire qui il diagramma ER ristrutturato]
+\begin{center}
+	\includegraphics[width=0.8\textwidth]{schema_ER_ristrutturato.eps}
+\end{center}
 
 \subsection{Domini degli Attributi}
 [eventuali modifiche dei domini degli attributi e informazioni sui domini di eventuali attributi introdotti]
@@ -135,12 +135,14 @@ Come scelta implementativa abbiamo deciso di rappresentare nel database "il grup
 \subsection{Vincoli}
 [modifiche all'elenco di vincoli del modello concettuale (nuovi vincoli, eventuali vincoli eliminati o modificati)]
 
+Bisogna dire che se TIPO è valorizzato ad C (cantante) implica la valorizzazione di biografia, genere musicale, edizioni passate (anche null), costo in baudi. Vincolo che vale anche alla rovescia. Se valorizzato uno di questi campi-> tipo C
+
 \subsection{Ristrutturazione Gerarchie}
-[discussione delle scelte fatte per eliminare le gerarchie di generalizzazione]
+%[discussione delle scelte fatte per eliminare le gerarchie di generalizzazione]
 
 \subsection{Schema Logico}
 [schema logico relazionale nella notazione vista a lezione]
-
+in modalità testo TABELLA (A1, A2, ecc chiavi esterne...)
 \subsection{Verifica di Qualità dello Schema}
 [verifica delle forme normali ed eventuali ottimizzazioni applicate tenendo in considerazione il carico di lavoro]
 
