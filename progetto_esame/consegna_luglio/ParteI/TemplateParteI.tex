@@ -141,35 +141,37 @@ Bisogna dire che se TIPO è valorizzato ad C (cantante) implica la valorizzazion
 %[discussione delle scelte fatte per eliminare le gerarchie di generalizzazione]
 
 \subsection{Schema Logico}
-[schema logico relazionale nella notazione vista a lezione]
-\item \textbf{ARTISTI}(\ul{codArtista}, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi)
-\item \textbf{UTENTI}(\ul{username}, nome, cognome)
-\item \textbf{LEGHE}(\ul{codLega}, nome, tipo)
-\item \textbf{BONUS_MALUS}(\ul{codBonusMalus}, descrizione, valore, tipo)
-\item \textbf{SQUADRE}(\ul{codSquadra}, nome, \underline{usernameProprietario})
-\item \textbf{BRANI}(\ul{titolo}, \underline{codArtista}, genereMusicale, durata)
-\item \textbf{SERATE}(\ul{nome}, data)
-\item \textbf{VOTI}(\ul{codVoto},tipo, dataOra, \ul{titoloBrano},\ul{codArtista})
-\item \textbf{FORMAZIONI}(\underline(codArtista), \underline{codSquadra}, \underline(nomeSerata), ruolo,dataModifica)
-\item \textbf{ESIBIZIONI}(\ul{titoloBrano},\ul{codArtista},orario, ordineEsibizione, \underline{nomeSerata})
-\item \textbf{GESTIONE_LEGA}(\underline{usernameAdmin}, \underline{codLega})
-\item \textbf{ANA_BRANO}(\ul{codArtista}, \ul{titolo}, composto, scritto, diretto)
-\item \textbf{SQUADRE_LEGA}(\ul{codSquadra}, \ul{codLega}, statoApprovazione)
-\item \textbf{BONUS_FORMAZIONI}(\ul{codSquadra}, \ul{codArtista}, \ul{nomeSerata}, \ul{codBonusMalus}, valoreEffettivo)
+%[schema logico relazionale nella notazione vista a lezione]
+	\begin{itemize}
+		\item \textbf{ARTISTI}(\underline{codArtista}, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi)
+		\item \textbf{UTENTI}(\underline{username}, nome, cognome)
+		\item \textbf{LEGHE}(\underline{codLega}, nome, tipo)
+		\item \textbf{BONUS\_MALUS}(\underline{codBonusMalus}, descrizione, valore, tipo)
+		\item \textbf{SQUADRE}(\underline{codSquadra}, nome, \underline{usernameProprietario})
+		\item \textbf{BRANI}(\underline{titolo}, \underline{codArtista}, genereMusicale, durata)
+		\item \textbf{SERATE}(\underline{nome}, data)
+		\item \textbf{VOTI}(\underline{codVoto}, tipo, dataOra, \underline{titoloBrano}, \underline{codArtista})
+		\item \textbf{FORMAZIONI}(\underline{codArtista}, \underline{codSquadra}, \underline{nomeSerata}, ruolo, dataModifica)
+		\item \textbf{ESIBIZIONI}(\underline{titoloBrano}, \underline{codArtista}, orario, ordineEsibizione, \underline{nomeSerata})
+		\item \textbf{GESTIONE\_LEGA}(\underline{usernameAdmin}, \underline{codLega})
+		\item \textbf{ANA\_BRANO}(\underline{codArtista}, \underline{titolo}, composto, scritto, diretto)
+		\item \textbf{SQUADRE\_LEGA}(\underline{codSquadra}, \underline{codLega}, statoApprovazione)
+		\item \textbf{BONUS\_FORMAZIONI}(\underline{codSquadra}, \underline{codArtista}, \underline{nomeSerata}, \underline{codBonusMalus}, valoreEffettivo)
+	\end{itemize}
+	
 
 \subsection{Verifica di Qualità dello Schema}
 [verifica delle forme normali ed eventuali ottimizzazioni applicate tenendo in considerazione il carico di lavoro]
 
 \subsection{Schema SQL in Forma Grafica}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{project_bd.png}
-	\caption{Diagramma dello schema relazionale generato con DataGrip}
-\end{figure}
+\begin{center}
+	\includegraphics[width=0.8\textwidth]{project_bd.png}
+	%\caption{Diagramma dello schema relazionale generato con DataGrip}
+\end{center}
 
 
 
 \subsection{Uso di Intelligenza Artificiale Generativa}
-[Specificare se e come è stata utilizzata l’intelligenza artificiale generativa per realizzare le varie parti del progetto. Indicare anche se sono stati effettuati esperimenti di uso di AI generativa relativi al progetto che non hanno prodotto alcun contributo effettivamente utilizzato nel progetto consegnato, commentandone i risultati]
+%[Specificare se e come è stata utilizzata l’intelligenza artificiale generativa per realizzare le varie parti del progetto. Indicare anche se sono stati effettuati esperimenti di uso di AI generativa relativi al progetto che non hanno prodotto alcun contributo effettivamente utilizzato nel progetto consegnato, commentandone i risultati]
 
 \end{document}
