@@ -84,7 +84,7 @@ Il proprietario e gli amministratori hanno il compito di gestire la lega e appro
 		
 		\item \textbf{(stato approvazione, partecipano)} = tipo\_approvazione
 		\begin{itemize}
-			\item tipo\_approvazione = \{IN\_APPROVAZIONE, RIFIUTATA, APPROVATA\}
+			\item tipo\_approvazione = {IN\_APPROVAZIONE, RIFIUTATA, APPROVATA}
 		\end{itemize}
 		
 		\item \textbf{(tipo, bonus malus)} = tipo\_bonusmalus
@@ -132,13 +132,30 @@ Come scelta implementativa abbiamo deciso di rappresentare nel database "il grup
 
 \subsection{Domini degli Attributi}
 [eventuali modifiche dei domini degli attributi e informazioni sui domini di eventuali attributi introdotti]
+\begin{itemize}
+	\item \textbf{(tipo, artisti)} = tipo\_artista
+	\begin{itemize}
+		\item tipo\_artista = \{cantante\}
+	\end{itemize}
+	\item \textbf{(tipo, art\_brani)} = ruolo\_artista
+	\begin{itemize}
+		\item ruolo\_artista = \{compositore, direttore, scrittore\}
+	\end{itemize}
+\end{itemize}
 
--AGGIUNTA TIPO IN ART BRANO (scritto, composto, diretto)
 
 \subsection{Vincoli}
-[modifiche all'elenco di vincoli del modello concettuale (nuovi vincoli, eventuali vincoli eliminati o modificati)]
+%[modifiche all'elenco di vincoli del modello concettuale (nuovi vincoli, eventuali vincoli eliminati o modificati)]
 
-Bisogna dire che se TIPO è valorizzato ad C (cantante) implica la valorizzazione di biografia, genere musicale, edizioni passate (anche null), costo in baudi. Vincolo che vale anche alla rovescia. Se valorizzato uno di questi campi-> tipo C
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|c|c|p{6.5cm}|}
+		\hline
+		\textbf{Numero Vincolo} & \textbf{Entità e/o Associazioni Coinvolte} & \textbf{Vincolo in Linguaggio Naturale} \\ \hline
+		1 & ARTISTI & Se un artista ha il tipo valorizzato a "C" (cantante), allora deve avere valorizzati gli attributi relativi al cantante: biografia, genere musicale, edizioni passate, costo in baudi. Viceversa, se almeno uno di questi attributi è valorizzato, allora il tipo deve essere "C".\\ \hline
+	\end{tabular}
+	\caption{Vincoli Non Esprimibili nel Diagramma ER}
+\end{table}
 
 \subsection{Ristrutturazione Gerarchie}
 %[discussione delle scelte fatte per eliminare le gerarchie di generalizzazione]
@@ -150,24 +167,69 @@ L’unica gerarchia presente nello schema, quella tra ARTISTI e CANTANTI, è sta
 		\item \textbf{UTENTI}(\underline{username}, nome, cognome)
 		\item \textbf{LEGHE}(\underline{codLega}, nome, tipo)
 		\item \textbf{BONUS\_MALUS}(\underline{codBonusMalus}, descrizione, valore, tipo)
-		\item \textbf{SQUADRE}(\underline{codSquadra}, nome, \underline{usernameProprieta})
+		\item \textbf{SQUADRE}(\underline{codSquadra}, nome, username)
 		\item \textbf{FORMAZIONI}(\underline{codArtista}\textsuperscript{ARTISTI}, \underline{codSquadra}\textsuperscript{SQUADRE}, \underline{nomeSerata}\textsuperscript{SERATE}, ruolo, dataModifica)
 		
 		\item \textbf{GESTIONE\_LEGHE}(\underline{username}, \underline{codLega}\textsuperscript{LEGHE}, proprietario)
 		\item \textbf{SQUADRE\_LEGHE}(\underline{codSquadra}\textsuperscript{SQUADRE}, \underline{codLega}\textsuperscript{LEGHE}, statoApprovazione)
 		\item \textbf{BONUS\_FORMAZIONI}(\underline{codSquadra}\textsuperscript{SQUADRE}, \underline{codArtista}\textsuperscript{ARTISTI}, \underline{nomeSerata}\textsuperscript{SERATE}, \underline{codBonusMalus}\textsuperscript{BONUS\_MALUS}, valoreEffettivo)
 		
-		\item \textbf{ARTISTI}(\underline{codArtista}, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi)
+		\item \textbf{ARTISTI}(\underline{codArtista}, nomeGruppo\textsubscript{O}, nome\textsubscript{O}, cognome\textsubscript{O}, dataNascita\textsubscript{O}, luogoNascita\textsubscript{O}, tipo\textsubscript{O}, biografia\textsubscript{O}, genereMusicale\textsubscript{O}, edizioniPassate\textsubscript{O}, costoBaudi\textsubscript{O})
 		\item \textbf{BRANI}(\underline{codBrano}, \uwave{titolo}, \uwave{codArtista}\textsuperscript{ARTISTI}, genereMusicale, durata)
-		\item \textbf{SERATE}(\underline{nome}, data)
-		\item \textbf{ESIBIZIONI}(\underline{codBrano}\textsuperscript{BRANI}, orario, ordineEsibizione, \underline{nomeSerata}\textsuperscript{SERATE})
-		\item \textbf{VOTI}(\underline{codVoto}, tipo, dataOra, {codBrano}\textsuperscript{BRANI})
+		\item \textbf{SERATE}(\underline{nome}, data\textsubscript{O})
+		\item \textbf{ESIBIZIONI}(\underline{codBrano}\textsuperscript{BRANI},\underline{codArtista}\textsuperscript{ARTISTI}, orario, ordineEsibizione, \underline{nomeSerata}\textsuperscript{SERATE})
+		\item \textbf{VOTI}(\underline{codVoto}, {codBrano}\textsuperscript{BRANI},{codArtista}\textsuperscript{ARTISTI}, {nomeSerata}\textsuperscript{SERATE} tipo, dataOra)
 		\item \textbf{ART\_BRANI}(\underline{codBrano}\textsuperscript{BRANI},\underline{codArtista}\textsuperscript{ARTISTI}, \underline{tipo}) 
 	\end{itemize}
 	
 
 \subsection{Verifica di Qualità dello Schema}
-[verifica delle forme normali ed eventuali ottimizzazioni applicate tenendo in considerazione il carico di lavoro]
+%[verifica delle forme normali ed eventuali ottimizzazioni applicate tenendo in considerazione il carico di lavoro]
+Elenco dipendenze funzionali
+
+UTENTI
+username → nome, cognome
+
+LEGHE
+codLega → nome, tipo
+
+BONUS\_MALUS
+codBonusMalus → descrizione, valore, tipo
+
+SQUADRE
+codSquadra → nome, username
+
+FORMAZIONI
+(codArtista, codSquadra, nomeSerata) → ruolo, dataModifica
+
+GESTIONE\_LEGHE
+(username, codLega) → proprietario
+
+SQUADRE\_LEGHE
+(codSquadra, codLega) → statoApprovazione
+
+BONUS\_FORMAZIONI
+(codSquadra, codArtista, nomeSerata, codBonusMalus) → valoreEffettivo
+
+ARTISTI
+codArtista → nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi
+(+ vincoli condizionali su tipo per coerenza attributi)
+
+BRANI
+codBrano → titolo, codArtista, genereMusicale, durata
+(eventuale: (codArtista, titolo) → codBrano se il titolo è univoco per artista)
+
+SERATE
+nome → data
+
+ESIBIZIONI
+(codBrano, codArtista, nomeSerata) → orario, ordineEsibizione
+
+VOTI
+codVoto → codBrano, codArtista, nomeSerata, tipo, dataOra
+
+ART\_BRANI
+(codBrano, codArtista) → tipo
 
 \subsection{Schema SQL in Forma Grafica}
 Attenzione che dobbiamo farlo con DataGrip (ma prima SQL e quindi parte schema logico...ci pensiamo! ;-)
