@@ -8,6 +8,7 @@
 \usepackage{fancyhdr}
 \usepackage{setspace}
 \usepackage{todonotes}
+\usepackage[normalem]{ulem}
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{Progetto Basi di Dati 2024-25}
@@ -132,6 +133,8 @@ Come scelta implementativa abbiamo deciso di rappresentare nel database "il grup
 \subsection{Domini degli Attributi}
 [eventuali modifiche dei domini degli attributi e informazioni sui domini di eventuali attributi introdotti]
 
+-AGGIUNTA TIPO IN ART BRANO (scritto, composto, diretto)
+
 \subsection{Vincoli}
 [modifiche all'elenco di vincoli del modello concettuale (nuovi vincoli, eventuali vincoli eliminati o modificati)]
 
@@ -139,6 +142,7 @@ Bisogna dire che se TIPO è valorizzato ad C (cantante) implica la valorizzazion
 
 \subsection{Ristrutturazione Gerarchie}
 %[discussione delle scelte fatte per eliminare le gerarchie di generalizzazione]
+L’unica gerarchia presente nello schema, quella tra ARTISTI e CANTANTI, è stata oggetto di ristrutturazione al fine di semplificare il modello. La gerarchia, parziale ed esclusiva, è stata rimossa e sostituita con un approccio basato su un attributo discriminante. In particolare, è stato introdotto l’attributo tipo nella relazione ARTISTI per distinguere gli artisti dai cantanti ("C" per cantanti). Gli attributi precedentemente associati a "CANTANTI" sono stati integrati come facoltativi direttamente in ARTISTI. Sebbene ciò comporti la presenza di valori nulli, si è ritenuta accettabile questa scelta in quanto la cardinalità della relazione è contenuta.
 
 \subsection{Schema Logico}
 %[schema logico relazionale nella notazione vista a lezione]
@@ -146,20 +150,19 @@ Bisogna dire che se TIPO è valorizzato ad C (cantante) implica la valorizzazion
 		\item \textbf{UTENTI}(\underline{username}, nome, cognome)
 		\item \textbf{LEGHE}(\underline{codLega}, nome, tipo)
 		\item \textbf{BONUS\_MALUS}(\underline{codBonusMalus}, descrizione, valore, tipo)
-		\item \textbf{SQUADRE}(\underline{codSquadra}, nome, \underline{usernameProprietario})
+		\item \textbf{SQUADRE}(\underline{codSquadra}, nome, \underline{usernameProprieta})
 		\item \textbf{FORMAZIONI}(\underline{codArtista}\textsuperscript{ARTISTI}, \underline{codSquadra}\textsuperscript{SQUADRE}, \underline{nomeSerata}\textsuperscript{SERATE}, ruolo, dataModifica)
 		
-		\item \textbf{GESTIONE\_LEGA}(\underline{usernameAdmin}, \underline{codLega}\textsuperscript{LEGHE})
-		\item \textbf{SQUADRE\_LEGA}(\underline{codSquadra}\textsuperscript{SQUADRE}, \underline{codLega}\textsuperscript{LEGHE}, statoApprovazione)
+		\item \textbf{GESTIONE\_LEGHE}(\underline{username}, \underline{codLega}\textsuperscript{LEGHE}, proprietario)
+		\item \textbf{SQUADRE\_LEGHE}(\underline{codSquadra}\textsuperscript{SQUADRE}, \underline{codLega}\textsuperscript{LEGHE}, statoApprovazione)
 		\item \textbf{BONUS\_FORMAZIONI}(\underline{codSquadra}\textsuperscript{SQUADRE}, \underline{codArtista}\textsuperscript{ARTISTI}, \underline{nomeSerata}\textsuperscript{SERATE}, \underline{codBonusMalus}\textsuperscript{BONUS\_MALUS}, valoreEffettivo)
 		
 		\item \textbf{ARTISTI}(\underline{codArtista}, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi)
-		\item \textbf{BRANI}(\underline{titolo}, \underline{codArtista}\textsuperscript{ARTISTI}, genereMusicale, durata)
+		\item \textbf{BRANI}(\underline{codBrano}, \uwave{titolo}, \uwave{codArtista}\textsuperscript{ARTISTI}, genereMusicale, durata)
 		\item \textbf{SERATE}(\underline{nome}, data)
-		\item \textbf{ESIBIZIONI}(\underline{titoloBrano}\textsuperscript{BRANI}, \underline{codArtista}\textsuperscript{ARTISTI}, orario, ordineEsibizione, \underline{nomeSerata}\textsuperscript{SERATE})
-		\item \textbf{VOTI}(\underline{codVoto}, tipo, dataOra, \underline{titoloBrano}\textsuperscript{BRANI}, \underline{codArtista}\textsuperscript{ARTISTI})
-		% c'è qualcosa che non mi torna su questa associazione, da capire come gestire perchè dovrebbe esserci un codice artista per ogni riga...forse ci vuole una chiave aggiuntiva oppure tre relazioni, titolo/artista...più facile
-		\item \textbf{ANA\_BRANO}(\underline{codArtista}, \underline{titolo}, composto, scritto, diretto) 
+		\item \textbf{ESIBIZIONI}(\underline{codBrano}\textsuperscript{BRANI}, orario, ordineEsibizione, \underline{nomeSerata}\textsuperscript{SERATE})
+		\item \textbf{VOTI}(\underline{codVoto}, tipo, dataOra, {codBrano}\textsuperscript{BRANI})
+		\item \textbf{ART\_BRANI}(\underline{codBrano}\textsuperscript{BRANI},\underline{codArtista}\textsuperscript{ARTISTI}, \underline{tipo}) 
 	\end{itemize}
 	
 

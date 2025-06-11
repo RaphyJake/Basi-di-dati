@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.16 Chrome/132.0.6834.196 Electron/34.2.0 Safari/537.36" version="26.0.16">
   <diagram id="_KvNBjtN0LgoV4jBBkdm" name="festival_sanremo_v2">
-    <mxGraphModel dx="1434" dy="1663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="989" dy="1404" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -68,7 +68,7 @@
         <mxCell id="FfVXFCaMh1slwa6Uivpq-22" value="BRANI" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="370" y="243" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="FfVXFCaMh1slwa6Uivpq-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=oval;endFill=0;startFill=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="FfVXFCaMh1slwa6Uivpq-22" target="FfVXFCaMh1slwa6Uivpq-24" edge="1">
+        <mxCell id="FfVXFCaMh1slwa6Uivpq-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=oval;endFill=1;startFill=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="FfVXFCaMh1slwa6Uivpq-22" target="FfVXFCaMh1slwa6Uivpq-24" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="FfVXFCaMh1slwa6Uivpq-24" value="titolo" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;spacingRight=4;" parent="1" vertex="1">
@@ -78,7 +78,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="FfVXFCaMh1slwa6Uivpq-26" value="durata" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;spacingLeft=4;" parent="1" vertex="1">
-          <mxGeometry x="270" y="248" width="50" height="30" as="geometry" />
+          <mxGeometry x="275" y="248" width="50" height="30" as="geometry" />
         </mxCell>
         <mxCell id="FfVXFCaMh1slwa6Uivpq-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=oval;endFill=0;" parent="1" source="FfVXFCaMh1slwa6Uivpq-22" target="FfVXFCaMh1slwa6Uivpq-28" edge="1">
           <mxGeometry relative="1" as="geometry" />
