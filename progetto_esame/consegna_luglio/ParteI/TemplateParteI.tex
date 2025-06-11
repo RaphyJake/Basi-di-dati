@@ -143,20 +143,23 @@ Bisogna dire che se TIPO è valorizzato ad C (cantante) implica la valorizzazion
 \subsection{Schema Logico}
 %[schema logico relazionale nella notazione vista a lezione]
 	\begin{itemize}
-		\item \textbf{ARTISTI}(\underline{codArtista}, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi)
 		\item \textbf{UTENTI}(\underline{username}, nome, cognome)
 		\item \textbf{LEGHE}(\underline{codLega}, nome, tipo)
 		\item \textbf{BONUS\_MALUS}(\underline{codBonusMalus}, descrizione, valore, tipo)
 		\item \textbf{SQUADRE}(\underline{codSquadra}, nome, \underline{usernameProprietario})
-		\item \textbf{BRANI}(\underline{titolo}, \underline{codArtista}, genereMusicale, durata)
+		\item \textbf{FORMAZIONI}(\underline{codArtista}\textsuperscript{ARTISTI}, \underline{codSquadra}\textsuperscript{SQUADRE}, \underline{nomeSerata}\textsuperscript{SERATE}, ruolo, dataModifica)
+		
+		\item \textbf{GESTIONE\_LEGA}(\underline{usernameAdmin}, \underline{codLega}\textsuperscript{LEGHE})
+		\item \textbf{SQUADRE\_LEGA}(\underline{codSquadra}\textsuperscript{SQUADRE}, \underline{codLega}\textsuperscript{LEGHE}, statoApprovazione)
+		\item \textbf{BONUS\_FORMAZIONI}(\underline{codSquadra}\textsuperscript{SQUADRE}, \underline{codArtista}\textsuperscript{ARTISTI}, \underline{nomeSerata}\textsuperscript{SERATE}, \underline{codBonusMalus}\textsuperscript{BONUS\_MALUS}, valoreEffettivo)
+		
+		\item \textbf{ARTISTI}(\underline{codArtista}, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi)
+		\item \textbf{BRANI}(\underline{titolo}, \underline{codArtista}\textsuperscript{ARTISTI}, genereMusicale, durata)
 		\item \textbf{SERATE}(\underline{nome}, data)
-		\item \textbf{VOTI}(\underline{codVoto}, tipo, dataOra, \underline{titoloBrano}, \underline{codArtista})
-		\item \textbf{FORMAZIONI}(\underline{codArtista}, \underline{codSquadra}, \underline{nomeSerata}, ruolo, dataModifica)
-		\item \textbf{ESIBIZIONI}(\underline{titoloBrano}, \underline{codArtista}, orario, ordineEsibizione, \underline{nomeSerata})
-		\item \textbf{GESTIONE\_LEGA}(\underline{usernameAdmin}, \underline{codLega})
-		\item \textbf{ANA\_BRANO}(\underline{codArtista}, \underline{titolo}, composto, scritto, diretto)
-		\item \textbf{SQUADRE\_LEGA}(\underline{codSquadra}, \underline{codLega}, statoApprovazione)
-		\item \textbf{BONUS\_FORMAZIONI}(\underline{codSquadra}, \underline{codArtista}, \underline{nomeSerata}, \underline{codBonusMalus}, valoreEffettivo)
+		\item \textbf{ESIBIZIONI}(\underline{titoloBrano}\textsuperscript{BRANI}, \underline{codArtista}\textsuperscript{ARTISTI}, orario, ordineEsibizione, \underline{nomeSerata}\textsuperscript{SERATE})
+		\item \textbf{VOTI}(\underline{codVoto}, tipo, dataOra, \underline{titoloBrano}\textsuperscript{BRANI}, \underline{codArtista}\textsuperscript{ARTISTI})
+		% c'è qualcosa che non mi torna su questa associazione, da capire come gestire perchè dovrebbe esserci un codice artista per ogni riga...forse ci vuole una chiave aggiuntiva oppure tre relazioni, titolo/artista...più facile
+		\item \textbf{ANA\_BRANO}(\underline{codArtista}, \underline{titolo}, composto, scritto, diretto) 
 	\end{itemize}
 	
 
@@ -164,6 +167,7 @@ Bisogna dire che se TIPO è valorizzato ad C (cantante) implica la valorizzazion
 [verifica delle forme normali ed eventuali ottimizzazioni applicate tenendo in considerazione il carico di lavoro]
 
 \subsection{Schema SQL in Forma Grafica}
+Attenzione che dobbiamo farlo con DataGrip (ma prima SQL e quindi parte schema logico...ci pensiamo! ;-)
 \begin{center}
 	\includegraphics[width=0.8\textwidth]{project_bd.png}
 	%\caption{Diagramma dello schema relazionale generato con DataGrip}
