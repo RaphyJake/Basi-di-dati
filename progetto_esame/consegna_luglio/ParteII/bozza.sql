@@ -168,12 +168,12 @@ CREATE TABLE contributi_brani (
 
 -- INSERT SERATE
 INSERT INTO serate (nome, data) VALUES
-  ('Sanremo Prima Serata', DATE '2025-02-11'),
-  ('Sanremo Seconda Serata', DATE '2025-02-12'),
-  ('Sanremo Terza Serata', DATE '2025-02-13'),
-  ('Sanremo Quarta Serata', DATE '2025-02-14'),
-  ('Sanremo Finale', DATE '2025-02-15'),
-  ('Extra Bonus', NULL);
+  ('Prima Serata', DATE '2025-02-11'),
+  ('Seconda Serata', DATE '2025-02-12'),
+  ('Terza Serata', DATE '2025-02-13'),
+  ('Quarta Serata', DATE '2025-02-14'),
+  ('Finale', DATE '2025-02-15'),
+  ('Extra', NULL);
 
 
 -- INSERT UTENTI
