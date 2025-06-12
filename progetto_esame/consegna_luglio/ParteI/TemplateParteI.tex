@@ -32,7 +32,6 @@
 \vspace{1cm}
 
 \section{REQUISITI RISTRUTTURATI}
-\noindent
 %[Riportare in questa sezione la specifica dei requisiti ristrutturata in modo da eliminare ambiguità, evidenziando eventuali modifiche effettuate rispetto alla specifica fornita]
 Si richiede la progettazione e realizzazione di una base di dati a supporto della piattaforma social di FantaSanremo, un gioco di fantasia ispirato al Festival di Sanremo.
 
@@ -84,19 +83,19 @@ Il proprietario e gli amministratori hanno il compito di gestire la lega e appro
 		
 		\item \textbf{(stato approvazione, partecipano)} = tipo\_approvazione
 		\begin{itemize}
-			\item tipo\_approvazione = {IN\_APPROVAZIONE, RIFIUTATA, APPROVATA}
+			\item tipo\_approvazione = \{IN\_APPROVAZIONE, RIFIUTATA, APPROVATA\}
 		\end{itemize}
 		
 		\item \textbf{(tipo, bonus malus)} = tipo\_bonusmalus
 		\begin{itemize}
-			\item tipo\_bonusmalus = \{extra, standard\}
+			\item tipo\_bonusmalus = \{EXTRA, STANDARD\}
 		\end{itemize}
 		
 		\item \textbf{(valore, bonus malus)} = real (può essere negativo per i malus)
 		
 		\item \textbf{(ruolo, compone)} = ruolo\_compone
 		\begin{itemize}
-			\item ruolo\_compone = \{capitano, titolare, riserva\}
+			\item ruolo\_compone = \{CAPITANO, TITOLARE, RISERVA\}
 		\end{itemize}
 		
 		\item \textbf{(durata, brani)} = real (secondi durata brano)
@@ -110,16 +109,15 @@ Il proprietario e gli amministratori hanno il compito di gestire la lega e appro
 	        \textbf{Numero Vincolo} & \textbf{Entità e/o Associazioni Coinvolte} & \textbf{Vincolo in Linguaggio Naturale} \\ \hline
 	        1 & utenti, squadre, leghe, partecipano & Un utente con le proprie squadre non può partecipare a più di 25 leghe \\ \hline
 	        2 & utenti, formazioni, squadre & Ogni utente, per ciascuna formazione di una squadra, ha a disposizione 100 baudi \\ \hline
-	       	3 & squadre, formazioni, serate & Una squadra, per ciascuna serata, può avere al massimo 7 partecipanti alla formazione (se durante la giornata la formazione cambia più volte nella fascia oraria concessa, sarà sovrascritta e aggiornata la data di modifica). \\ \hline
-	        4 & squadre, formazioni, cantanti & Per ciascuna data, per ciascuna squadra, potremo avere al massimo 4 titolari, 2 riserve, 1 capitano all'interno della formazione. \\ \hline
+	       	3 & squadre, formazioni, serate & Una squadra, per ciascuna serata, può avere al massimo 7 partecipanti alla formazione (se durante la giornata la formazione cambia più volte nella fascia oraria concessa, sarà sovrascritta e aggiornata la data di modifica) \\ \hline
+	        4 & squadre, formazioni, cantanti & Per ciascuna data, per ciascuna squadra, potremo avere al massimo 4 titolari, 2 riserve, 1 capitano all'interno della formazione \\ \hline
 	        5 & leghe, partecipano & Se la tipologia di lega è pubblica, il tipo di approvazione dell'associazione 'partecipano' è valorizzato ad "APPROVATA". \\ \hline
-	        6 & artisti, scritto, composto, diretto & Se l'artista è un gruppo (attributo 'nome gruppo' valorizzato), non potrà scrivere, comporre o dirigere brani. \\ \hline
-	        7 & artisti & Se l'artista ha valorizzato l'attributo 'nome gruppo', non potrà avere valorizzati 'nome', 'cognome', 'data nascita' e 'luogo nascita', e viceversa.  \\ \hline
+	        6 & artisti, scritto, composto, diretto & Se l'artista è un gruppo (attributo 'nome gruppo' valorizzato), non potrà scrivere, comporre o dirigere brani \\ \hline
+	        7 & artisti & Se l'artista ha valorizzato l'attributo 'nome gruppo', non potrà avere valorizzati 'nome', 'cognome', 'data nascita' e 'luogo nascita', e viceversa  \\ \hline
 	    \end{tabular}
 	    \caption{Vincoli Non Esprimibili nel Diagramma ER}
 	\end{table}
 \subsection{Commenti e Scelte Effettuate}
-\noindent
 Come scelta implementativa abbiamo deciso di rappresentare nel database "il gruppo" come un oggetto unico e non come insieme di persone che lo compongono. Dal nostro punto di vista, il gruppo partecipa alla gara e non i singoli membri. I brani non vengono scritti/composti/diretti da un gruppo, ma da artisti (che eventualmente potrebbero fare parte di un gruppo, ma non teniamo traccia di questo elemento). In breve, lo schema non vuole tenere in considerazione la composizione dei gruppi.
 
 \newpage
@@ -135,18 +133,17 @@ Come scelta implementativa abbiamo deciso di rappresentare nel database "il grup
 \begin{itemize}
 	\item \textbf{(tipo, artisti)} = tipo\_artista
 	\begin{itemize}
-		\item tipo\_artista = \{cantante\}
+		\item tipo\_artista = \{CANTANTE\}
 	\end{itemize}
 	\item \textbf{(tipo, art\_brani)} = ruolo\_artista
 	\begin{itemize}
-		\item ruolo\_artista = \{compositore, direttore, scrittore\}
+		\item ruolo\_artista = \{COMPOSITORE, DIRETTORE, SCRITTORE\}
 	\end{itemize}
 \end{itemize}
 
 
 \subsection{Vincoli}
 %[modifiche all'elenco di vincoli del modello concettuale (nuovi vincoli, eventuali vincoli eliminati o modificati)]
-
 \begin{table}[h!]
 	\centering
 	\begin{tabular}{|c|c|p{6.5cm}|}
@@ -159,82 +156,64 @@ Come scelta implementativa abbiamo deciso di rappresentare nel database "il grup
 
 \subsection{Ristrutturazione Gerarchie}
 %[discussione delle scelte fatte per eliminare le gerarchie di generalizzazione]
-L’unica gerarchia presente nello schema, quella tra ARTISTI e CANTANTI, è stata oggetto di ristrutturazione al fine di semplificare il modello. La gerarchia, parziale ed esclusiva, è stata rimossa e sostituita con un approccio basato su un attributo discriminante. In particolare, è stato introdotto l’attributo tipo nella relazione ARTISTI per distinguere gli artisti dai cantanti ("C" per cantanti). Gli attributi precedentemente associati a "CANTANTI" sono stati integrati come facoltativi direttamente in ARTISTI. Sebbene ciò comporti la presenza di valori nulli, si è ritenuta accettabile questa scelta in quanto la cardinalità della relazione è contenuta.
+L’unica gerarchia presente nello schema, quella tra ARTISTI e CANTANTI, è stata oggetto di ristrutturazione al fine di semplificare il modello. La gerarchia, parziale ed esclusiva, è stata rimossa e sostituita con un approccio basato su un attributo discriminante. In particolare, è stato introdotto l’attributo tipo nella relazione ARTISTI per distinguere gli artisti dai cantanti ("CANTANTE"). Gli attributi precedentemente associati a "CANTANTI" sono stati integrati come facoltativi direttamente in ARTISTI. Sebbene ciò comporti la presenza di valori nulli, si è ritenuta accettabile questa scelta in quanto la cardinalità della relazione è contenuta.
 
 \subsection{Schema Logico}
 %[schema logico relazionale nella notazione vista a lezione]
-	\begin{itemize}
-		\item \textbf{UTENTI}(\underline{username}, nome, cognome)
-		\item \textbf{LEGHE}(\underline{codLega}, nome, tipo)
-		\item \textbf{BONUS\_MALUS}(\underline{codBonusMalus}, descrizione, valore, tipo)
-		\item \textbf{SQUADRE}(\underline{codSquadra}, nome, username)
-		\item \textbf{FORMAZIONI}(\underline{codArtista}\textsuperscript{ARTISTI}, \underline{codSquadra}\textsuperscript{SQUADRE}, \underline{nomeSerata}\textsuperscript{SERATE}, ruolo, dataModifica)
-		
-		\item \textbf{GESTIONE\_LEGHE}(\underline{username}, \underline{codLega}\textsuperscript{LEGHE}, proprietario)
-		\item \textbf{SQUADRE\_LEGHE}(\underline{codSquadra}\textsuperscript{SQUADRE}, \underline{codLega}\textsuperscript{LEGHE}, statoApprovazione)
-		\item \textbf{BONUS\_FORMAZIONI}(\underline{codSquadra}\textsuperscript{SQUADRE}, \underline{codArtista}\textsuperscript{ARTISTI}, \underline{nomeSerata}\textsuperscript{SERATE}, \underline{codBonusMalus}\textsuperscript{BONUS\_MALUS}, valoreEffettivo)
-		
-		\item \textbf{ARTISTI}(\underline{codArtista}, nomeGruppo\textsubscript{O}, nome\textsubscript{O}, cognome\textsubscript{O}, dataNascita\textsubscript{O}, luogoNascita\textsubscript{O}, tipo\textsubscript{O}, biografia\textsubscript{O}, genereMusicale\textsubscript{O}, edizioniPassate\textsubscript{O}, costoBaudi\textsubscript{O})
-		\item \textbf{BRANI}(\underline{codBrano}, \uwave{titolo}, \uwave{codArtista}\textsuperscript{ARTISTI}, genereMusicale, durata)
-		\item \textbf{SERATE}(\underline{nome}, data\textsubscript{O})
-		\item \textbf{ESIBIZIONI}(\underline{codBrano}\textsuperscript{BRANI},\underline{codArtista}\textsuperscript{ARTISTI}, orario, ordineEsibizione, \underline{nomeSerata}\textsuperscript{SERATE})
-		\item \textbf{VOTI}(\underline{codVoto}, {codBrano}\textsuperscript{BRANI},{codArtista}\textsuperscript{ARTISTI}, {nomeSerata}\textsuperscript{SERATE} tipo, dataOra)
-		\item \textbf{ART\_BRANI}(\underline{codBrano}\textsuperscript{BRANI},\underline{codArtista}\textsuperscript{ARTISTI}, \underline{tipo}) 
-	\end{itemize}
+\begin{itemize}
+	\item \textbf{UTENTI}(\underline{username}, nome, cognome)
+	\item \textbf{LEGHE}(\underline{codLega}, nome, tipo)
+	\item \textbf{BONUS\_MALUS}(\underline{codBonusMalus}, descrizione, valore, tipo)
+	\item \textbf{SQUADRE}(\underline{codSquadra}, nome, username\textsuperscript{UTENTI})
+	\item \textbf{FORMAZIONI}(\underline{codArtista}\textsuperscript{ARTISTI}, \underline{codSquadra}\textsuperscript{SQUADRE}, \underline{nomeSerata}\textsuperscript{SERATE}, ruolo, dataModifica)
 	
+	\item \textbf{GESTIONE\_LEGHE}(\underline{username}\textsuperscript{UTENTI}, \underline{codLega}\textsuperscript{LEGHE}, proprietario)
+	\item \textbf{PARTECIPAZIONE\_LEGHE}(\underline{codSquadra}\textsuperscript{SQUADRE}, \underline{codLega}\textsuperscript{LEGHE}, statoApprovazione)
+	\item \textbf{BONUS\_ASSEGNTI}(\underline{codSquadra}\textsuperscript{SQUADRE}, \underline{codArtista}\textsuperscript{ARTISTI}, \underline{nomeSerata}\textsuperscript{SERATE}, \underline{codBonusMalus}\textsuperscript{BONUS\_MALUS}, valoreEffettivo)
+	
+	\item \textbf{ARTISTI}(\underline{codArtista}, nomeGruppo\textsubscript{O}, nome\textsubscript{O}, cognome\textsubscript{O}, dataNascita\textsubscript{O}, luogoNascita\textsubscript{O}, tipo\textsubscript{O}, biografia\textsubscript{O}, genereMusicale\textsubscript{O}, edizioniPassate\textsubscript{O}, costoBaudi\textsubscript{O})
+	\item \textbf{BRANI}(\underline{codBrano}, \uwave{titolo}, \uwave{codArtista}\textsuperscript{ARTISTI}, genereMusicale, durata)
+	\item \textbf{SERATE}(\underline{nome}, data\textsubscript{O})
+	\item \textbf{ESIBIZIONI}(\underline{codBrano}\textsuperscript{BRANI},\underline{codArtista}\textsuperscript{ARTISTI}, orario, ordineEsibizione, \underline{nomeSerata}\textsuperscript{SERATE})
+	\item \textbf{VOTI}(\underline{codVoto}, codBrano\textsuperscript{BRANI}, codArtista\textsuperscript{ARTISTI}, nomeSerata\textsuperscript{SERATE}, tipo, dataOra)
+	\item \textbf{CONTRIBUTI\_BRANI}(\underline{codBrano}\textsuperscript{BRANI}, \underline{codArtista}\textsuperscript{ARTISTI}, \underline{tipo})
+\end{itemize}
 
 \subsection{Verifica di Qualità dello Schema}
 %[verifica delle forme normali ed eventuali ottimizzazioni applicate tenendo in considerazione il carico di lavoro]
-Elenco dipendenze funzionali
 
-UTENTI
-username → nome, cognome
+\subsubsection{Dipendenze funzionali}
 
-LEGHE
-codLega → nome, tipo
+\begin{itemize}
+	\item UTENTI: username → nome, cognome
+	\item LEGHE: codLega → nome, tipo
+	\item BONUS\_MALUS: codBonusMalus → descrizione, valore, tipo
+	\item SQUADRE: codSquadra → nome, username
+	\item FORMAZIONI: (codArtista, codSquadra, nomeSerata) → ruolo, dataModifica
+	\item GESTIONE\_LEGHE: (username, codLega) → proprietario
+	\item PARTECIPAZIONE\_LEGHE: (codSquadra, codLega) → statoApprovazione
+	\item BONUS\_ASSEGNTI: (codSquadra, codArtista, nomeSerata, codBonusMalus) → valoreEffettivo
+	\item ARTISTI: codArtista → nomeGruppo, nome, cognome, dataNascita,\\
+	\hspace{4.5em} luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi
+	\item BRANI: codBrano → titolo, codArtista, genereMusicale, durata\\
+	\hspace{4.5em}(codArtista, titolo) → codBrano, titolo, genereMusicale, durata
+	\item SERATE: nome → data
+	\item ESIBIZIONI: (codBrano, codArtista, nomeSerata) → orario, ordineEsibizione
+	\item VOTI: codVoto → codBrano, codArtista, nomeSerata, tipo, dataOra
+	\item CONTRIBUTI\_BRANI: (codBrano, codArtista) → tipo
+\end{itemize}
 
-BONUS\_MALUS
-codBonusMalus → descrizione, valore, tipo
+\subsubsection{Verifica BCNF}
+Tutte le relazioni presenti nello schema logico risultano essere in forma normale di Boyce-Codd (BCNF).  
+Per ciascuna relazione, infatti, è stato verificato che ogni dipendenza funzionale non banale ha come determinante una superchiave.  
+Questo garantisce un elevato livello di normalizzazione, con benefici in termini di assenza di ridondanze, integrità dei dati e semplificazione delle operazioni di aggiornamento.  
+Non sono stati rilevati casi di violazione della BCNF, nemmeno in presenza di chiavi candidate alternative o vincoli condizionali, come nel caso della relazione \texttt{ARTISTI}.
 
-SQUADRE
-codSquadra → nome, username
 
-FORMAZIONI
-(codArtista, codSquadra, nomeSerata) → ruolo, dataModifica
-
-GESTIONE\_LEGHE
-(username, codLega) → proprietario
-
-SQUADRE\_LEGHE
-(codSquadra, codLega) → statoApprovazione
-
-BONUS\_FORMAZIONI
-(codSquadra, codArtista, nomeSerata, codBonusMalus) → valoreEffettivo
-
-ARTISTI
-codArtista → nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi
-(+ vincoli condizionali su tipo per coerenza attributi)
-
-BRANI
-codBrano → titolo, codArtista, genereMusicale, durata
-(eventuale: (codArtista, titolo) → codBrano se il titolo è univoco per artista)
-
-SERATE
-nome → data
-
-ESIBIZIONI
-(codBrano, codArtista, nomeSerata) → orario, ordineEsibizione
-
-VOTI
-codVoto → codBrano, codArtista, nomeSerata, tipo, dataOra
-
-ART\_BRANI
-(codBrano, codArtista) → tipo
 
 \subsection{Schema SQL in Forma Grafica}
-Attenzione che dobbiamo farlo con DataGrip (ma prima SQL e quindi parte schema logico...ci pensiamo! ;-)
 \begin{center}
-	\includegraphics[width=0.8\textwidth]{project_bd.png}
+	\includegraphics[width=0.9\textwidth]{fantasanremo.eps}
 	%\caption{Diagramma dello schema relazionale generato con DataGrip}
 \end{center}
 
@@ -242,5 +221,14 @@ Attenzione che dobbiamo farlo con DataGrip (ma prima SQL e quindi parte schema l
 
 \subsection{Uso di Intelligenza Artificiale Generativa}
 %[Specificare se e come è stata utilizzata l’intelligenza artificiale generativa per realizzare le varie parti del progetto. Indicare anche se sono stati effettuati esperimenti di uso di AI generativa relativi al progetto che non hanno prodotto alcun contributo effettivamente utilizzato nel progetto consegnato, commentandone i risultati]
+Nel corso dello sviluppo del presente progetto è stato fatto ricorso, in maniera mirata e controllata, a strumenti di intelligenza artificiale generativa, in particolare ChatGPT di OpenAI, con finalità esclusivamente assistive.\\
+L’impiego dell’AI si è concentrato su alcune attività specifiche:
+\begin{itemize}
+	\item l’esplicitazione delle dipendenze funzionali a partire dallo schema logico relazionale;
+	\item la verifica del rispetto delle forme normali, con particolare attenzione alla Boyce-Codd Normal Form (BCNF);
+	\item il supporto alla redazione della documentazione in linguaggio \LaTeX;
+	\item la definizione dei domini degli attributi, tramite l’impiego di tipi enumerati coerenti con la semantica del modello.
+\end{itemize}
 
+Tutti i contenuti generati con il supporto dell’intelligenza artificiale sono stati oggetto di verifica da parte dei componenti del gruppo, che hanno esercitato un controllo costante e consapevole sull’intero processo di progettazione. L’AI è stata dunque utilizzata esclusivamente come strumento di supporto operativo, e non come fonte automatica di soluzioni corrette in modo assoluto o prive di necessità di revisione critica.
 \end{document}
