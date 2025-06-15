@@ -1,3 +1,186 @@
+--- Progetto BD 24-25 (6CFU)
+--- Gruppo 35
+--- Alessio Molinas 5339413
+--- Ettore Romano 5644926
+
+--- PARTE 2 
+/* il file deve essere file SQL ... cio formato solo testo e apribili ed eseguibili in pgAdmin */
+
+/*************************************************************************************************************************************************************************/
+--1a. Schema
+-- CREATE SCHEMA
+CREATE SCHEMA IF NOT EXISTS fantasanremo;
+SET search_path TO fantasanremo;
+
+-- ENUM TYPES
+CREATE TYPE tipo_voto AS ENUM ('TELEVOTO', 'GIURIA_STAMPA', 'GIURIA_RADIO');
+CREATE TYPE tipo_lega AS ENUM ('PUBBLICA', 'PRIVATA', 'SEGRETA');
+CREATE TYPE tipo_bonusmalus AS ENUM ('EXTRA', 'STANDARD');
+CREATE TYPE tipo_approvazione AS ENUM ('IN_APPROVAZIONE', 'RIFIUTATA', 'APPROVATA');
+CREATE TYPE ruolo_compone AS ENUM ('CAPITANO', 'TITOLARE', 'RISERVA');
+CREATE TYPE tipo_artista AS ENUM ('CANTANTE');
+CREATE TYPE ruolo_artista AS ENUM ('COMPOSITORE', 'DIRETTORE', 'SCRITTORE');
+
+-- UTENTI
+CREATE TABLE utenti (
+    username VARCHAR(90) NOT NULL,
+    nome VARCHAR(50) NOT NULL,
+    cognome VARCHAR(50) NOT NULL,
+    CONSTRAINT pk_utenti PRIMARY KEY (username)
+);
+
+-- LEGHE
+CREATE TABLE leghe (
+    codLega INTEGER NOT NULL,
+    nome VARCHAR(50) NOT NULL,
+    tipo tipo_lega NOT NULL,
+    CONSTRAINT pk_leghe PRIMARY KEY (codLega)
+);
+
+-- BONUS_MALUS
+CREATE TABLE bonus_malus (
+    codBonusMalus INTEGER NOT NULL,
+    descrizione VARCHAR(100) NOT NULL,
+    valore NUMERIC NOT NULL,
+    tipo tipo_bonusmalus NOT NULL,
+    CONSTRAINT pk_bonus_malus PRIMARY KEY (codBonusMalus)
+);
+
+-- ARTISTI
+CREATE TABLE artisti (
+    codArtista INTEGER NOT NULL,
+    nomeGruppo VARCHAR(50),
+    nome VARCHAR(50),
+    cognome VARCHAR(50),
+    dataNascita DATE,
+    luogoNascita VARCHAR(100),
+    tipo tipo_artista,
+    biografia VARCHAR(255),
+    genereMusicale VARCHAR(50),
+    edizioniPassate VARCHAR(100),
+    costoBaudi NUMERIC,
+    CONSTRAINT pk_artisti PRIMARY KEY (codArtista)
+);
+
+-- SQUADRE
+CREATE TABLE squadre (
+    codSquadra INTEGER NOT NULL,
+    nome VARCHAR(50) NOT NULL,
+    username VARCHAR(30) NOT NULL,
+    CONSTRAINT pk_squadre PRIMARY KEY (codSquadra),
+    CONSTRAINT fk_squadre_utenti FOREIGN KEY (username) REFERENCES utenti(username) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- SERATE
+CREATE TABLE serate (
+    nome VARCHAR(50) NOT NULL,
+    data DATE,
+    CONSTRAINT pk_serate PRIMARY KEY (nome)
+);
+
+-- BRANI
+CREATE TABLE brani (
+    codBrano INTEGER NOT NULL,
+    titolo VARCHAR(100) NOT NULL,
+    codArtista INTEGER NOT NULL,
+    genereMusicale VARCHAR(50) NOT NULL,
+    durata INTERVAL NOT NULL DEFAULT INTERVAL '0 seconds',
+    CONSTRAINT pk_brani PRIMARY KEY (codBrano),
+    CONSTRAINT uq_brani_artista_titolo UNIQUE (codArtista, titolo),
+    CONSTRAINT fk_brani_artisti FOREIGN KEY (codArtista) REFERENCES artisti(codArtista) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT ck_durata_min CHECK (durata > INTERVAL '0 seconds')
+);
+
+-- FORMAZIONI
+CREATE TABLE formazioni (
+    codArtista INTEGER NOT NULL,
+    codSquadra INTEGER NOT NULL,
+    nomeSerata VARCHAR(50) NOT NULL,
+    ruolo ruolo_compone NOT NULL,
+    dataModifica TIMESTAMP NOT NULL,
+    CONSTRAINT pk_formazioni PRIMARY KEY (codArtista, codSquadra, nomeSerata),
+    CONSTRAINT fk_formazioni_artisti FOREIGN KEY (codArtista) REFERENCES artisti(codArtista) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_formazioni_squadre FOREIGN KEY (codSquadra) REFERENCES squadre(codSquadra) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_formazioni_serate FOREIGN KEY (nomeSerata) REFERENCES serate(nome) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- GESTIONE_LEGHE
+CREATE TABLE gestione_leghe (
+    username VARCHAR(30) NOT NULL,
+    codLega INTEGER NOT NULL,
+    proprietario BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT pk_gestione_leghe PRIMARY KEY (username, codLega),
+    CONSTRAINT fk_gestione_leghe_utenti FOREIGN KEY (username) REFERENCES utenti(username) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_gestione_leghe_leghe FOREIGN KEY (codLega) REFERENCES leghe(codLega) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- PARTECIPAZIONE_LEGHE
+CREATE TABLE partecipazione_leghe (
+    codSquadra INTEGER NOT NULL,
+    codLega INTEGER NOT NULL,
+    statoApprovazione tipo_approvazione NOT NULL,
+    CONSTRAINT pk_partecipazione_leghe PRIMARY KEY (codSquadra, codLega),
+    CONSTRAINT fk_partecipazione_leghe_squadre FOREIGN KEY (codSquadra) REFERENCES squadre(codSquadra) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_partecipazione_leghe_leghe FOREIGN KEY (codLega) REFERENCES leghe(codLega) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- BONUS_ASSEGNATI
+CREATE TABLE bonus_assegnati (
+    codSquadra INTEGER NOT NULL,
+    codArtista INTEGER NOT NULL,
+    nomeSerata VARCHAR(50) NOT NULL,
+    codBonusMalus INTEGER NOT NULL,
+    valoreEffettivo NUMERIC NOT NULL,
+    CONSTRAINT pk_bonus_assegnati PRIMARY KEY (codSquadra, codArtista, nomeSerata, codBonusMalus),
+    CONSTRAINT fk_bonus_assegnati_squadre FOREIGN KEY (codSquadra) REFERENCES squadre(codSquadra) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_bonus_assegnati_artisti FOREIGN KEY (codArtista) REFERENCES artisti(codArtista) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_bonus_assegnati_serate FOREIGN KEY (nomeSerata) REFERENCES serate(nome) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_bonus_assegnati_bonus FOREIGN KEY (codBonusMalus) REFERENCES bonus_malus(codBonusMalus) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- ESIBIZIONI
+CREATE TABLE esibizioni (
+    codBrano INTEGER NOT NULL,
+    codArtista INTEGER NOT NULL,
+    nomeSerata VARCHAR(50) NOT NULL,
+    orario TIME NOT NULL,
+    ordineEsibizione INTEGER NOT NULL,
+    CONSTRAINT pk_esibizioni PRIMARY KEY (codBrano, codArtista, nomeSerata),
+    CONSTRAINT fk_esibizioni_brani FOREIGN KEY (codBrano) REFERENCES brani(codBrano) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_esibizioni_artisti FOREIGN KEY (codArtista) REFERENCES artisti(codArtista) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_esibizioni_serate FOREIGN KEY (nomeSerata) REFERENCES serate(nome) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- VOTI
+CREATE TABLE voti (
+    codVoto INTEGER NOT NULL,
+    codBrano INTEGER NOT NULL,
+    codArtista INTEGER NOT NULL,
+    nomeSerata VARCHAR(50) NOT NULL,
+    tipo tipo_voto NOT NULL,
+    dataOra TIMESTAMP NOT NULL,
+    CONSTRAINT pk_voti PRIMARY KEY (codVoto),
+    CONSTRAINT fk_voti_brani FOREIGN KEY (codBrano) REFERENCES brani(codBrano) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_voti_artisti FOREIGN KEY (codArtista) REFERENCES artisti(codArtista) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_voti_serate FOREIGN KEY (nomeSerata) REFERENCES serate(nome) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CONTRIBUTI_BRANI
+CREATE TABLE contributi_brani (
+    codBrano INTEGER NOT NULL,
+    codArtista INTEGER NOT NULL,
+    tipo ruolo_artista NOT NULL,
+    CONSTRAINT pk_contributi_brani PRIMARY KEY (codBrano, codArtista, tipo),
+    CONSTRAINT fk_contributi_brani_brani FOREIGN KEY (codBrano) REFERENCES brani(codBrano) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_contributi_brani_artisti FOREIGN KEY (codArtista) REFERENCES artisti(codArtista) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+/* inserire qui i comandi SQL per la creazione dello schema logico della base di dati in accordo allo schema relazionale ottenuto alla fine della fase di progettazione logica, per la porzione necessaria per i punti successivi (cio le tabelle coinvolte dalle interrogazioni nel carico di lavoro, nella definizione della vista, nelle interrogazioni, in funzioni, procedure e trigger). Lo schema dovrˆ essere comprensivo dei vincoli esprimibili con check. */
+
+/*************************************************************************************************************************************************************************/ 
+--1b. Popolamento 
+/*************************************************************************************************************************************************************************/
+/* inserire qui i comandi SQL per il popolamento 'in piccolo' di tale base di dati (utile per il test dei vincoli e delle operazioni in parte 2.) */
 -- INSERT SERATE
 INSERT INTO serate (nome, data) VALUES
   ('Prima Serata', DATE '2025-02-11'),
@@ -100,12 +283,12 @@ INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (4, 'I
 INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (5, 'Seda una rissa in diretta', 25, 'STANDARD');
 INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (6, 'Nomina il FantaSanremo sul palco', -10, 'STANDARD');
 INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (7, 'Il presentatore sbaglia il titolo della canzone', -10, 'STANDARD');
-INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (8, 'Il presentatore sbaglia il nome dellâ€™artista', -5, 'STANDARD');
+INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (8, 'Il presentatore sbaglia il nome dell’artista', -5, 'STANDARD');
 INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (9, 'Outfit total black', -5, 'STANDARD');
-INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (10, 'Non ringrazia verbalmente al termine dellâ€™esibizione', -5, 'STANDARD');
+INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (10, 'Non ringrazia verbalmente al termine dell’esibizione', -5, 'STANDARD');
 INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (11, 'Batti 5 alla statua di Mike Bongiorno', 10, 'EXTRA');
 INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (12, 'Canta con i fan per le vie di Sanremo', 10, 'EXTRA');
-INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (13, 'Canta la sigla â€œOcchi di FantaSanremoâ€ di Cristina Dâ€™Avena', 10, 'EXTRA');
+INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (13, 'Canta la sigla “Occhi di FantaSanremo” di Cristina D’Avena', 10, 'EXTRA');
 
 INSERT INTO voti (codVoto, codBrano, codArtista, nomeSerata, tipo, dataOra) VALUES (1, 6, 6, 'Seconda Serata', 'GIURIA_RADIO', '2025-02-12 21:00:00');
 INSERT INTO voti (codVoto, codBrano, codArtista, nomeSerata, tipo, dataOra) VALUES (2, 8, 8, 'Seconda Serata', 'GIURIA_STAMPA', '2025-02-12 21:10:00');
@@ -219,15 +402,237 @@ INSERT INTO partecipazione_leghe (codSquadra, codLega, statoApprovazione) VALUES
 INSERT INTO partecipazione_leghe (codSquadra, codLega, statoApprovazione) VALUES (15, 3, 'APPROVATA');
 
 
-INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 4, 'Prima Serata', 10, -5);;
-INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 4, 'Prima Serata', 9, -5);;
-INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 10, 'Prima Serata', 6, -10);;
-INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 6, 'Prima Serata', 5, 25);;
-INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 6, 'Prima Serata', 8, -5);;
-INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 7, 'Prima Serata', 5, 25);;
-INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 7, 'Prima Serata', 3, 15);;
-INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 2, 'Prima Serata', 10, -5);;
-INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 9, 'Prima Serata', 9, -5);;
-INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 9, 'Prima Serata', 8, -5);;
-INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 3, 'Prima Serata', 9, -5);;
-INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 3, 'Prima Serata', 8, -5);;
+INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 4, 'Prima Serata', 10, -5);
+INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 4, 'Prima Serata', 9, -5);
+INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 10, 'Prima Serata', 6, -10);
+INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 6, 'Prima Serata', 5, 25);
+INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 6, 'Prima Serata', 8, -5);
+INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 7, 'Prima Serata', 5, 25);
+INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 7, 'Prima Serata', 3, 15);
+INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 2, 'Prima Serata', 10, -5);
+INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 9, 'Prima Serata', 9, -5);
+INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 9, 'Prima Serata', 8, -5);
+INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 3, 'Prima Serata', 9, -5);
+INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 3, 'Prima Serata', 8, -5);
+
+/*************************************************************************************************************************************************************************/ 
+--2. Vista 
+/*
+Per ogni serata, per ogni squadra e per ogni versione della formazione (identificata dalla data di modifica), la vista mostra il nome della squadra, il costo medio in baudi degli artisti schierati, il costo minimo e il costo massimo all'interno di quella formazione.
+*/ 
+CREATE OR REPLACE VIEW v_costi_formazione_squadra AS
+SELECT
+    f.nomeSerata,
+    f.codSquadra,
+    s.nome AS nomeSquadra,
+    f.dataModifica,
+    ROUND(AVG(a.costoBaudi), 2) AS costo_medio_baudi,
+    MIN(a.costoBaudi) AS costo_min_baudi,
+    MAX(a.costoBaudi) AS costo_max_baudi
+FROM
+    formazioni f
+JOIN artisti a ON f.codArtista = a.codArtista
+JOIN squadre s ON f.codSquadra = s.codSquadra
+GROUP BY
+    f.nomeSerata, f.codSquadra, s.nome, f.dataModifica;
+
+/*************************************************************************************************************************************************************************/ 
+--3. Interrogazioni
+/*************************************************************************************************************************************************************************/
+/* 3a (interrogazione con operazione insiemistica)															 */
+/*
+	Scrittura di una query che visualizza gli artisti che si sono esibiti sia nella serata "Finale" e nella serata "Prima serata"
+*/
+SELECT DISTINCT codArtista
+FROM esibizioni
+WHERE nomeSerata = 'Finale'
+INTERSECT
+SELECT DISTINCT codArtista
+FROM esibizioni
+WHERE nomeSerata = 'Prima Serata';
+
+/*************************************************************************************************************************************************************************/ 
+/* 3b (interrogazione di divisione) */
+/* Trovare gli artisti che hanno ricevuto almeno un voto in tutte le serate in cui si sono esibiti. */ 
+SELECT e.codArtista
+FROM esibizioni e
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM esibizioni es
+    WHERE es.codArtista = e.codArtista
+    AND NOT EXISTS (
+        SELECT 1
+        FROM voti v
+        WHERE v.codArtista = es.codArtista
+          AND v.nomeSerata = es.nomeSerata
+    )
+)
+GROUP BY e.codArtista;
+
+/*************************************************************************************************************************************************************************/ 
+/* 3b (interrogazione con sottointerrogazione correlata) */
+/* Elencare i nomi e cognomi degli artisti che hanno ricevuto almeno un voto in una serata in cui la loro squadra non li aveva schierati. */ 
+SELECT DISTINCT a.nome, a.cognome, v.nomeSerata
+FROM voti v
+JOIN artisti a ON v.codArtista = a.codArtista
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM formazioni f
+    WHERE f.codArtista = v.codArtista
+      AND f.nomeSerata = v.nomeSerata
+)
+/*************************************************************************************************************************************************************************/ 
+--4. Funzioni
+/*************************************************************************************************************************************************************************/ 
+/*************************************************************************************************************************************************************************/ 
+/* 4a: operazione di inserimento non banale, effettuando tutti gli opportuni controlli e calcoli di dati derivati. */
+/* Funzione utile all'inserimento di un voto in tabella, assicurandosi che:
+- Il brano e l'artista esistano e siano correttamente associati.
+- La serata esista.
+- Il timestamp del voto sia coerente (non futuro).
+- Si assegni automaticamente un codice voto progressivo (MAX+1).
+- Se uno di questi controlli fallisce, si solleva un errore.*/ 
+
+CREATE OR REPLACE FUNCTION inserisci_voto(
+    p_codBrano INTEGER,
+    p_codArtista INTEGER,
+    p_nomeSerata VARCHAR,
+    p_tipo tipo_voto,
+    p_dataOra TIMESTAMP
+) RETURNS VOID AS $$
+DECLARE
+    nuovo_codVoto INTEGER;
+    artista_brano_ok BOOLEAN;
+BEGIN
+    -- Controllo che artista e brano siano collegati correttamente
+    SELECT EXISTS (
+        SELECT 1
+        FROM brani
+        WHERE codBrano = p_codBrano AND codArtista = p_codArtista
+    ) INTO artista_brano_ok;
+
+    IF NOT artista_brano_ok THEN
+        RAISE EXCEPTION 'Errore: il brano % non è associato all’artista %', p_codBrano, p_codArtista;
+    END IF;
+
+    -- Controllo che la serata esista
+    IF NOT EXISTS (
+        SELECT 1 FROM serate WHERE nome = p_nomeSerata
+    ) THEN
+        RAISE EXCEPTION 'Errore: la serata "%" non esiste', p_nomeSerata;
+    END IF;
+
+    -- Controllo che il timestamp non sia nel futuro
+    IF p_dataOra > NOW() THEN
+        RAISE EXCEPTION 'Errore: la data/ora del voto è nel futuro (% > %)', p_dataOra, NOW();
+    END IF;
+
+    -- Calcolo nuovo codVoto
+    SELECT COALESCE(MAX(codVoto), 0) + 1 INTO nuovo_codVoto FROM voti;
+
+    -- Inserimento
+    INSERT INTO voti (codVoto, codBrano, codArtista, nomeSerata, tipo, dataOra)
+    VALUES (nuovo_codVoto, p_codBrano, p_codArtista, p_nomeSerata, p_tipo, p_dataOra);
+END;
+$$ LANGUAGE plpgsql;
+
+/*************************************************************************************************************************************************************************/ -- NON VA BENE
+/* 4b: calcolo di un'informazione derivata rilevante e non banale, che richieda l'accesso a diverse tabelle e un'aggregazione */
+/* Funzione che calcola, per ogni artista, il punteggio medio ricevuto dai propri brani nelle varie serate.
+Il punteggio medio considera tutti i voti (di qualsiasi tipo) e richiede:
+- Join tra le tabelle: artisti, brani, voti, serate
+- Raggruppamento per artista
+- Calcolo del numero totale di voti e della media dei voti per ogni artista
+La funzione restituisce una tabella con:
+codArtista, nomeArtista, numVoti, mediaPerArtista*/ 
+
+CREATE OR REPLACE FUNCTION punteggio_medio_artista()
+RETURNS TABLE (
+    codArtista INT,
+    nomeArtista VARCHAR,
+    numVoti INT,
+    mediaVoti NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        a.codArtista,
+        a.nome,
+        COUNT(v.codVoto) AS numVoti,
+        ROUND(AVG(
+            CASE 
+                WHEN v.tipo = 'TELEVOTO' THEN 1
+                WHEN v.tipo = 'GIURIA_DEMO' THEN 2
+                WHEN v.tipo = 'GIURIA_STAMPA' THEN 3
+                WHEN v.tipo = 'GIURIA_TELEVISIONE' THEN 4
+                ELSE 0
+            END
+        ), 2) AS mediaVoti
+    FROM artisti a
+    JOIN brani b ON a.codArtista = b.codArtista
+    JOIN voti v ON b.codBrano = v.codBrano AND v.codArtista = a.codArtista
+    GROUP BY a.codArtista, a.nome;
+END;
+$$ LANGUAGE plpgsql;
+
+/*************************************************************************************************************************************************************************/ 
+--5. Trigger
+/*************************************************************************************************************************************************************************/
+/*************************************************************************************************************************************************************************/ 
+/* 5a: trigger per la verifica di un vincolo che non sia implementabile come vincolo CHECK */
+/* Ogni squadra può avere al massimo 7 artisti nella formazione per una determinata serata.
+Questo vincolo non può essere espresso con un semplice CHECK perché richiede di contare i record esistenti nella tabella formazioni prima di permettere un nuovo inserimento.*/
+
+CREATE OR REPLACE FUNCTION check_max_artisti_per_squadra()
+RETURNS TRIGGER AS $$
+DECLARE
+    num_artisti INTEGER;
+BEGIN
+    SELECT COUNT(*)
+    INTO num_artisti
+    FROM formazioni
+    WHERE codSquadra = NEW.codSquadra
+      AND nomeSerata = NEW.nomeSerata;
+
+    IF num_artisti >= 7 THEN
+        RAISE EXCEPTION 'Una squadra non può avere più di 7 artisti in formazione per la serata %', NEW.nomeSerata;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_check_max_artisti_per_squadra
+BEFORE INSERT ON formazioni
+FOR EACH ROW
+EXECUTE FUNCTION check_max_artisti_per_squadra();
+
+/*************************************************************************************************************************************************************************/ ---NON VA BENE
+/* 5b: trigger per il mantenimento di informazione derivata o per l'implementazione di una regola di dominio                                                             */                                                                          
+/* Inserire qui la specifica in linguaggio naturale del trigger                                                                                                          */
+/*Quando si inserisce un nuovo voto, il trigger controlla che non esista già un voto dello stesso tipo (TELEVOTO, GIURIA_STAMPA, GIURIA_RADIO) per lo stesso artista, brano e serata. Se esiste, impedisce l’inserimento.*/ 
+
+
+/* inserire qui i comandi SQL per la creazione del trigger corrispondente alla specifica indicata nel commento precedente */ 
+
+CREATE OR REPLACE FUNCTION verifica_voto_unico()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM voti v
+        WHERE v.codArtista = NEW.codArtista
+          AND v.codBrano = NEW.codBrano
+          AND v.nomeSerata = NEW.nomeSerata
+          AND v.tipo = NEW.tipo
+    ) THEN
+        RAISE EXCEPTION 'Errore: voto di tipo % per artista % brano % e serata % già esistente',
+            NEW.tipo, NEW.codArtista, NEW.codBrano, NEW.nomeSerata;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_verifica_voto_unico
+BEFORE INSERT ON voti
+FOR EACH ROW
+EXECUTE FUNCTION verifica_voto_unico();
