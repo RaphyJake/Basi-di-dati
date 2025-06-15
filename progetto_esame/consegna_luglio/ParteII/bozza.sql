@@ -11,6 +11,7 @@ CREATE TYPE ruolo_compone AS ENUM ('CAPITANO', 'TITOLARE', 'RISERVA');
 CREATE TYPE tipo_artista AS ENUM ('CANTANTE');
 CREATE TYPE ruolo_artista AS ENUM ('COMPOSITORE', 'DIRETTORE', 'SCRITTORE');
 
+
 -- UTENTI
 CREATE TABLE utenti (
     username VARCHAR(90) NOT NULL,
@@ -233,7 +234,6 @@ INSERT INTO utenti (username, nome, cognome) VALUES
 
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (9, NULL, 'Achille', 'Lauro', DATE '1990-11-07', 'Verona', 'CANTANTE', 'Cantautrice e producer.', 'Pop', '2016,2017,2024', NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (85, NULL, 'Alberto', 'Martini', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (121, NULL, 'Alberto', 'Martini', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (59, NULL, 'Alessandro', 'Conti', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (98, NULL, 'Alessia', 'Romano', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (33, NULL, 'Alex', 'Wyse', NULL, NULL, 'CANTANTE', NULL, NULL, NULL, NULL);
@@ -242,14 +242,12 @@ INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNa
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (38, NULL, 'Andrea', 'Benassai', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (63, NULL, 'Andrea', 'Moretti', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (92, NULL, 'Anna', 'Ferri', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (128, NULL, 'Anna', 'Ferri', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (20, NULL, 'Bresh', NULL, NULL, NULL, 'CANTANTE', 'Band rock italiano.', 'Pop Rock', '2011,2018,2023', NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (21, NULL, 'Brunori', 'Sas', DATE '1977-09-28', 'Cosenza', 'CANTANTE', 'Cantautore e polistrumentista.', 'Pop', '2011,2012,2019', NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (51, NULL, 'Carmelo', 'Patti', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (104, NULL, 'Chiara', 'Conti', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (66, NULL, 'Chiara', 'Leone', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (86, NULL, 'Chiara', 'Sanna', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (122, NULL, 'Chiara', 'Sanna', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (22, NULL, 'Clara', NULL, DATE '1999-10-25', 'Varese', 'CANTANTE', 'Cantautrice pop urbana, vincitrice Sanremo Giovani 2023.', 'Pop', '2023', NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (6, 'Coma_Cose', NULL, NULL, NULL, NULL, 'CANTANTE', 'Duo indie pop milanese.', 'Indie Pop', '2022,2023', NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (39, NULL, 'Daniel', 'Bestonzo', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -260,10 +258,8 @@ INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNa
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (108, NULL, 'Elena', 'Moretti', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (76, NULL, 'Elena', 'Parisi', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (62, NULL, 'Elisa', 'Greco', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (96, NULL, 'Elisa', 'Greco', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (19, NULL, 'Elodie', NULL, DATE '1990-03-05', 'Roma', 'CANTANTE', 'Pop‑singer, runner‑up Amici 2016 ora pop star.', 'Pop', '2024', NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (87, NULL, 'Emanuele', 'Villa', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (123, NULL, 'Emanuele', 'Villa', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (47, NULL, 'Enrico', 'Melozzi', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (42, NULL, 'Enzo', 'Campagnoli', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (81, NULL, 'Fabio', 'Amato', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -544,3 +540,136 @@ INSERT INTO esibizioni (codBrano, codArtista, nomeSerata, orario, ordineEsibizio
 INSERT INTO esibizioni (codBrano, codArtista, nomeSerata, orario, ordineEsibizione) VALUES (3, 3, 'Finale', TIME '23:10:00', 27);
 INSERT INTO esibizioni (codBrano, codArtista, nomeSerata, orario, ordineEsibizione) VALUES (1, 1, 'Finale', TIME '23:15:00', 28);
 INSERT INTO esibizioni (codBrano, codArtista, nomeSerata, orario, ordineEsibizione) VALUES (14, 14, 'Finale', TIME '23:20:00', 29);
+
+INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES
+(1,  'Canta a piedi scalzi', 10, 'STANDARD'),
+(2,  'Urla "Sanremo!" sul palco', 5, 'STANDARD'),
+(3,  'Indossa un mantello', 8, 'EXTRA'),
+(4,  'Dimentica il testo', -15, 'STANDARD'),
+(5,  'Cade sul palco', -10, 'EXTRA'),
+(6,  'Fa un monologo improvvisato', -5, 'EXTRA'),
+(7,  'Cita il Fantasanremo durante l’esibizione', 12, 'STANDARD'),
+(8,  'Indossa occhiali da sole di notte', 6, 'EXTRA'),
+(9,  'Balla in modo imbarazzante', 7, 'STANDARD'),
+(10, 'Fa piangere il conduttore', 15, 'EXTRA'),
+(11, 'Sbaglia l’orario dell’esibizione', -8, 'STANDARD'),
+(12, 'Dedica la canzone a un nonno immaginario', 9, 'EXTRA'),
+(13, 'Tocca il gobbo elettronico', -4, 'STANDARD'),
+(14, 'Canta in dialetto', 11, 'STANDARD'),
+(15, 'Esce con una coreografia assurda', 13, 'EXTRA'),
+(16, 'Urla “Viva il Fantasanremo!”', 10, 'STANDARD'),
+(17, 'Indossa un costume da animale', 14, 'EXTRA'),
+(18, 'Interagisce col pubblico in platea', 6, 'STANDARD'),
+(19, 'Abbandona il palco prima della fine', -12, 'EXTRA'),
+(20, 'Parla di politica durante l’intervista', -6, 'STANDARD');
+
+INSERT INTO squadre (codSquadra, nome, username) VALUES
+(1,  'I FantaRossi', 'm.rossi1@email.it'),
+(2,  'Festival Warriors', 'd.ferrari7@email.it'),
+(3,  'Tananai Club', 'g.napoli35@email.it'),
+(4,  'Irene e gli Urlatori', 'i.gatti12@email.it'),
+(5,  'Romagnoli Royalty', 'v.romagnoli30@email.it'),
+(6,  'Marta in Palco', 'm.deangelis27@email.it'),
+(7,  'Fantavalentina', 'v.riva11@email.it'),
+(8,  'I Sarcastici', 'a.verdi3@email.it'),
+(9,  'CantaLombardi', 's.lombardi14@email.it'),
+(10, 'Pagliari Prime', 's.pagliari32@email.it'),
+(11, 'I Gentle Gentile', 'n.gentile28@email.it'),
+(12, 'La Squadra di Fabio', 'f.mazza29@email.it'),
+(13, 'Donati Dreams', 'm.donati41@email.it'),
+(14, 'Sabrina on Fire', 's.monti38@email.it'),
+(15, 'Team Leone', 'g.leone24@email.it'),
+(16, 'Bianco Power', 'a.bianco31@email.it'),
+(17, 'Caterina Stars', 'c.rizzi43@email.it'),
+(18, 'The Farina Force', 's.farina26@email.it'),
+(19, 'Fantachiara', 'c.milani10@email.it'),
+(20, 'Squadra Fabbro', 'm.fabbro46@email.it');
+
+INSERT INTO leghe (codLega, nome, tipo) VALUES
+(1,  'FantaFestival', 'PUBBLICA'),
+(2,  'Squadra del Cuore', 'PRIVATA'),
+(3,  'Sanremesi Anonimi', 'PUBBLICA'),
+(4,  'Top Secret League', 'SEGRETA'),
+(5,  'La Cricca del Microfono', 'PRIVATA'),
+(6,  'Note Ribelli', 'PUBBLICA'),
+(7,  'Cantanti allo Sbaraglio', 'PRIVATA'),
+(8,  'Club Segretissimo', 'SEGRETA'),
+(9,  'Giù il Gobbo', 'PUBBLICA'),
+(10, 'FantaVip', 'SEGRETA'),
+(11, 'Tutti al Festival', 'PRIVATA'),
+(12, 'Noi e Morandi', 'PUBBLICA'),
+(13, 'Gli Intonati', 'PUBBLICA'),
+(14, 'FantaRiot', 'SEGRETA'),
+(15, 'Lega delle Stelle', 'PUBBLICA'),
+(16, 'Amici del Fantasanremo', 'PRIVATA'),
+(17, 'Lega Oscura', 'SEGRETA'),
+(18, 'Musica & Caos', 'PUBBLICA'),
+(19, 'Sanremo FantaMood', 'PRIVATA'),
+(20, 'Non ci crede nessuno', 'SEGRETA');
+
+
+INSERT INTO gestione_leghe (username, codLega, proprietario) VALUES
+-- Lega 1: FantaFestival
+('m.rossi1@email.it', 1, true),
+('i.gatti12@email.it', 1, false),
+
+-- Lega 2: Squadra del Cuore
+('s.lombardi14@email.it', 2, true),
+
+-- Lega 3: Sanremesi Anonimi
+('v.riva11@email.it', 3, true),
+('m.deangelis27@email.it', 3, false),
+
+-- Lega 4: Top Secret League
+('n.gentile28@email.it', 4, true),
+
+-- Lega 5: La Cricca del Microfono
+('f.russo5@email.it', 5, true),
+('s.farina26@email.it', 5, false),
+
+-- Lega 6: Note Ribelli
+('g.leone24@email.it', 6, true),
+
+-- Lega 7: Cantanti allo Sbaraglio
+('g.martini6@email.it', 7, true),
+
+-- Lega 8: Club Segretissimo
+('m.battaglia34@email.it', 8, true),
+
+-- Lega 9: Giù il Gobbo
+('a.verdi3@email.it', 9, true),
+('f.mazza29@email.it', 9, false),
+
+-- Lega 10: FantaVip
+('c.milani10@email.it', 10, true),
+
+-- Lega 11: Tutti al Festival
+('m.greco9@email.it', 11, true),
+
+-- Lega 12: Noi e Morandi
+('d.ferrari7@email.it', 12, true),
+
+-- Lega 13: Gli Intonati
+('v.romagnoli30@email.it', 13, true),
+
+-- Lega 14: FantaRiot
+('s.neri4@email.it', 14, true),
+('g.mazzei47@email.it', 14, false),
+
+-- Lega 15: Lega delle Stelle
+('e.gallo8@email.it', 15, true),
+
+-- Lega 16: Amici del Fantasanremo
+('m.fabbro46@email.it', 16, true),
+
+-- Lega 17: Lega Oscura
+('s.pagliari32@email.it', 17, true),
+
+-- Lega 18: Musica & Caos
+('a.bianco31@email.it', 18, true),
+
+-- Lega 19: Sanremo FantaMood
+('p.romano20@email.it', 19, true),
+
+-- Lega 20: Non ci crede nessuno
+('c.costa25@email.it', 20, true);
