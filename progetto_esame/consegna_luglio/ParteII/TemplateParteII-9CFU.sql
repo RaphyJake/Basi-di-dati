@@ -4,8 +4,6 @@
 --- Ettore Romano 5644926
 
 --- PARTE 2 
-/* il file deve essere file SQL ... cioè formato solo testo e apribili ed eseguibili in pgAdmin */
-
 /*************************************************************************************************************************************************************************/
 --1a. Schema
 -- CREATE SCHEMA
@@ -59,7 +57,31 @@ CREATE TABLE artisti (
     genereMusicale VARCHAR(50),
     edizioniPassate VARCHAR(100),
     costoBaudi NUMERIC,
-    CONSTRAINT pk_artisti PRIMARY KEY (codArtista)
+    CONSTRAINT pk_artisti PRIMARY KEY (codArtista),
+	CONSTRAINT chk_artista_o_gruppo_esclusivo
+		CHECK (
+			(nomeGruppo IS NOT NULL AND nome IS NULL AND cognome IS NULL AND dataNascita IS NULL AND luogoNascita IS NULL)
+			OR
+			(nomeGruppo IS NULL AND nome IS NOT NULL AND cognome IS NOT NULL AND dataNascita IS NOT NULL AND luogoNascita IS NOT NULL)
+		),
+	CONSTRAINT chk_dati_cantante_con_tipo
+        CHECK (
+            (
+                tipo = 'C' AND 
+                biografia IS NOT NULL AND 
+                genereMusicale IS NOT NULL AND 
+                edizioniPassate IS NOT NULL AND 
+                costoBaudi IS NOT NULL
+            )
+            OR
+            (
+                tipo <> 'C' AND 
+                biografia IS NULL AND 
+                genereMusicale IS NULL AND 
+                edizioniPassate IS NULL AND 
+                costoBaudi IS NULL
+            )
+        )
 );
 
 -- SQUADRE
@@ -470,7 +492,7 @@ WHERE NOT EXISTS (
 GROUP BY e.codArtista;
 
 /*************************************************************************************************************************************************************************/ 
-/* 3b (interrogazione con sottointerrogazione correlata) */
+/* 3c (interrogazione con sottointerrogazione correlata) */
 /* Elencare i nomi e cognomi degli artisti che hanno ricevuto almeno un voto in una serata in cui la loro squadra non li aveva schierati. */ 
 SELECT DISTINCT a.nome, a.cognome, v.nomeSerata
 FROM voti v
@@ -580,16 +602,29 @@ $$ LANGUAGE plpgsql;
 /*************************************************************************************************************************************************************************/
 /*************************************************************************************************************************************************************************/ 
 /* 5a: trigger per la verifica di un vincolo che non sia implementabile come vincolo CHECK */
-/* Ogni squadra puÚ avere al massimo 7 artisti nella formazione per una determinata serata.
-Questo vincolo non puÚ essere espresso con un semplice CHECK perchÈ richiede di contare i record esistenti nella tabella formazioni prima di permettere un nuovo inserimento.*/
+/* Il trigger trg_check_formazione si attiva prima dell'inserimento di una nuova riga nella tabella formazioni e ha lo scopo di verificare il rispetto di alcune regole di composizione delle squadre per ciascuna serata del Festival.
+In particolare, per ogni combinazione di squadra (codSquadra) e serata (nomeSerata), il trigger controlla che:
+	- Non siano presenti pi˘ di 7 artisti in totale nella formazione della squadra per quella serata. Se si tenta di inserire un artista in una squadra che ha gi‡ raggiunto questo limite, l'inserimento viene bloccato.
 
-CREATE OR REPLACE FUNCTION check_max_artisti_per_squadra()
+    - Non venga superato il numero massimo consentito per ciascun ruolo, ovvero:
+
+        - Al massimo 1 CAPITANO per squadra e serata.
+
+		- Al massimo 2 RISERVE per squadra e serata.
+
+		- Al massimo 4 TITOLARI per squadra e serata.
+Se si tenta di inserire un artista con un ruolo che supererebbe uno di questi limiti, líinserimento viene annullato e viene mostrato un messaggio di errore esplicativo. */
+
+CREATE OR REPLACE FUNCTION check_formazione_regole()
 RETURNS TRIGGER AS $$
 DECLARE
-    num_artisti INTEGER;
+    num_artisti INTEGER := 0;
+    num_capitani INTEGER := 0;
+    num_riserve INTEGER := 0;
+    num_titolari INTEGER := 0;
 BEGIN
-    SELECT COUNT(*)
-    INTO num_artisti
+    -- Conta il numero totale di artisti gi‡ presenti per squadra e serata
+    SELECT COUNT(*) INTO num_artisti
     FROM formazioni
     WHERE codSquadra = NEW.codSquadra
       AND nomeSerata = NEW.nomeSerata;
@@ -598,41 +633,74 @@ BEGIN
         RAISE EXCEPTION 'Una squadra non puÚ avere pi˘ di 7 artisti in formazione per la serata %', NEW.nomeSerata;
     END IF;
 
+    -- Conta i ruoli specifici esistenti per la squadra e la serata
+    SELECT COUNT(*) INTO num_capitani
+    FROM formazioni
+    WHERE codSquadra = NEW.codSquadra
+      AND nomeSerata = NEW.nomeSerata
+      AND ruolo = 'CAPITANO';
+
+    SELECT COUNT(*) INTO num_riserve
+    FROM formazioni
+    WHERE codSquadra = NEW.codSquadra
+      AND nomeSerata = NEW.nomeSerata
+      AND ruolo = 'RISERVA';
+
+    SELECT COUNT(*) INTO num_titolari
+    FROM formazioni
+    WHERE codSquadra = NEW.codSquadra
+      AND nomeSerata = NEW.nomeSerata
+      AND ruolo = 'TITOLARE';
+
+    -- Verifica i limiti per ruolo
+    IF NEW.ruolo = 'CAPITANO' AND num_capitani >= 1 THEN
+        RAISE EXCEPTION '» gi‡ presente un CAPITANO per questa squadra nella serata %', NEW.nomeSerata;
+    ELSIF NEW.ruolo = 'RISERVA' AND num_riserve >= 2 THEN
+        RAISE EXCEPTION 'Non si possono avere pi˘ di 2 RISERVE per questa squadra nella serata %', NEW.nomeSerata;
+    ELSIF NEW.ruolo = 'TITOLARE' AND num_titolari >= 4 THEN
+        RAISE EXCEPTION 'Non si possono avere pi˘ di 4 TITOLARI per questa squadra nella serata %', NEW.nomeSerata;
+    END IF;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trg_check_max_artisti_per_squadra
+CREATE TRIGGER trg_check_formazione
 BEFORE INSERT ON formazioni
 FOR EACH ROW
-EXECUTE FUNCTION check_max_artisti_per_squadra();
-
-/*************************************************************************************************************************************************************************/ ---NON VA BENE
-/* 5b: trigger per il mantenimento di informazione derivata o per l'implementazione di una regola di dominio                                                             */                                                                          
-/* Inserire qui la specifica in linguaggio naturale del trigger                                                                                                          */
-/*Quando si inserisce un nuovo voto, il trigger controlla che non esista gi‡ un voto dello stesso tipo (TELEVOTO, GIURIA_STAMPA, GIURIA_RADIO) per lo stesso artista, brano e serata. Se esiste, impedisce líinserimento.*/ 
+EXECUTE FUNCTION check_formazione_regole();
 
 
-/* inserire qui i comandi SQL per la creazione del trigger corrispondente alla specifica indicata nel commento precedente */ 
+/*************************************************************************************************************************************************************************/
+/* 5b: trigger per il mantenimento di informazione derivata o per l'implementazione di una regola di dominio*/                                                                          
+/* Questo trigger si attiva prima di ogni inserimento nella tabella partecipazione_leghe. Se il campo statoApprovazione non viene valorizzato esplicitamente, il sistema lo imposta automaticamente in base al tipo di lega:
+	- Se la lega Ë di tipo PUBBLICA, la partecipazione Ë approvata automaticamente (APPROVATA)
+	- Se la lega Ë di tipo PRIVATA o SEGRETA, la partecipazione entra in fase di approvazione (IN_APPROVAZIONE)*/ 
 
-CREATE OR REPLACE FUNCTION verifica_voto_unico()
+CREATE OR REPLACE FUNCTION imposta_stato_approvazione()
 RETURNS TRIGGER AS $$
+DECLARE
+    tipoLega tipo_lega;
 BEGIN
-    IF EXISTS (
-        SELECT 1 FROM voti v
-        WHERE v.codArtista = NEW.codArtista
-          AND v.codBrano = NEW.codBrano
-          AND v.nomeSerata = NEW.nomeSerata
-          AND v.tipo = NEW.tipo
-    ) THEN
-        RAISE EXCEPTION 'Errore: voto di tipo % per artista % brano % e serata % gi‡ esistente',
-            NEW.tipo, NEW.codArtista, NEW.codBrano, NEW.nomeSerata;
+    -- Prende il tipo della lega a cui si sta iscrivendo
+    SELECT tipo INTO tipoLega
+    FROM leghe
+    WHERE codLega = NEW.codLega;
+
+    -- Se lo stato approvazione non Ë stato fornito, lo assegna in automatico
+    IF NEW.statoApprovazione IS NULL THEN
+        IF tipoLega = 'PUBBLICA' THEN
+            NEW.statoApprovazione := 'APPROVATA';
+        ELSE
+            NEW.statoApprovazione := 'IN_APPROVAZIONE';
+        END IF;
     END IF;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trg_verifica_voto_unico
-BEFORE INSERT ON voti
+CREATE TRIGGER trg_imposta_stato_approvazione
+BEFORE INSERT ON partecipazione_leghe
 FOR EACH ROW
-EXECUTE FUNCTION verifica_voto_unico();
+EXECUTE FUNCTION imposta_stato_approvazione();
