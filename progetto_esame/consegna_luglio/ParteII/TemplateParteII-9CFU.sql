@@ -560,42 +560,45 @@ $$ LANGUAGE plpgsql;
 
 /*************************************************************************************************************************************************************************/ -- NON VA BENE
 /* 4b: calcolo di un'informazione derivata rilevante e non banale, che richieda l'accesso a diverse tabelle e un'aggregazione */
-/* Funzione che calcola, per ogni artista, il punteggio medio ricevuto dai propri brani nelle varie serate.
-Il punteggio medio considera tutti i voti (di qualsiasi tipo) e richiede:
-- Join tra le tabelle: artisti, brani, voti, serate
-- Raggruppamento per artista
-- Calcolo del numero totale di voti e della media dei voti per ogni artista
-La funzione restituisce una tabella con:
-codArtista, nomeArtista, numVoti, mediaPerArtista*/ 
-
-CREATE OR REPLACE FUNCTION punteggio_medio_artista()
+/* La funzione riepilogo_voti_per_serata prende in input il nome di una serata (es. "Finale") e restituisce un riepilogo dei voti ricevuti da ciascun artista in quella serata (anche se non ha ricevuto voti).
+Per ogni artista mostra:
+    - Il nome (nome + cognome, oppure nome del gruppo)
+    - Il numero di voti ricevuti da ciascun tipo di giuria:
+		- Televoto
+        - Giuria della stampa
+        - Giuria delle radio
+	- Il totale complessivo dei voti*/ 
+CREATE OR REPLACE FUNCTION riepilogo_voti_per_serata(nome_serata_input VARCHAR)
 RETURNS TABLE (
-    codArtista INT,
-    nomeArtista VARCHAR,
-    numVoti INT,
-    mediaVoti NUMERIC
+  artista TEXT,
+  televoto BIGINT,
+  giuria_stampa BIGINT,
+  giuria_radio BIGINT,
+  totale BIGINT
 ) AS $$
 BEGIN
-    RETURN QUERY
-    SELECT 
-        a.codArtista,
-        a.nome,
-        COUNT(v.codVoto) AS numVoti,
-        ROUND(AVG(
-            CASE 
-                WHEN v.tipo = 'TELEVOTO' THEN 1
-                WHEN v.tipo = 'GIURIA_DEMO' THEN 2
-                WHEN v.tipo = 'GIURIA_STAMPA' THEN 3
-                WHEN v.tipo = 'GIURIA_TELEVISIONE' THEN 4
-                ELSE 0
-            END
-        ), 2) AS mediaVoti
-    FROM artisti a
-    JOIN brani b ON a.codArtista = b.codArtista
-    JOIN voti v ON b.codBrano = v.codBrano AND v.codArtista = a.codArtista
-    GROUP BY a.codArtista, a.nome;
+  RETURN QUERY
+  SELECT 
+    CASE
+      WHEN a.nomeGruppo IS NOT NULL THEN a.nomeGruppo
+      ELSE TRIM(COALESCE(a.nome, '') || ' ' || COALESCE(a.cognome, ''))
+    END AS artista,
+    COALESCE(SUM(CASE WHEN v.tipo = 'TELEVOTO' THEN 1 END), 0)        AS televoto,
+    COALESCE(SUM(CASE WHEN v.tipo = 'GIURIA_STAMPA' THEN 1 END), 0)   AS giuria_stampa,
+    COALESCE(SUM(CASE WHEN v.tipo = 'GIURIA_RADIO' THEN 1 END), 0)    AS giuria_radio,
+    COUNT(v.codVoto)                                                  AS totale
+  FROM esibizioni e
+  JOIN artisti a ON e.codArtista = a.codArtista
+  LEFT JOIN voti v 
+    ON v.codBrano = e.codBrano 
+   AND v.codArtista = e.codArtista 
+   AND v.nomeSerata = e.nomeSerata
+  WHERE e.nomeSerata = nome_serata_input
+  GROUP BY a.codArtista, a.nomeGruppo, a.nome, a.cognome
+  ORDER BY totale DESC;
 END;
 $$ LANGUAGE plpgsql;
+
 
 /*************************************************************************************************************************************************************************/ 
 --5. Trigger
