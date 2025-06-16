@@ -2,6 +2,7 @@
 \usepackage{graphicx} % Required for inserting images
 \usepackage{todonotes}
 \usepackage{geometry}
+\usepackage{listings}
 \geometry{a4paper, top=3cm, bottom=3cm, left=3.5cm, right=3.5cm} % heightrounded, bindingoffset=5mm}
 
 \title{Progetto Basi di Dati 2024-25 \\
@@ -26,11 +27,20 @@ Parte III}
 \paragraph*{LINGUAGGIO NATURALE \\} 
 
 
-\todo[inline]{Riportare in questa sezione l’interrogazione del carico di lavoro con singola selezione e nessun join, in linguaggio naturale}
+\todo[inline]{Voglio ottenere, per tutti gli artisti di tipo \texttt{C}, il nome e cognome se si tratta di una persona, oppure il nome del gruppo se si tratta di un gruppo, insieme alla relativa biografia.}
 
 \paragraph*{SQL \\}
 
-\todo[inline]{Riportare in questa sezione l’interrogazione del carico di lavoro con singola selezione e nessun join, in SQL}
+%\todo[inline]
+\begin{lstlisting}[language=SQL]
+	SELECT 
+	COALESCE(nomeGruppo, CONCAT(nome, ' ', cognome)) AS nome_artista,
+	biografia
+	FROM 
+	artisti
+	WHERE 
+	tipo = 'C';
+\end{lstlisting}
 
 
 
@@ -38,22 +48,40 @@ Parte III}
 
 \paragraph*{LINGUAGGIO NATURALE\\}
 
-\todo[inline]{Riportare in questa sezione l’interrogazione del carico di lavoro con condizione di selezione complessa e nessun join, in linguaggio naturale}
+\todo[inline]{Voglio ottenere, per tutti gli artisti di tipo \texttt{C} nati dopo dal 01-01-1992, tutti gli attributi}
 
 \paragraph*{SQL \\}
 
-\todo[inline]{Riportare in questa sezione l’interrogazione del carico di lavoro con condizione di selezione complessae nessun join, in SQL}
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM artisti
+WHERE tipo = 'C'
+AND dataNascita >= DATE '1992-01-01';
+\end{lstlisting}
 
 
 \subsubsection{Q3 - QUERY CON ALMENO UN JOIN E ALMENO UNA CONDIZIONE DI SELEZIONE\\ }
 
 \paragraph*{LINGUAGGIO NATURALE\\}
 
-\todo[inline]{Riportare in questa sezione l’interrogazione del carico di lavoro  con almeno un join e almeno una condizione di selezione, in linguaggio naturale}
+\todo[inline]{Voglio ottenere, per ciascuna lega di tipo pubblico, l'elenco delle squadre partecipanti, includendo il nome della lega e il nome della squadra. È necessario unire le tabelle leghe, partecipazione\_leghe e squadre, e filtrare le leghe di tipo pubblico.}
 
 \paragraph*{SQL \\}
 
-\todo[inline]{Riportare in questa sezione l’interrogazione del carico di lavoro con almeno un join e almeno una condizione di selezione, in SQL}
+%\todo[inline]{Riportare in questa sezione l’interrogazione del carico di lavoro con almeno un join e almeno una condizione di selezione, in SQL}
+\begin{lstlisting}[language=SQL]
+	SELECT 
+	l.nome AS nome_lega,
+	s.nome AS nome_squadra
+	FROM 
+	leghe l
+	JOIN 
+	partecipazione_leghe pl ON l.codLega = pl.codLega
+	JOIN 
+	squadre s ON pl.codSquadra = s.codSquadra
+	WHERE 
+	l.tipo = 'PUBBLICA';
+\end{lstlisting}
 
 
 \subsection{1D-PROGETTO FISICO\\}
@@ -67,7 +95,9 @@ Parte III}
 \hline
 {\bf Id query} & {\bf Relazione} & \parbox{2cm}{\bf Chiave di ricerca} & \parbox{2cm}{\bf Tipo (ordinato/hash, clusterizzato/non clusterizzato)} & \parbox{5cm}{\bf Motivazione} \\
 \hline
-& & & & \\
+Q1 & artisti & tipo & ordinato e clusterizzato &  Visto il numero frequente di query sull'attributo tipo (non UNIQUE) potrei optare per la clusterizzazione\\
+Q2 & artisti & tipo, dataNascita & ordinato e clusterizzato & Devo escludere indice hash perchè è prevista ricerca per range sulla data nascita. Opterei per un indice composto per facilitare sia la query precedente che quella corrente\\
+Q3 & leghe, partecipazione\_leghe, squadre & leghe.tipo & ordinato e clusterizzato & Oltre all'indice su leghe.tipo, introdurrei degli indici ordinati sulle chiavi utilizzate per eseguire le join. Questi permettono di utilizzare algoritmi di join come l'indexed nested loop.\\
 \hline
 \end{tabular}
 \end{footnotesize}
@@ -81,7 +111,10 @@ Parte III}
 \hline
 \parbox{5cm}{\bf Schema fisico complessivo per il carico di lavoro} &  \parbox{5cm}{\bf Motivazione} \\
 \hline
-&  \\
+- indice ordinato e clusterizzato su (tipo, dataNascita), tabella artisti& Ricerca per tipo con uguaglianza e dataNascita per range (anche per ricerca attraverso solo tipo) \\
+- indice ordinato e clusterizzato su tipo, tabella leghe& Ricerca per tipo, clusterizzato perchè tipo non è UNIQUE\\
+- indice ordinato non clusterizzato su codLega, tabella partecipazione\_leghe & accesso alla relazione con indice per join con leghe\\
+- indice ordinato non clusterizzato su codSquadra, tabella squadre & accesso alla relazione con indice per join con partecipazione\_leghe\\
 \hline
 \end{tabular}
 \end{footnotesize}
@@ -94,7 +127,9 @@ Parte III}
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA PRIMA DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{Riportare in questa sezione il piano di esecuzione scelto da PostgreSQL prima della creazione dello schema fi-sico complessivo, in formato testuale}
+\todo[inline]{ Seq Scan on artisti as artisti
+	Filter: (tipo = 'CANTANTE'::tipo\_artista)}
+
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA DOPO DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
@@ -121,7 +156,8 @@ Parte III}
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA PRIMA DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{Riportare in questa sezione il piano di esecuzione scelto da PostgreSQL prima della creazione dello schema fi-sico complessivo, in formato testuale}
+\todo[inline]{Seq Scan on artisti as artisti
+Filter: ((datanascita $\geq$ '1992-01-01'::date) AND (tipo = 'CANTANTE'::tipo\_artista))}
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA DOPO DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 

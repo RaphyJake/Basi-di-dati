@@ -16,7 +16,7 @@ CREATE TYPE tipo_lega AS ENUM ('PUBBLICA', 'PRIVATA', 'SEGRETA');
 CREATE TYPE tipo_bonusmalus AS ENUM ('EXTRA', 'STANDARD');
 CREATE TYPE tipo_approvazione AS ENUM ('IN_APPROVAZIONE', 'RIFIUTATA', 'APPROVATA');
 CREATE TYPE ruolo_compone AS ENUM ('CAPITANO', 'TITOLARE', 'RISERVA');
-CREATE TYPE tipo_artista AS ENUM ('CANTANTE');
+CREATE TYPE tipo_artista AS ENUM ('C');
 CREATE TYPE ruolo_artista AS ENUM ('COMPOSITORE', 'DIRETTORE', 'SCRITTORE');
 
 -- UTENTI
@@ -223,16 +223,16 @@ INSERT INTO utenti (username, nome, cognome) VALUES
   ('g.martini6@email.it', 'Giulia', 'Martini'),
   ('d.ferrari7@email.it', 'Davide', 'Ferrari');
   
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (1, NULL, 'Rkomi', NULL, DATE '1994-04-19', 'Milano', 'CANTANTE', 'Cantautore e performer provocatorio.', 'Pop', '2019,2022', 10);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (2, NULL, 'Francesco', 'Gabbani', DATE '1982-09-09', 'Carrara', 'CANTANTE', 'Voce emergente.', 'Pop', '2024', 15);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (3, NULL, 'Gaia', NULL, DATE '1997-09-29', 'Guastalla', 'CANTANTE', 'Giovane trapper.', 'Trap', '2024', 12);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (4, NULL, 'Noemi', NULL, DATE '1982-01-25', 'Roma', 'CANTANTE', 'Cantautore lucano.', 'Indie', '2018,2024', 14);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (5, NULL, 'Irama', NULL, DATE '1995-12-20', 'Carrara', 'CANTANTE', 'Esordiente indie pop.', 'Pop', '2024', 9);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (6, 'Coma_Cose', NULL, NULL, NULL, NULL, 'CANTANTE', 'Duo indie pop milanese.', 'Indie Pop', '2022,2023', 10);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (7, NULL, 'Simone', 'Cristicchi', DATE '1977-05-02', 'Roma', 'CANTANTE', 'Artista e icona di stile.', 'Pop', '2017,2020,2024', 14);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (8, NULL, 'Marcella', 'Bella', DATE '1952-06-18', 'Catania', 'CANTANTE', 'Rapper e personaggio mediatico.', 'Pop Rap', '2020,2024', 15);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (9, NULL, 'Achille', 'Lauro', DATE '1990-11-07', 'Verona', 'CANTANTE', 'Cantautrice e producer.', 'Pop', '2016,2017,2024', 7);
-INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (10, NULL, 'Giorgia', NULL, DATE '1971-01-26', 'Roma', 'CANTANTE', 'Vincitore di Sanremo 2017.', 'Pop', '2016,2017,2024', 10);
+INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (1, NULL, 'Rkomi', NULL, DATE '1994-04-19', 'Milano', 'C', 'Cantautore e performer provocatorio.', 'Pop', '2019,2022', 10);
+INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (2, NULL, 'Francesco', 'Gabbani', DATE '1982-09-09', 'Carrara', 'C', 'Voce emergente.', 'Pop', '2024', 15);
+INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (3, NULL, 'Gaia', NULL, DATE '1997-09-29', 'Guastalla', 'C', 'Giovane trapper.', 'Trap', '2024', 12);
+INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (4, NULL, 'Noemi', NULL, DATE '1982-01-25', 'Roma', 'C', 'Cantautore lucano.', 'Indie', '2018,2024', 14);
+INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (5, NULL, 'Irama', NULL, DATE '1995-12-20', 'Carrara', 'C', 'Esordiente indie pop.', 'Pop', '2024', 9);
+INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (6, 'Coma_Cose', NULL, NULL, NULL, NULL, 'C', 'Duo indie pop milanese.', 'Indie Pop', '2022,2023', 10);
+INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (7, NULL, 'Simone', 'Cristicchi', DATE '1977-05-02', 'Roma', 'C', 'Artista e icona di stile.', 'Pop', '2017,2020,2024', 14);
+INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (8, NULL, 'Marcella', 'Bella', DATE '1952-06-18', 'Catania', 'C', 'Rapper e personaggio mediatico.', 'Pop Rap', '2020,2024', 15);
+INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (9, NULL, 'Achille', 'Lauro', DATE '1990-11-07', 'Verona', 'C', 'Cantautrice e producer.', 'Pop', '2016,2017,2024', 7);
+INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (10, NULL, 'Giorgia', NULL, DATE '1971-01-26', 'Roma', 'C', 'Vincitore di Sanremo 2017.', 'Pop', '2016,2017,2024', 10);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (11, NULL, 'Fabio', 'Barnaba', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (12, NULL, 'Andrea', 'Benassai', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (13, NULL, 'Daniel', 'Bestonzo', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
