@@ -59,11 +59,7 @@ CREATE TABLE artisti (
     costoBaudi NUMERIC,
     CONSTRAINT pk_artisti PRIMARY KEY (codArtista),
 	CONSTRAINT chk_artista_o_gruppo_esclusivo
-		CHECK (
-			(nomeGruppo IS NOT NULL AND nome IS NULL AND cognome IS NULL AND dataNascita IS NULL AND luogoNascita IS NULL)
-			OR
-			(nomeGruppo IS NULL AND nome IS NOT NULL AND cognome IS NOT NULL AND dataNascita IS NOT NULL AND luogoNascita IS NOT NULL)
-		),
+	CHECK (nomegruppo IS NOT NULL AND nome IS NULL AND cognome IS NULL AND datanascita IS NULL AND luogonascita IS NULL OR nomegruppo IS NULL AND (nome IS NOT NULL OR cognome IS NOT NULL OR datanascita IS NOT NULL OR luogonascita IS NOT NULL)),
 	CONSTRAINT chk_dati_cantante_con_tipo
         CHECK (
             (
@@ -502,7 +498,7 @@ WHERE NOT EXISTS (
     FROM formazioni f
     WHERE f.codArtista = v.codArtista
       AND f.nomeSerata = v.nomeSerata
-)
+);
 /*************************************************************************************************************************************************************************/ 
 --4. Funzioni
 /*************************************************************************************************************************************************************************/ 
