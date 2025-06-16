@@ -28,11 +28,11 @@ CREATE TABLE artisti_cl (
     edizioniPassate VARCHAR(100),
     costoBaudi NUMERIC,
     CONSTRAINT chk_artista_o_gruppo_esclusivo
-        CHECK (
-            (nomeGruppo IS NOT NULL AND nome IS NULL AND cognome IS NULL AND dataNascita IS NULL AND luogoNascita IS NULL)
-            OR
-            (nomeGruppo IS NULL AND nome IS NOT NULL AND cognome IS NOT NULL AND dataNascita IS NOT NULL AND luogoNascita IS NOT NULL)
-        ),
+	CHECK (
+	  (nomegruppo IS NOT NULL AND nome IS NULL AND cognome IS NULL AND datanascita IS NULL AND luogonascita IS NULL)
+	  OR
+	  (nomegruppo IS NULL AND (nome IS NOT NULL OR cognome IS NOT NULL OR datanascita IS NOT NULL OR luogonascita IS NOT NULL))
+	),
     CONSTRAINT chk_dati_cantante_con_tipo
         CHECK (
             (
@@ -136,6 +136,49 @@ ON squadre_cl(codSquadra);
 
 /* inserire qui i comandi SQL per la definizione della politica di controllo dell'accesso della base di dati  (definizione ruoli, gerarchia, definizione utenti, assegnazione privilegi) in modo che, dopo l'esecuzione di questi comandi, 
 le operazioni corrispondenti ai privilegi delegati ai ruoli e agli utenti sia correttamente eseguibili. */
+
+--NON HO BEN CAPITO LA RICHIESTA SULLA TABELLA
+
+/*
+	Gerarchia presa in considerazione: Amministratore Fanta > Amministratore Lega > Proprietario Lega > Utente Semplice
+*/
+
+-- Creo ruoli
+CREATE ROLE admin_fanta NOLOGIN;
+CREATE ROLE admin_lega NOLOGIN;
+CREATE ROLE proprietario_lega NOLOGIN;
+CREATE ROLE utente_semplice NOLOGIN;
+
+-- Gerarchia ruoli: admin_fanta > admin_lega > proprietario_lega > utente_semplice
+GRANT utente_semplice TO proprietario_lega;
+GRANT proprietario_lega TO admin_lega;
+GRANT admin_lega TO admin_fanta;
+
+CREATE USER mario LOGIN PASSWORD 'marioPass123';
+CREATE USER lucia LOGIN PASSWORD 'luciaPass123';
+CREATE USER alessio LOGIN PASSWORD 'alessioPass123';
+CREATE USER sara LOGIN PASSWORD 'saraPass123';
+
+-- Assegnazione ruoli a utenti creati
+GRANT admin_fanta TO mario;-- Mario è super admin
+GRANT admin_lega TO lucia;-- Lucia è amministratore lega
+GRANT proprietario_lega TO alessio;-- Alessio è proprietario lega
+GRANT utente_semplice TO sara;-- Sara è utente semplice
+
+-- PRIVILEGI SULLE TABELLE
+
+-- Tutti i privilegi per admin_fanta
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin_fanta;
+
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO admin_lega;
+GRANT INSERT, UPDATE, DELETE ON leghe_cl, partecipazione_leghe_cl, squadre_cl TO admin_lega;
+
+-- Privilegi proprietario_lega (limitati alla propria squadra/lega a livello applicativo)
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO proprietario_lega;
+GRANT INSERT, UPDATE ON partecipazione_leghe_cl, squadre_cl TO proprietario_lega;
+
+-- Privilegi utente_semplice
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO utente_semplice;
 
 
 
