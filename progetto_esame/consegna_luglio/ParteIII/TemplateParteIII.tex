@@ -27,19 +27,15 @@ Parte III}
 \paragraph*{LINGUAGGIO NATURALE \\} 
 
 
-\todo[inline]{Voglio ottenere, per tutti gli artisti di tipo \texttt{C}, il nome e cognome se si tratta di una persona, oppure il nome del gruppo se si tratta di un gruppo, insieme alla relativa biografia.}
+\todo[inline]{Seleziona tutte le informazioni degli artisti dalla tabella artisti\_cl il cui nome è esattamente 'Ana'}
 
 \paragraph*{SQL \\}
 
 %\todo[inline]
 \begin{lstlisting}[language=SQL]
-	SELECT 
-	COALESCE(nomeGruppo, CONCAT(nome, ' ', cognome)) AS nome_artista,
-	biografia
-	FROM 
-	artisti
-	WHERE 
-	tipo = 'C';
+SELECT *
+FROM artisti_cl
+WHERE nome = 'Ana';
 \end{lstlisting}
 
 
@@ -48,15 +44,14 @@ Parte III}
 
 \paragraph*{LINGUAGGIO NATURALE\\}
 
-\todo[inline]{Voglio ottenere, per tutti gli artisti di tipo \texttt{C} nati dopo dal 01-01-1992, tutti gli attributi}
+\todo[inline]{Seleziona tutte le informazioni degli artisti dalla tabella artisti\_cl che si chiamano Ana e sono nati dopo il 1° gennaio 1992.}
 
 \paragraph*{SQL \\}
 
 \begin{lstlisting}[language=SQL]
 SELECT *
-FROM artisti
-WHERE tipo = 'C'
-AND dataNascita >= DATE '1992-01-01';
+FROM artisti_cl
+WHERE nome = 'Ana' AND dataNascita >= DATE '1992-01-01';
 \end{lstlisting}
 
 
@@ -64,23 +59,16 @@ AND dataNascita >= DATE '1992-01-01';
 
 \paragraph*{LINGUAGGIO NATURALE\\}
 
-\todo[inline]{Voglio ottenere, per ciascuna lega di tipo pubblico, l'elenco delle squadre partecipanti, includendo il nome della lega e il nome della squadra. È necessario unire le tabelle leghe, partecipazione\_leghe e squadre, e filtrare le leghe di tipo pubblico.}
+\todo[inline]{Seleziona tutte le informazioni relative alle leghe chiamate 'Anthony', insieme alle squadre che vi partecipano e ai dettagli della partecipazione a quelle leghe}
 
 \paragraph*{SQL \\}
 
 %\todo[inline]{Riportare in questa sezione l’interrogazione del carico di lavoro con almeno un join e almeno una condizione di selezione, in SQL}
 \begin{lstlisting}[language=SQL]
-	SELECT 
-	l.nome AS nome_lega,
-	s.nome AS nome_squadra
-	FROM 
-	leghe l
-	JOIN 
-	partecipazione_leghe pl ON l.codLega = pl.codLega
-	JOIN 
-	squadre s ON pl.codSquadra = s.codSquadra
-	WHERE 
-	l.tipo = 'PUBBLICA';
+	SELECT * FROM leghe_cl l
+	JOIN partecipazione_leghe_cl pl ON l.codLega = pl.codLega
+	JOIN squadre_cl s ON pl.codSquadra = s.codSquadra
+	WHERE l.nome = 'Anthony';
 \end{lstlisting}
 
 
@@ -95,9 +83,9 @@ AND dataNascita >= DATE '1992-01-01';
 \hline
 {\bf Id query} & {\bf Relazione} & \parbox{2cm}{\bf Chiave di ricerca} & \parbox{2cm}{\bf Tipo (ordinato/hash, clusterizzato/non clusterizzato)} & \parbox{5cm}{\bf Motivazione} \\
 \hline
-Q1 & artisti & tipo & ordinato e clusterizzato &  Visto il numero frequente di query sull'attributo tipo (non UNIQUE) potrei optare per la clusterizzazione\\
-Q2 & artisti & tipo, dataNascita & ordinato e clusterizzato & Devo escludere indice hash perchè è prevista ricerca per range sulla data nascita. Opterei per un indice composto per facilitare sia la query precedente che quella corrente\\
-Q3 & leghe, partecipazione\_leghe, squadre & leghe.tipo & ordinato e clusterizzato & Oltre all'indice su leghe.tipo, introdurrei degli indici ordinati sulle chiavi utilizzate per eseguire le join. Questi permettono di utilizzare algoritmi di join come l'indexed nested loop.\\
+Q1 & artisti & nome & ordinato e clusterizzato &  Visto il numero frequente di query sull'attributo nome (non UNIQUE) potrei optare per la clusterizzazione\\
+Q2 & artisti & nome, dataNascita & ordinato e clusterizzato & Devo escludere indice hash perchè è prevista ricerca per range sulla data nascita. Opterei per un indice composto per facilitare sia la query precedente che quella corrente\\
+Q3 & leghe, partecipazione\_leghe, squadre & leghe.nome & ordinato & Oltre all'indice su leghe.nome, introdurrei degli indici sulle chiavi utilizzate per eseguire le join. Questi permettono di utilizzare algoritmi di join come l'indexed nested loop.\\
 \hline
 \end{tabular}
 \end{footnotesize}
@@ -111,10 +99,8 @@ Q3 & leghe, partecipazione\_leghe, squadre & leghe.tipo & ordinato e clusterizza
 \hline
 \parbox{5cm}{\bf Schema fisico complessivo per il carico di lavoro} &  \parbox{5cm}{\bf Motivazione} \\
 \hline
-- indice ordinato e clusterizzato su (tipo, dataNascita), tabella artisti& Ricerca per tipo con uguaglianza e dataNascita per range (anche per ricerca attraverso solo tipo) \\
-- indice ordinato e clusterizzato su tipo, tabella leghe& Ricerca per tipo, clusterizzato perchè tipo non è UNIQUE\\
-- indice ordinato non clusterizzato su codLega, tabella partecipazione\_leghe & accesso alla relazione con indice per join con leghe\\
-- indice ordinato non clusterizzato su codSquadra, tabella squadre & accesso alla relazione con indice per join con partecipazione\_leghe\\
+- indice ordinato e clusterizzato su (nome, dataNascita), tabella artisti& Ricerca per nome con uguaglianza e dataNascita per range (anche per ricerca attraverso solo per nome) \\
+- indice ordinato su nome, tabella leghe& Ricerca per nome\\
 \hline
 \end{tabular}
 \end{footnotesize}
@@ -127,13 +113,12 @@ Q3 & leghe, partecipazione\_leghe, squadre & leghe.tipo & ordinato e clusterizza
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA PRIMA DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{ Seq Scan on artisti as artisti
-	Filter: (tipo = 'CANTANTE'::tipo\_artista)}
+\todo[inline]{Seq Scan on artisti\_cl as artisti\_cl Filter: ((nome)::text = 'Ana'::text)}
 
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA DOPO DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{Riportare in questa sezione il piano di esecuzione scelto da PostgreSQL dopo della creazione dello schema fisi-cocomplessivo, in formato testuale}
+\todo[inline]{Index Scan using idx\_artisti\_cl\_nome\_datanascita on artisti\_cl as artisti\_cl Index Cond: ((nome)::text = 'Ana'::text)}
 
 \paragraph*{CONFRONTO TRA I DUE PIANI\\}
 
@@ -146,7 +131,7 @@ Q3 & leghe, partecipazione\_leghe, squadre & leghe.tipo & ordinato e clusterizza
 \hline
 \parbox{3cm}{\bf Tempo esecuzione PRIMA} & \parbox{3cm}{\bf Tempo esecuzione DOPO} &  \parbox{7cm}{\bf Motivazione} \\
 \hline
-& &  \\
+00:00:00.153 & 00:00:00.054 & Viene utilizzato l'indice composto per la ricerca per nome (senza eseguire confronti sulla data)  \\
 \hline
 \end{tabular}
 \end{footnotesize}
@@ -156,12 +141,13 @@ Q3 & leghe, partecipazione\_leghe, squadre & leghe.tipo & ordinato e clusterizza
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA PRIMA DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{Seq Scan on artisti as artisti
-Filter: ((datanascita $\geq$ '1992-01-01'::date) AND (tipo = 'CANTANTE'::tipo\_artista))}
+\todo[inline]{Seq Scan on artisti\_cl as artisti\_cl
+	Filter: ((datanascita  $\geq$ '1992-01-01'::date) AND ((nome)::text = 'Ana'::text))}
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA DOPO DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{Riportare in questa sezione il piano di esecuzione scelto da PostgreSQL dopo della creazione dello schema fisi-co complessivo, in formato testuale}
+\todo[inline]{Index Scan using idx\_artisti\_cl\_nome\_datanascita on artisti\_cl as artisti\_cl
+ Index Cond: (((nome)::text = 'Ana'::text) AND (datanascita $\geq$ '1992-01-01'::date))}
 
 \paragraph*{CONFRONTO TRA I DUE PIANI\\}
 
@@ -174,7 +160,7 @@ Filter: ((datanascita $\geq$ '1992-01-01'::date) AND (tipo = 'CANTANTE'::tipo\_a
 \hline
 \parbox{3cm}{\bf Tempo esecuzione PRIMA} & \parbox{3cm}{\bf Tempo esecuzione DOPO} &  \parbox{7cm}{\bf Motivazione} \\
 \hline
-& &  \\
+00:00:00.079 & 00:00:00.052 & Viene utilizzato l'indice composto per ricerca con nome uguale ad un valore e data con un range \\
 \hline
 \end{tabular}
 \end{footnotesize}
@@ -186,11 +172,35 @@ Filter: ((datanascita $\geq$ '1992-01-01'::date) AND (tipo = 'CANTANTE'::tipo\_a
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA PRIMA DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{Riportare in questa sezione il piano di esecuzione scelto da PostgreSQL prima della creazione dello schema fi-sico complessivo, in formato testuale}
+\todo[inline]{
+	- Hash Inner Join \\
+	- Hash Cond: (s.codsquadra = pl.codsquadra) \\
+	- Seq Scan on squadre\_cl as s \\
+	- Hash \\
+	- Hash Inner Join \\
+	- Hash Cond: (pl.codlega = l.codlega) \\
+	- Seq Scan on partecipazione\_leghe\_cl as pl \\
+	- Hash \\
+	- Seq Scan on leghe\_cl as l \\
+	- Filter: ((nome)::text = 'Anthony'::text) \\
+	}
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA DOPO DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{Riportare in questa sezione il piano di esecuzione scelto da PostgreSQL dopo della creazione dello schema fisi-co complessivo, in formato testuale}
+\todo[inline]{
+	- Hash Inner Join \\
+	- Hash Cond: (s.codsquadra = pl.codsquadra) \\
+	- Seq Scan on squadre\_cl as s \\
+	- Hash \\
+	- Hash Inner Join \\
+	- Hash Cond: (pl.codlega = l.codlega) \\
+	- Seq Scan on partecipazione\_leghe\_cl as pl \\
+	- Hash \\
+	- Bitmap Heap Scan on leghe\_cl as l \\
+	- Recheck Cond: ((nome)::text = 'Anthony'::text) \\
+	- Bitmap Index Scan using idx\_leghe\_cl\_nome \\
+	- Index Cond: ((nome)::text = 'Anthony'::text) \\
+}
 
 \paragraph*{CONFRONTO TRA I DUE PIANI\\}
 
@@ -203,7 +213,8 @@ Filter: ((datanascita $\geq$ '1992-01-01'::date) AND (tipo = 'CANTANTE'::tipo\_a
 \hline
 \parbox{3cm}{\bf Tempo esecuzione PRIMA} & \parbox{3cm}{\bf Tempo esecuzione DOPO} &  \parbox{7cm}{\bf Motivazione} \\
 \hline
-& &  \\
+00:00:00.043 & 00:00:00.052 & Nonostante la creazione di un indice sul nome della lega — testato sia in versione clusterizzata che non — la query non ha ottenuto benefici significativi in termini di performance. Sono stati inoltre effettuati alcuni test con la creazione di indici sui campi utilizzati per le join (i codici delle relazioni), ma anche in questo caso il database ha preferito utilizzare l’hash join, ignorando gli indici disponibili.
+ \\
 \hline
 \end{tabular}
 \end{footnotesize}
