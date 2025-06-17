@@ -76,8 +76,6 @@ ON leghe_cl (nome);
 /* inserire qui i comandi SQL per la definizione della politica di controllo dell'accesso della base di dati  (definizione ruoli, gerarchia, definizione utenti, assegnazione privilegi) in modo che, dopo l'esecuzione di questi comandi, 
 le operazioni corrispondenti ai privilegi delegati ai ruoli e agli utenti sia correttamente eseguibili. */
 
---NON HO BEN CAPITO LA RICHIESTA SULLA TABELLA
-
 /*
 	Gerarchia presa in considerazione: Amministratore Fanta > Amministratore Lega > Proprietario Lega > Utente Semplice
 */
@@ -107,17 +105,17 @@ GRANT utente_semplice TO sara;-- Sara è utente semplice
 -- PRIVILEGI SULLE TABELLE
 
 -- Tutti i privilegi per admin_fanta
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin_fanta;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA fantasanremo TO admin_fanta;
 
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO admin_lega;
+GRANT SELECT ON ALL TABLES IN SCHEMA fantasanremo TO admin_lega;
 GRANT INSERT, UPDATE, DELETE ON leghe_cl, partecipazione_leghe_cl, squadre_cl TO admin_lega;
 
 -- Privilegi proprietario_lega (limitati alla propria squadra/lega a livello applicativo)
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO proprietario_lega;
+GRANT SELECT ON ALL TABLES IN SCHEMA fantasanremo TO proprietario_lega;
 GRANT INSERT, UPDATE ON partecipazione_leghe_cl, squadre_cl TO proprietario_lega;
 
 -- Privilegi utente_semplice
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO utente_semplice;
+GRANT SELECT ON ALL TABLES IN SCHEMA fantasanremo TO utente_semplice;
 
 
 

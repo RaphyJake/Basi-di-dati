@@ -230,29 +230,78 @@ Q3 & leghe, partecipazione\_leghe, squadre & leghe.nome & ordinato & Oltre all'i
 \subsubsection{GERARCHIA\\}
 
 \todo[inline]{Riportare in questa sezione la gerarchia che si intende definire tra i quattro ruoli}
+La gerarchia scelta è la seguente:
+\[
+\texttt{admin\_fanta} \rightarrow \texttt{admin\_lega} \rightarrow \texttt{proprietario\_lega} \rightarrow \texttt{utente\_semplice}
+\]
 
 \subsubsection{MOTIVAZIONE GERARCHIA}
 
 \todo[inline]{Riportare in questa sezione una motivazione per la gerarchia proposta}
+\subsection*{Gerarchia dei ruoli e motivazioni}
+
+La gerarchia dei ruoli nel sistema FantaSanremo è stata progettata seguendo i principi del \textbf{minimo privilegio} e della \textbf{modularità dei compiti}. La struttura gerarchica è la seguente:
+
+\begin{center}
+	\begin{tikzpicture}[node distance=1.5cm]
+		\node (adminfanta) [draw, rectangle] {admin\_fanta};
+		\node (adminlega) [draw, rectangle, below of=adminfanta] {admin\_lega};
+		\node (proplega) [draw, rectangle, below of=adminlega] {proprietario\_lega};
+		\node (utente) [draw, rectangle, below of=proplega] {utente\_semplice};
+		
+		\draw[->] (adminfanta) -- (adminlega);
+		\draw[->] (adminlega) -- (proplega);
+		\draw[->] (proplega) -- (utente);
+	\end{tikzpicture}
+\end{center}
+
+\paragraph{utente\_semplice} È il ruolo con i privilegi minimi, dedicato agli utenti che partecipano al gioco. Può consultare i dati delle leghe, artisti e squadre, ma non modificarli.\\
+\textbf{Motivazione:} deve solo accedere ai dati pubblici e non alterare lo stato del sistema.
+
+\paragraph{proprietario\_lega} Questo ruolo rappresenta l’utente che crea e gestisce una propria lega. Ha il diritto di gestire la partecipazione alla lega e modificare i dati della propria squadra.\\
+\textbf{Motivazione:} ha responsabilità amministrative limitate alla propria lega.
+
+\paragraph{admin\_lega} Oltre ai privilegi del proprietario di lega, può modificare tutte le leghe, squadre e partecipazioni.\\
+\textbf{Motivazione:} è pensato per supervisionare l’intera struttura delle leghe.
+
+\paragraph{admin\_fanta} È il super amministratore del sistema, con pieni privilegi su tutte le tabelle.\\
+\textbf{Motivazione:} è responsabile della gestione globale del sistema e delle attività di manutenzione.
+
+\medskip
+
+\noindent
+Questa gerarchia consente di:
+\begin{itemize}
+	\item garantire la \textbf{sicurezza}, evitando accessi non autorizzati a utenti con ruoli minori;
+	\item mantenere la \textbf{chiarezza}, grazie all'ereditarietà dei privilegi tra ruoli;
+	\item migliorare la \textbf{manutenibilità}, poiché i privilegi possono essere gestiti centralmente tramite i ruoli.
+\end{itemize}
+
+
 
 
 \subsection{ASSEGNAZIONE PRIVILEGI SPECIFICI AI RUOLI}
 
-\todo[inline]{Riportare nella prima colonna della seguente tabella le relazioni considerate e in ciascuna altra cella (i,j) i privilegi specifici (quindi non acquisiti tramite la gerarchia) che si intendono assegnare al ruolo j sulla tabella }
-
-
-
 \begin{center}
-\begin{footnotesize}
-\begin{tabular}{|c|p{2.7cm}|p{2.7cm}|p{2.7cm}|p{2.7cm}|}
-\hline
-{\bf Relazione} & \parbox{2.7cm}{\bf Amministratore del FantaSarremo} & \parbox{2.7cm}{\bf Utente} &  \parbox{2.7cm}{\bf Amministratore lega} & \parbox{2.7cm}{\bf Proprietario lega} \\
-\hline
-& &  & & \\
-\hline
-\end{tabular}
-\end{footnotesize}
+	\begin{footnotesize}
+		\begin{tabular}{|c|p{2.7cm}|p{2.7cm}|p{2.7cm}|p{2.7cm}|}
+			\hline
+			{\bf Relazione} & \parbox{2.7cm}{\bf Amministratore del FantaSanremo} & \parbox{2.7cm}{\bf Utente semplice} &  \parbox{2.7cm}{\bf Amministratore lega} & \parbox{2.7cm}{\bf Proprietario lega} \\
+			\hline
+			\texttt{artisti} & ALL PRIVILEGES & SELECT & SELECT & SELECT \\
+			\hline
+			\texttt{leghe} & ALL PRIVILEGES & - & INSERT, SELECT, UPDATE & INSERT, SELECT \\
+			\hline
+			\texttt{partecipazione\_leghe} & ALL PRIVILEGES & INSERT, SELECT & INSERT, SELECT, UPDATE & INSERT, SELECT \\
+			\hline
+			\texttt{squadre} & ALL PRIVILEGES & INSERT, SELECT & SELECT, UPDATE & INSERT, SELECT \\
+			\hline
+			\texttt{utenti} & ALL PRIVILEGES & SELECT ON SELF & - & - \\
+			\hline
+		\end{tabular}
+	\end{footnotesize}
 \end{center}
+
 
 
 \end{document}
