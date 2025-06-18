@@ -104,23 +104,28 @@ GRANT utente_semplice TO sara;-- Sara è utente semplice
 
 -- PRIVILEGI SULLE TABELLE
 
--- Tutti i privilegi per admin_fanta
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA fantasanremo TO admin_fanta;
+-- Grants per utente_semplice
+GRANT SELECT ON artisti TO utente_semplice;
+GRANT SELECT ON brani TO utente_semplice;
+GRANT SELECT ON contributi_brani TO utente_semplice;
+GRANT SELECT ON esibizioni TO utente_semplice;
+GRANT SELECT ON serate TO utente_semplice;
+GRANT SELECT voti TO utente_semplice;
+GRANT SELECT ON bonus_assegnati TO utente_semplice;
+GRANT SELECT ON bonus_malus TO utente_semplice;
+GRANT SELECT, INSERT, UPDATE, DELETE ON formazioni TO utente_semplice;
+GRANT SELECT ON leghe TO utente_semplice;
+GRANT SELECT, INSERT, UPDATE, DELETE ON partecipazione_leghe TO utente_semplice;
+GRANT SELECT, INSERT, UPDATE, DELETE ON squadre TO utente_semplice;
 
-GRANT SELECT ON ALL TABLES IN SCHEMA fantasanremo TO admin_lega;
-GRANT INSERT, UPDATE, DELETE ON leghe_cl, partecipazione_leghe_cl, squadre_cl TO admin_lega;
+-- Grants aggiuntivi per proprietario_lega (solo quelli in più)
+GRANT SELECT, INSERT, UPDATE, DELETE ON gestione_leghe TO proprietario_lega;
+GRANT SELECT, INSERT, UPDATE, DELETE ON leghe TO proprietario_lega;
 
--- Privilegi proprietario_lega (limitati alla propria squadra/lega a livello applicativo)
-GRANT SELECT ON ALL TABLES IN SCHEMA fantasanremo TO proprietario_lega;
-GRANT INSERT, UPDATE ON partecipazione_leghe_cl, squadre_cl TO proprietario_lega;
+-- Grants aggiuntivi per admin_lega
+GRANT SELECT ON utenti TO admin_lega;
 
--- Privilegi utente_semplice
-GRANT SELECT ON ALL TABLES IN SCHEMA fantasanremo TO utente_semplice;
-
-
-
-
-
-
-
-
+-- Grants aggiuntivi per admin_fanta
+GRANT SELECT, INSERT, UPDATE, DELETE ON bonus_assegnati TO admin_fanta;
+GRANT SELECT, INSERT, UPDATE, DELETE ON bonus_malus TO admin_fanta;
+GRANT SELECT, INSERT, UPDATE, DELETE ON utenti TO admin_fanta;

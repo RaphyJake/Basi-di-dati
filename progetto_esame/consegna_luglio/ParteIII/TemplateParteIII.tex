@@ -255,8 +255,8 @@ La gerarchia dei ruoli nel sistema FantaSanremo è stata progettata seguendo i p
 	\end{tikzpicture}
 \end{center}
 
-\paragraph{admin\_fanta} È il super amministratore del sistema, con pieni privilegi su tutte le tabelle.\\
-\textbf{Motivazione:} è responsabile della gestione globale del sistema e delle attività di manutenzione.
+\paragraph{admin\_fanta} È il super amministratore del sistema, con pieni privilegi su tutte le tabelle del FantaSanremo.\\
+\textbf{Motivazione:}è responsabile della gestione complessiva del sistema e delle attività di manutenzione legate al gioco. Le tabelle relative alla competizione "Festival di Sanremo" vengono invece popolate da un sistema esterno, tramite un utente tecnico dotato di permessi specifici aggiuntivi.
 
 \paragraph{admin\_lega}È il responsabile della gestione del FantaSanremo, con privilegi di modifica su leghe, squadre e partecipanti delle leghe.\\
 \textbf{Motivazione:} è pensato per supervisionare la gestione del gioco FantaSanremo.
@@ -315,23 +315,24 @@ Questa gerarchia consente di:
 		\end{tabular}
 	\end{footnotesize}
 \end{center}
+
 \begin{center}
 	\begin{footnotesize}
 		\begin{tabular}{|c|p{2.7cm}|p{2.7cm}|p{2.7cm}|p{2.7cm}|}
 			\hline
 			{\bf Relazione} & \parbox{2.7cm}{\bf Amministratore del FantaSanremo} & \parbox{2.7cm}{\bf Utente} &  \parbox{2.7cm}{\bf Amministratore lega} & \parbox{2.7cm}{\bf Proprietario lega} \\
 			\hline
-			artisti & SELECT, INSERT, UPDATE, DELETE & SELECT & SELECT & SELECT \\
+			artisti & SELECT & SELECT & SELECT & SELECT \\
 			\hline
-			brani & SELECT, INSERT, UPDATE, DELETE & SELECT & SELECT & SELECT \\
+			brani & SELECT & SELECT & SELECT & SELECT \\
 			\hline
-			contributi\_brani & SELECT, INSERT, UPDATE, DELETE & - & - & - \\
+			contributi\_brani & SELECT & SELECT & SELECT & SELECT \\
 			\hline
-			esibizioni & SELECT, INSERT, UPDATE, DELETE & SELECT & SELECT & SELECT \\
+			esibizioni & SELECT & SELECT & SELECT & SELECT \\
 			\hline
-			serate & SELECT, INSERT, UPDATE, DELETE & SELECT & SELECT & SELECT \\
+			serate & SELECT & SELECT & SELECT & SELECT \\
 			\hline
-			voti & SELECT, INSERT, UPDATE, DELETE & - & - & - \\
+			voti & SELECT & SELECT & SELECT & SELECT \\
 			\hline
 			bonus\_assegnati & SELECT, INSERT, UPDATE, DELETE & SELECT & SELECT & SELECT \\
 			\hline
