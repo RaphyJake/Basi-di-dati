@@ -255,20 +255,18 @@ La gerarchia dei ruoli nel sistema FantaSanremo è stata progettata seguendo i p
 	\end{tikzpicture}
 \end{center}
 
-\paragraph{utente\_semplice} È il ruolo con i privilegi minimi, dedicato agli utenti che partecipano al gioco. Può consultare i dati delle leghe, artisti e squadre, ma non modificarli.\\
-\textbf{Motivazione:} deve solo accedere ai dati pubblici e non alterare lo stato del sistema.
+\paragraph{admin\_fanta} È il super amministratore del sistema, con pieni privilegi su tutte le tabelle.\\
+\textbf{Motivazione:} è responsabile della gestione globale del sistema e delle attività di manutenzione.
+
+\paragraph{admin\_lega}È il responsabile della gestione del FantaSanremo, con privilegi di modifica su leghe, squadre e partecipanti delle leghe.\\
+\textbf{Motivazione:} è pensato per supervisionare la gestione del gioco FantaSanremo.
 
 \paragraph{proprietario\_lega} Questo ruolo rappresenta l’utente che crea e gestisce una propria lega. Ha il diritto di gestire la partecipazione alla lega e modificare i dati della propria squadra.\\
 \textbf{Motivazione:} ha responsabilità amministrative limitate alla propria lega.
 
-\paragraph{admin\_lega} Oltre ai privilegi del proprietario di lega, può modificare tutte le leghe, squadre e partecipazioni.\\
-\textbf{Motivazione:} è pensato per supervisionare l’intera struttura delle leghe.
-
-\paragraph{admin\_fanta} È il super amministratore del sistema, con pieni privilegi su tutte le tabelle.\\
-\textbf{Motivazione:} è responsabile della gestione globale del sistema e delle attività di manutenzione.
-
+\paragraph{utente\_semplice}È il partecipante comune al FantaSanremo. Può iscriversi alle leghe, creare e gestire le proprie squadre.\\
+\textbf{Motivazione:}  rappresenta l'utente finale che partecipa al gioco, con accesso strettamente limitato ai propri dati.
 \medskip
-
 \noindent
 Questa gerarchia consente di:
 \begin{itemize}
@@ -317,8 +315,43 @@ Questa gerarchia consente di:
 		\end{tabular}
 	\end{footnotesize}
 \end{center}
-
-
+\begin{center}
+	\begin{footnotesize}
+		\begin{tabular}{|c|p{2.7cm}|p{2.7cm}|p{2.7cm}|p{2.7cm}|}
+			\hline
+			{\bf Relazione} & \parbox{2.7cm}{\bf Amministratore del FantaSanremo} & \parbox{2.7cm}{\bf Utente} &  \parbox{2.7cm}{\bf Amministratore lega} & \parbox{2.7cm}{\bf Proprietario lega} \\
+			\hline
+			artisti & SELECT, INSERT, UPDATE, DELETE & SELECT & SELECT & SELECT \\
+			\hline
+			brani & SELECT, INSERT, UPDATE, DELETE & - & - & - \\
+			\hline
+			contributi\_brani & SELECT, INSERT, UPDATE, DELETE & - & - & - \\
+			\hline
+			esibizioni & SELECT, INSERT, UPDATE, DELETE & - & - & - \\
+			\hline
+			serate & SELECT, INSERT, UPDATE, DELETE & SELECT & SELECT & SELECT \\
+			\hline
+			voti & SELECT, INSERT, UPDATE, DELETE & - & - & - \\
+			\hline
+			bonus\_assegnati & SELECT, INSERT, UPDATE, DELETE & SELECT & SELECT & SELECT \\
+			\hline
+			bonus\_malus & SELECT, INSERT, UPDATE, DELETE & SELECT & SELECT & SELECT \\
+			\hline
+			formazioni & SELECT, INSERT, UPDATE, DELETE & SELECT, INSERT, UPDATE, DELETE (own) & SELECT, INSERT, UPDATE, DELETE & SELECT, INSERT, UPDATE, DELETE (own) \\
+			\hline
+			gestione\_leghe & SELECT, INSERT, UPDATE, DELETE & - & SELECT, INSERT, UPDATE, DELETE & SELECT, INSERT, UPDATE, DELETE (own) \\
+			\hline
+			leghe & SELECT, INSERT, UPDATE, DELETE & SELECT & SELECT, INSERT, UPDATE, DELETE & SELECT, INSERT, UPDATE, DELETE (own) \\
+			\hline
+			partecipazione\_leghe & SELECT, INSERT, UPDATE, DELETE & SELECT, INSERT, UPDATE, DELETE (own) & SELECT, INSERT, UPDATE, DELETE & SELECT, INSERT, UPDATE, DELETE (own) \\
+			\hline
+			squadre & SELECT, INSERT, UPDATE, DELETE & SELECT, INSERT, UPDATE, DELETE (own) & SELECT, INSERT, UPDATE, DELETE & SELECT, INSERT, UPDATE, DELETE (own) \\
+			\hline
+			utenti & SELECT, INSERT, UPDATE, DELETE & - & SELECT & - \\
+			\hline
+		\end{tabular}
+	\end{footnotesize}
+\end{center}
 
 
 \end{document}
