@@ -11,7 +11,7 @@
 /* per ogni relazione R coinvolta nel carico di lavoro, inserire qui i comandi SQL per creare una nuova relazione R_CL con schema equivalente a R ma senza vincoli di chiave primaria, secondaria o esterna e con eventuali attributi dummy */
 -- ARTISTI_CL con CHECK
 SET search_path TO fantasanremo;
-drop table artisti_cl, leghe_cl, partecipazione_leghe_cl, squadre_cl;
+DROP TABLE IF EXISTS artisti_cl, leghe_cl, partecipazione_leghe_cl, squadre_cl;
 CREATE TABLE artisti_cl
 (LIKE artisti INCLUDING DEFAULTS EXCLUDING CONSTRAINTS);
 
@@ -110,7 +110,7 @@ GRANT SELECT ON brani TO utente_semplice;
 GRANT SELECT ON contributi_brani TO utente_semplice;
 GRANT SELECT ON esibizioni TO utente_semplice;
 GRANT SELECT ON serate TO utente_semplice;
-GRANT SELECT voti TO utente_semplice;
+GRANT SELECT ON voti TO utente_semplice;
 GRANT SELECT ON bonus_assegnati TO utente_semplice;
 GRANT SELECT ON bonus_malus TO utente_semplice;
 GRANT SELECT, INSERT, UPDATE, DELETE ON formazioni TO utente_semplice;
