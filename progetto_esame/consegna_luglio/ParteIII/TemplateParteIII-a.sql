@@ -97,12 +97,71 @@ CREATE USER alessio LOGIN PASSWORD 'alessioPass123';
 CREATE USER sara LOGIN PASSWORD 'saraPass123';
 
 -- Assegnazione ruoli a utenti creati
-GRANT admin_fanta TO mario;-- Mario è super admin
+GRANT admin_fanta TO mario;-- Mario è admin
 GRANT admin_lega TO lucia;-- Lucia è amministratore lega
 GRANT proprietario_lega TO alessio;-- Alessio è proprietario lega
 GRANT utente_semplice TO sara;-- Sara è utente semplice
 
--- PRIVILEGI SULLE TABELLE
+-- USAGE ON Schema
+GRANT USAGE ON SCHEMA fantasanremo TO admin_fanta;
+GRANT USAGE ON SCHEMA fantasanremo TO admin_lega;
+GRANT USAGE ON SCHEMA fantasanremo TO proprietario_lega;
+GRANT USAGE ON SCHEMA fantasanremo TO utente_semplice;
+
+-- ADMIN Fantasanremo
+GRANT ALL PRIVILEGES ON TABLE artisti TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE brani TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE contributi_brani TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE esibizioni TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE serate TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE voti TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE bonus_assegnati TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE bonus_malus TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE formazioni TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE gestione_leghe TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE leghe TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE partecipazione_leghe TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE squadre TO admin_fanta;
+GRANT ALL PRIVILEGES ON TABLE utenti TO admin_fanta;
+
+--Proprietario Lega
+GRANT SELECT ON TABLE artisti TO proprietario_lega;
+GRANT SELECT ON TABLE brani TO proprietario_lega;
+GRANT SELECT ON TABLE contributi_brani TO proprietario_lega;
+GRANT SELECT ON TABLE esibizioni TO proprietario_lega;
+GRANT SELECT ON TABLE serate TO proprietario_lega;
+GRANT SELECT ON TABLE voti TO proprietario_lega;
+
+GRANT SELECT ON TABLE bonus_assegnati TO proprietario_lega;
+GRANT SELECT ON TABLE bonus_malus TO proprietario_lega;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE formazioni TO proprietario_lega;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE partecipazione_leghe TO proprietario_lega;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE squadre TO proprietario_lega;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE leghe TO proprietario_lega;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE gestione_leghe TO proprietario_lega;
+
+--Admin Lega
+GRANT SELECT ON TABLE artisti TO admin_lega;
+GRANT SELECT ON TABLE brani TO admin_lega;
+GRANT SELECT ON TABLE contributi_brani TO admin_lega;
+GRANT SELECT ON TABLE esibizioni TO admin_lega;
+GRANT SELECT ON TABLE serate TO admin_lega;
+GRANT SELECT ON TABLE voti TO admin_lega;
+
+GRANT SELECT ON TABLE bonus_assegnati TO admin_lega;
+GRANT SELECT ON TABLE bonus_malus TO admin_lega;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE formazioni TO admin_lega;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE partecipazione_leghe TO admin_lega;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE squadre TO admin_lega;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE leghe TO admin_lega;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE gestione_leghe TO admin_lega;
+
+GRANT SELECT ON TABLE utenti TO admin_lega;
+
 
 -- Grants per utente_semplice
 GRANT SELECT ON artisti TO utente_semplice;
@@ -117,15 +176,3 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON formazioni TO utente_semplice;
 GRANT SELECT ON leghe TO utente_semplice;
 GRANT SELECT, INSERT, UPDATE, DELETE ON partecipazione_leghe TO utente_semplice;
 GRANT SELECT, INSERT, UPDATE, DELETE ON squadre TO utente_semplice;
-
--- Grants aggiuntivi per proprietario_lega (solo quelli in più)
-GRANT SELECT, INSERT, UPDATE, DELETE ON gestione_leghe TO proprietario_lega;
-GRANT SELECT, INSERT, UPDATE, DELETE ON leghe TO proprietario_lega;
-
--- Grants aggiuntivi per admin_lega
-GRANT SELECT ON utenti TO admin_lega;
-
--- Grants aggiuntivi per admin_fanta
-GRANT SELECT, INSERT, UPDATE, DELETE ON bonus_assegnati TO admin_fanta;
-GRANT SELECT, INSERT, UPDATE, DELETE ON bonus_malus TO admin_fanta;
-GRANT SELECT, INSERT, UPDATE, DELETE ON utenti TO admin_fanta;
