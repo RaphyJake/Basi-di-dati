@@ -1,4 +1,4 @@
---- Progetto BD 24-25 (6CFU)
+--- Progetto BD 24-25 (12 CFU)
 --- Gruppo 35
 --- Alessio Molinas 5339413
 --- Ettore Romano 5644926
@@ -210,12 +210,11 @@ CREATE TABLE contributi_brani (
     CONSTRAINT fk_contributi_brani_artisti FOREIGN KEY (codArtista) REFERENCES artisti(codArtista) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-/* inserire qui i comandi SQL per la creazione dello schema logico della base di dati in accordo allo schema relazionale ottenuto alla fine della fase di progettazione logica, per la porzione necessaria per i punti successivi (cioè le tabelle coinvolte dalle interrogazioni nel carico di lavoro, nella definizione della vista, nelle interrogazioni, in funzioni, procedure e trigger). Lo schema dovrà essere comprensivo dei vincoli esprimibili con check. */
-
 /*************************************************************************************************************************************************************************/ 
 --1b. Popolamento 
 /*************************************************************************************************************************************************************************/
 /* inserire qui i comandi SQL per il popolamento 'in piccolo' di tale base di dati (utile per il test dei vincoli e delle operazioni in parte 2.) */
+
 -- INSERT SERATE
 INSERT INTO serate (nome, data) VALUES
   ('Prima Serata', DATE '2025-02-11'),
@@ -224,7 +223,6 @@ INSERT INTO serate (nome, data) VALUES
   ('Quarta Serata', DATE '2025-02-14'),
   ('Finale', DATE '2025-02-15'),
   ('Extra', NULL);
-
 
 -- INSERT UTENTI
 INSERT INTO utenti (username, nome, cognome) VALUES
@@ -236,6 +234,7 @@ INSERT INTO utenti (username, nome, cognome) VALUES
   ('g.martini6@email.it', 'Giulia', 'Martini'),
   ('d.ferrari7@email.it', 'Davide', 'Ferrari');
   
+-- INSERT ARTISTI
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (1, NULL, 'Rkomi', NULL, DATE '1994-04-19', 'Milano', 'C', 'Cantautore e performer provocatorio.', 'Pop', '2019,2022', 10);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (2, NULL, 'Francesco', 'Gabbani', DATE '1982-09-09', 'Carrara', 'C', 'Voce emergente.', 'Pop', '2024', 15);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (3, NULL, 'Gaia', NULL, DATE '1997-09-29', 'Guastalla', 'C', 'Giovane trapper.', 'Trap', '2024', 12);
@@ -250,7 +249,7 @@ INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNa
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (12, NULL, 'Andrea', 'Benassai', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO artisti (codArtista, nomeGruppo, nome, cognome, dataNascita, luogoNascita, tipo, biografia, genereMusicale, edizioniPassate, costoBaudi) VALUES (13, NULL, 'Daniel', 'Bestonzo', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
-  
+-- INSERT BRANI
 INSERT INTO brani (codBrano, titolo, codArtista, genereMusicale, durata) VALUES
 (1, 'Il ritmo delle cose', 1, 'Pop Rap', INTERVAL '185 seconds'),
 (2, 'Viva la vita', 2, 'Pop', INTERVAL '210 seconds'),
@@ -263,6 +262,7 @@ INSERT INTO brani (codBrano, titolo, codArtista, genereMusicale, durata) VALUES
 (9, 'Incoscienti giovani', 9, 'Pop', INTERVAL '200 seconds'),
 (10, 'La cura per me', 10, 'Pop', INTERVAL '220 seconds');
 
+-- INSERT ESIBIZIONI
 INSERT INTO esibizioni (codBrano, codArtista, nomeSerata, orario, ordineEsibizione) VALUES (3, 3, 'Prima Serata', TIME '21:00:00', 1);
 INSERT INTO esibizioni (codBrano, codArtista, nomeSerata, orario, ordineEsibizione) VALUES (2, 2, 'Prima Serata', TIME '21:05:00', 2);
 INSERT INTO esibizioni (codBrano, codArtista, nomeSerata, orario, ordineEsibizione) VALUES (1, 1, 'Prima Serata', TIME '21:10:00', 3);
@@ -310,7 +310,7 @@ INSERT INTO contributi_brani (codBrano, codArtista, tipo) VALUES (5, 12, 'COMPOS
 INSERT INTO contributi_brani (codBrano, codArtista, tipo) VALUES (5, 13, 'DIRETTORE');
 INSERT INTO contributi_brani (codBrano, codArtista, tipo) VALUES (5, 11, 'SCRITTORE');
 
-
+-- INSERT BONUS_MALUS
 INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (1, 'Cantante suona uno strumento', 10, 'STANDARD');
 INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (2, 'Presenza di ballerini', 10, 'STANDARD');
 INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (3, 'Esibizione con performer non in gara (esclusi ballerini)', 15, 'STANDARD');
@@ -325,6 +325,7 @@ INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (11, '
 INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (12, 'Canta con i fan per le vie di Sanremo', 10, 'EXTRA');
 INSERT INTO bonus_malus (codBonusMalus, descrizione, valore, tipo) VALUES (13, 'Canta la sigla ìOcchi di FantaSanremoî di Cristina DíAvena', 10, 'EXTRA');
 
+-- INSERT VOTI
 INSERT INTO voti (codVoto, codBrano, codArtista, nomeSerata, tipo, dataOra) VALUES (1, 6, 6, 'Seconda Serata', 'GIURIA_RADIO', '2025-02-12 21:00:00');
 INSERT INTO voti (codVoto, codBrano, codArtista, nomeSerata, tipo, dataOra) VALUES (2, 8, 8, 'Seconda Serata', 'GIURIA_STAMPA', '2025-02-12 21:10:00');
 INSERT INTO voti (codVoto, codBrano, codArtista, nomeSerata, tipo, dataOra) VALUES (3, 10, 10, 'Seconda Serata', 'TELEVOTO', '2025-02-12 21:20:00');
@@ -345,6 +346,7 @@ INSERT INTO voti (codVoto, codBrano, codArtista, nomeSerata, tipo, dataOra) VALU
 INSERT INTO voti (codVoto, codBrano, codArtista, nomeSerata, tipo, dataOra) VALUES (18, 7, 7, 'Finale', 'TELEVOTO', '2025-02-15 21:10:00');
 INSERT INTO voti (codVoto, codBrano, codArtista, nomeSerata, tipo, dataOra) VALUES (19, 2, 2, 'Finale', 'GIURIA_RADIO', '2025-02-15 21:05:00');
 
+-- INSERT SQUADRE
 INSERT INTO squadre (codSquadra, nome, username) VALUES (1, 'Sanremo Stars', 'm.rossi1@email.it');
 INSERT INTO squadre (codSquadra, nome, username) VALUES (2, 'Festival Fighters', 'l.bianchi2@email.it');
 INSERT INTO squadre (codSquadra, nome, username) VALUES (3, 'Note Ribelli', 'a.verdi3@email.it');
@@ -361,13 +363,14 @@ INSERT INTO squadre (codSquadra, nome, username) VALUES (13, 'Liguri in Gara', '
 INSERT INTO squadre (codSquadra, nome, username) VALUES (14, 'Coda alla Rampa', 'd.ferrari7@email.it');
 INSERT INTO squadre (codSquadra, nome, username) VALUES (15, 'Ultimi Ma Belli', 'm.rossi1@email.it');
 
+-- INSERT LEGHE
 INSERT INTO leghe (codLega, nome, tipo) VALUES (1, 'Liguri in Gara', 'PUBBLICA');
 INSERT INTO leghe (codLega, nome, tipo) VALUES (2, 'Gli Amici del Fantasanremo', 'PRIVATA');
 INSERT INTO leghe (codLega, nome, tipo) VALUES (3, 'Giocati di Casa', 'PUBBLICA');
 INSERT INTO leghe (codLega, nome, tipo) VALUES (4, 'I Segretissimi', 'SEGRETA');
 INSERT INTO leghe (codLega, nome, tipo) VALUES (5, 'Team Festivalieri', 'PRIVATA');
 
-
+-- INSERT FORMAZIONI
 INSERT INTO formazioni (codArtista, codSquadra, nomeSerata, ruolo, dataModifica) VALUES (4, 1, 'Prima Serata', 'CAPITANO', '2025-02-11 12:00:00');
 INSERT INTO formazioni (codArtista, codSquadra, nomeSerata, ruolo, dataModifica) VALUES (10, 1, 'Prima Serata', 'TITOLARE','2025-02-11 12:00:00');
 INSERT INTO formazioni (codArtista, codSquadra, nomeSerata, ruolo, dataModifica) VALUES (6, 1, 'Prima Serata', 'TITOLARE', '2025-02-11 12:00:00');
@@ -436,7 +439,7 @@ INSERT INTO partecipazione_leghe (codSquadra, codLega, statoApprovazione) VALUES
 INSERT INTO partecipazione_leghe (codSquadra, codLega, statoApprovazione) VALUES (14, 3, 'APPROVATA');
 INSERT INTO partecipazione_leghe (codSquadra, codLega, statoApprovazione) VALUES (15, 3, 'APPROVATA');
 
-
+-- INSERT BONUS_ASSEGNATI
 INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 4, 'Prima Serata', 10, -5);
 INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 4, 'Prima Serata', 9, -5);
 INSERT INTO bonus_assegnati (codSquadra, codArtista, nomeSerata, codBonusMalus, valoreEffettivo) VALUES (1, 10, 'Prima Serata', 6, -10);
@@ -570,11 +573,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-/*************************************************************************************************************************************************************************/ -- NON VA BENE
+/*************************************************************************************************************************************************************************/
 /* 4b: calcolo di un'informazione derivata rilevante e non banale, che richieda l'accesso a diverse tabelle e un'aggregazione */
 /* Calcolo del punteggio totale ottenuto da ogni squadra in una specifica serata */
-
-CREATE OR REPLACE FUNCTION fantasanremo.punteggio_squadre_per_serata(p_nomeSerata VARCHAR)
+CREATE OR REPLACE FUNCTION punteggio_squadre_per_serata(p_nomeSerata VARCHAR)
 RETURNS TABLE (
     codSquadra INTEGER,
     nomeSquadra VARCHAR,
@@ -668,7 +670,7 @@ EXECUTE FUNCTION check_formazione_regole();
 
 
 /*************************************************************************************************************************************************************************/
-/* 5b: trigger per il mantenimento di informazione derivata o per l'implementazione di una regola di dominio*/                                                                          
+/* 5b: trigger per il mantenimento di informazione derivata o per l'implementazione di una regola di dominio*/
 /* Questo trigger si attiva prima di ogni inserimento nella tabella partecipazione_leghe. Se il campo statoApprovazione non viene valorizzato esplicitamente, il sistema lo imposta automaticamente in base al tipo di lega:
 	- Se la lega Ë di tipo PUBBLICA, la partecipazione Ë approvata automaticamente (APPROVATA)
 	- Se la lega Ë di tipo PRIVATA o SEGRETA, la partecipazione entra in fase di approvazione (IN_APPROVAZIONE)*/ 

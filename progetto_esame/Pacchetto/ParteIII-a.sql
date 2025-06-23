@@ -3,7 +3,6 @@
 --- Alessio Molinas 5339413
 --- Ettore Romano 5644926
 
-
 --- PARTE III 
 /*************************************************************************************************************************************************************************/ 
 --1b. Schema per popolamento in the large
@@ -57,10 +56,8 @@ WHERE l.nome = 'Anthony';
 /*************************************************************************************************************************************************************************/
 --1e. Schema fisico
 /*************************************************************************************************************************************************************************/ 
-/* inserire qui i comandi SQL per cancellare tutti gli indici già esistenti per le tabelle coinvolte nel carico di lavoro */
----Sulle tabelle "_cl" non sono presenti indici da cancellare in quanto non copiati durante la creazione delle stesse
+--- Sulle tabelle "_cl" non sono presenti indici da cancellare in quanto non copiati durante la creazione delle stesse
 
-/* inserire qui i comandi SQL per la creazione dello schema fisico della base di dati in accordo al risultato della fase di progettazione fisica per il carico di lavoro. */
 --- artisti
 CREATE INDEX idx_artisti_cl_nome_datanascita
 ON artisti_cl (nome, dataNascita);
@@ -72,10 +69,6 @@ ON leghe_cl (nome);
 /*************************************************************************************************************************************************************************/ 
 --2. Controllo dell'accesso 
 /*************************************************************************************************************************************************************************/ 
-
-/* inserire qui i comandi SQL per la definizione della politica di controllo dell'accesso della base di dati  (definizione ruoli, gerarchia, definizione utenti, assegnazione privilegi) in modo che, dopo l'esecuzione di questi comandi, 
-le operazioni corrispondenti ai privilegi delegati ai ruoli e agli utenti sia correttamente eseguibili. */
-
 /*
 	Gerarchia presa in considerazione: Amministratore Fanta > Amministratore Lega > Proprietario Lega > Utente Semplice
 */
@@ -131,14 +124,11 @@ GRANT SELECT ON TABLE contributi_brani TO proprietario_lega;
 GRANT SELECT ON TABLE esibizioni TO proprietario_lega;
 GRANT SELECT ON TABLE serate TO proprietario_lega;
 GRANT SELECT ON TABLE voti TO proprietario_lega;
-
 GRANT SELECT ON TABLE bonus_assegnati TO proprietario_lega;
 GRANT SELECT ON TABLE bonus_malus TO proprietario_lega;
-
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE formazioni TO proprietario_lega;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE partecipazione_leghe TO proprietario_lega;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE squadre TO proprietario_lega;
-
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE leghe TO proprietario_lega;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE gestione_leghe TO proprietario_lega;
 
@@ -149,19 +139,14 @@ GRANT SELECT ON TABLE contributi_brani TO admin_lega;
 GRANT SELECT ON TABLE esibizioni TO admin_lega;
 GRANT SELECT ON TABLE serate TO admin_lega;
 GRANT SELECT ON TABLE voti TO admin_lega;
-
 GRANT SELECT ON TABLE bonus_assegnati TO admin_lega;
 GRANT SELECT ON TABLE bonus_malus TO admin_lega;
-
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE formazioni TO admin_lega;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE partecipazione_leghe TO admin_lega;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE squadre TO admin_lega;
-
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE leghe TO admin_lega;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE gestione_leghe TO admin_lega;
-
 GRANT SELECT ON TABLE utenti TO admin_lega;
-
 
 -- Grants per utente_semplice
 GRANT SELECT ON artisti TO utente_semplice;

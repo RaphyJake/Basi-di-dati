@@ -8,9 +8,6 @@
 /*************************************************************************************************************************************************************************/ 
 --1f. Popolamento in the large
 /*************************************************************************************************************************************************************************/ 
-
-
-/* inserire qui i comandi SQL per il popolamento 'in the large' delle relazioni coinvolte nel carico di lavoro  */
 INSERT INTO "fantasanremo"."squadre_cl" ("codsquadra","nome","username") VALUES (1,'Sheridan Systems','PeterSlemp@mobileme.it');
 INSERT INTO "fantasanremo"."squadre_cl" ("codsquadra","nome","username") VALUES (2,'Bank Labouchere','P.Bloom3@excite.net');
 INSERT INTO "fantasanremo"."squadre_cl" ("codsquadra","nome","username") VALUES (3,'Heineken','Hank.Ratliff2@mail.fr');
