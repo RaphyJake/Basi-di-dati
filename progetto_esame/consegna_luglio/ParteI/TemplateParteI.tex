@@ -129,17 +129,19 @@ Come scelta implementativa abbiamo deciso di rappresentare nel database "il grup
 \end{center}
 
 \subsection{Domini degli Attributi}
-[eventuali modifiche dei domini degli attributi e informazioni sui domini di eventuali attributi introdotti]
+%[eventuali modifiche dei domini degli attributi e informazioni sui domini di eventuali attributi introdotti]
 \begin{itemize}
-	\item \textbf{(tipo, artisti)} = tipo\_artista
+	\item \textbf{(tipo, ARTISTI)} = tipo\_artista
 	\begin{itemize}
 		\item tipo\_artista = \{CANTANTE\}
 	\end{itemize}
-	\item \textbf{(tipo, art\_brani)} = ruolo\_artista
+	\item \textbf{(tipo, CONTRIBUTI\_BRANI)} = ruolo\_artista
 	\begin{itemize}
 		\item ruolo\_artista = \{COMPOSITORE, DIRETTORE, SCRITTORE\}
 	\end{itemize}
 \end{itemize}
+
+Per quanto riguarda i campi multi-valore è stato deciso di renderli un campo unico ed utilizzare la "," come carattere separatore (gestione lato software sapendo che verranno utilizzati di rado).
 
 
 \subsection{Vincoli}
