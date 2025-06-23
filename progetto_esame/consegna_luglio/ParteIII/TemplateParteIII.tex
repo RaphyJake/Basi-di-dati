@@ -73,19 +73,15 @@ WHERE nome = 'Ana' AND dataNascita >= DATE '1992-01-01';
 
 
 \subsection{1D-PROGETTO FISICO\\}
-
-\todo[inline]{Riportare nella seguente tabella l’elenco degli indici che si intendono creare per: (1) ciascuna query del carico di lavoro individualmente; (2) l’insieme delle query del carico di lavoro, motivando opportunamente, in modo sintetico, le scelte effettuate}
-
-
 \begin{center}
 \begin{footnotesize}
 \begin{tabular}{|c|c|p{2cm}|p{2cm}|p{5cm}|}
 \hline
 {\bf Id query} & {\bf Relazione} & \parbox{2cm}{\bf Chiave di ricerca} & \parbox{2cm}{\bf Tipo (ordinato/hash, clusterizzato/non clusterizzato)} & \parbox{5cm}{\bf Motivazione} \\
 \hline
-Q1 & artisti & nome & ordinato e clusterizzato &  Visto il numero frequente di query sull'attributo nome (non UNIQUE) potrei optare per la clusterizzazione\\
-Q2 & artisti & nome, dataNascita & ordinato e clusterizzato & Devo escludere indice hash perchè è prevista ricerca per range sulla data nascita. Opterei per un indice composto per facilitare sia la query precedente che quella corrente\\
-Q3 & leghe, partecipazione\_leghe, squadre & leghe.nome & ordinato & Oltre all'indice su leghe.nome, introdurrei degli indici sulle chiavi utilizzate per eseguire le join. Questi permettono di utilizzare algoritmi di join come l'indexed nested loop.\\
+Q1 & artisti & nome & ordinato e clusterizzato & Considerato l'elevato numero di query che filtrano  risultati in base all'’attributo nome, e considerato che tale attributo non è UNIQUE, si è optato per la clusterizzazione.\\
+Q2 & artisti & nome, dataNascita & ordinato e clusterizzato & Poiché le query coinvolgono ricerche per range sulla data di nascita, si esclude l’utilizzo di un indice hash. Si è quindi optato per un indice composto su nome e dataNascita, in modo da ottimizzare sia le ricerche puntuali sul nome che quelle basate su intervalli temporali. Questa scelta consente di migliorare le performance complessive delle interrogazioni più frequenti.\\
+Q3 & leghe, partecipazione\_leghe, squadre & leghe.nome & ordinato & Oltre all'indice sull'attributo leghe.nome, si propone l'introduzione di indici sugli attributi chiave utilizzati nelle operazioni di join. Questa scelta consente al motore di ottimizzazione delle query di sfruttare algoritmi più efficienti, come l'indexed nested loop join, migliorando così le performance complessive delle interrogazioni che coinvolgono più tabelle."\\
 \hline
 \end{tabular}
 \end{footnotesize}
@@ -95,17 +91,17 @@ Q3 & leghe, partecipazione\_leghe, squadre & leghe.nome & ordinato & Oltre all'i
 
 \begin{center}
 \begin{footnotesize}
-\begin{tabular}{|p{6.5cm}|p{6.5cm}|}
+\begin{tabular}{|p{8.1cm}|p{8.1cm}|}
 \hline
-\parbox{5cm}{\bf Schema fisico complessivo per il carico di lavoro} &  \parbox{5cm}{\bf Motivazione} \\
+{\bf Schema fisico complessivo per il carico di lavoro} & {\bf Motivazione} \\
 \hline
-- indice ordinato e clusterizzato su (nome, dataNascita), tabella artisti& Ricerca per nome con uguaglianza e dataNascita per range (anche per ricerca attraverso solo per nome) \\
+- indice ordinato e clusterizzato su (nome, dataNascita), tabella artisti& Le query più frequenti prevedono la ricerca per uguaglianza sull'attributo nome e per intervallo su dataNascita, ma sono comuni anche interrogazioni basate esclusivamente sul nome. Per questo motivo, si è scelto di creare un indice composto su (nome, dataNascita), che ottimizza entrambe le tipologie di ricerca\\
 - indice ordinato su nome, tabella leghe& Ricerca per nome\\
 \hline
 \end{tabular}
 \end{footnotesize}
 \end{center}
-
+\newpage
 \subsection{1G-ANALISI PIANI DI ESECUZIONE SCELTI DAL SISTEMA\\}
 
 
@@ -113,25 +109,23 @@ Q3 & leghe, partecipazione\_leghe, squadre & leghe.nome & ordinato & Oltre all'i
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA PRIMA DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{Seq Scan on artisti\_cl as artisti\_cl Filter: ((nome)::text = 'Ana'::text)}
+\todo[inline]{Seq Scan on artisti\_cl as artisti\_cl \\
+	Filter: ((nome)::text = 'Ana'::text)}
 
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA DOPO DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{Index Scan using idx\_artisti\_cl\_nome\_datanascita on artisti\_cl as artisti\_cl Index Cond: ((nome)::text = 'Ana'::text)}
+\todo[inline]{Index Scan using idx\_artisti\_cl\_nome\_datanascita on artisti\_cl as artisti\_cl \\
+	Index Cond: ((nome)::text = 'Ana'::text)}
 
 \paragraph*{CONFRONTO TRA I DUE PIANI\\}
-
-\todo[inline]{Riportare nella seguente tabella i tempi di esecuzione per i piani ottenuti prima e dopo la creazione dello schema fisico complessivo, giustificando i piani e i tempi ottenuti}
-
-
 \begin{center}
 \begin{footnotesize}
 \begin{tabular}{|p{3cm}|p{3cm}|p{7cm}|}
 \hline
 \parbox{3cm}{\bf Tempo esecuzione PRIMA} & \parbox{3cm}{\bf Tempo esecuzione DOPO} &  \parbox{7cm}{\bf Motivazione} \\
 \hline
-00:00:00.153 & 00:00:00.054 & Viene utilizzato l'indice composto per la ricerca per nome (senza eseguire confronti sulla data)  \\
+00:00:00.153 & 00:00:00.054 & Anche nel caso in cui la query effettui una ricerca solo sull'attributo nome, senza condizioni su dataNascita, l'indice composto (nome, dataNascita) risulta comunque efficace. Questo perché il motore può sfruttare la parte iniziale dell'indice per ottimizzare le interrogazioni basate esclusivamente su nome\\
 \hline
 \end{tabular}
 \end{footnotesize}
@@ -141,26 +135,22 @@ Q3 & leghe, partecipazione\_leghe, squadre & leghe.nome & ordinato & Oltre all'i
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA PRIMA DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{Seq Scan on artisti\_cl as artisti\_cl
+\todo[inline]{Seq Scan on artisti\_cl as artisti\_cl \\
 	Filter: ((datanascita  $\geq$ '1992-01-01'::date) AND ((nome)::text = 'Ana'::text))}
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA DOPO DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{Index Scan using idx\_artisti\_cl\_nome\_datanascita on artisti\_cl as artisti\_cl
+\todo[inline]{Index Scan using idx\_artisti\_cl\_nome\_datanascita on artisti\_cl as artisti\_cl \\
  Index Cond: (((nome)::text = 'Ana'::text) AND (datanascita $\geq$ '1992-01-01'::date))}
 
 \paragraph*{CONFRONTO TRA I DUE PIANI\\}
-
-\todo[inline]{Riportare nella seguente tabella i tempi di esecuzione per i piani ottenuti prima e dopo la creazione dello schema fisico complessivo, giustificando i piani e i tempi ottenuti}
-
-
 \begin{center}
 \begin{footnotesize}
 \begin{tabular}{|p{3cm}|p{3cm}|p{7cm}|}
 \hline
 \parbox{3cm}{\bf Tempo esecuzione PRIMA} & \parbox{3cm}{\bf Tempo esecuzione DOPO} &  \parbox{7cm}{\bf Motivazione} \\
 \hline
-00:00:00.079 & 00:00:00.052 & Viene utilizzato l'indice composto per ricerca con nome uguale ad un valore e data con un range \\
+00:00:00.079 & 00:00:00.052 & L'indice composto su (nome, dataNascita) viene utilizzato efficacemente nelle query che filtrano per uguaglianza sul nome e per intervallo su dataNascita. Questa combinazione consente al motore di sfruttare appieno la struttura dell'indice, migliorando  le performance\\
 \hline
 \end{tabular}
 \end{footnotesize}
@@ -172,41 +162,35 @@ Q3 & leghe, partecipazione\_leghe, squadre & leghe.nome & ordinato & Oltre all'i
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA PRIMA DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{
-	- Hash Inner Join \\
-	- Hash Cond: (s.codsquadra = pl.codsquadra) \\
-	- Seq Scan on squadre\_cl as s \\
-	- Hash \\
-	- Hash Inner Join \\
-	- Hash Cond: (pl.codlega = l.codlega) \\
-	- Seq Scan on partecipazione\_leghe\_cl as pl \\
-	- Hash \\
-	- Seq Scan on leghe\_cl as l \\
-	- Filter: ((nome)::text = 'Anthony'::text) \\
+\todo[inline]{Hash Inner Join \\
+	Hash Cond: (s.codsquadra = pl.codsquadra) \\
+	Seq Scan on squadre\_cl as s \\
+	Hash \\
+	Hash Inner Join \\
+	Hash Cond: (pl.codlega = l.codlega) \\
+	Seq Scan on partecipazione\_leghe\_cl as pl \\
+	Hash \\
+	Seq Scan on leghe\_cl as l \\
+	Filter: ((nome)::text = 'Anthony'::text) \\
 	}
 
 \paragraph*{PIANO DI ESECUZIONE SCELTO DAL SISTEMA DOPO DELLA CREAZIONE DELLO SCHEMA FISICO\\}
 
-\todo[inline]{
-	- Hash Inner Join \\
-	- Hash Cond: (s.codsquadra = pl.codsquadra) \\
-	- Seq Scan on squadre\_cl as s \\
-	- Hash \\
-	- Hash Inner Join \\
-	- Hash Cond: (pl.codlega = l.codlega) \\
-	- Seq Scan on partecipazione\_leghe\_cl as pl \\
-	- Hash \\
-	- Bitmap Heap Scan on leghe\_cl as l \\
-	- Recheck Cond: ((nome)::text = 'Anthony'::text) \\
-	- Bitmap Index Scan using idx\_leghe\_cl\_nome \\
-	- Index Cond: ((nome)::text = 'Anthony'::text) \\
+\todo[inline]{Hash Inner Join \\
+	Hash Cond: (s.codsquadra = pl.codsquadra) \\
+	Seq Scan on squadre\_cl as s \\
+	Hash \\
+	Hash Inner Join \\
+	Hash Cond: (pl.codlega = l.codlega) \\
+	Seq Scan on partecipazione\_leghe\_cl as pl \\
+	Hash \\
+	Bitmap Heap Scan on leghe\_cl as l \\
+	Recheck Cond: ((nome)::text = 'Anthony'::text) \\
+	Bitmap Index Scan using idx\_leghe\_cl\_nome \\
+	Index Cond: ((nome)::text = 'Anthony'::text) \\
 }
 
 \paragraph*{CONFRONTO TRA I DUE PIANI\\}
-
-\todo[inline]{Riportare nella seguente tabella i tempi di esecuzione per i piani ottenuti prima e dopo la creazione dello schema fisico complessivo, giustificando i piani e i tempi ottenuti}
-
-
 \begin{center}
 \begin{footnotesize}
 \begin{tabular}{|p{3cm}|p{3cm}|p{7cm}|}
@@ -228,16 +212,12 @@ Q3 & leghe, partecipazione\_leghe, squadre & leghe.nome & ordinato & Oltre all'i
 \subsection{GERARCHIA TRA I RUOLI \\}
 
 \subsubsection{GERARCHIA\\}
-
-\todo[inline]{Riportare in questa sezione la gerarchia che si intende definire tra i quattro ruoli}
 La gerarchia scelta è la seguente:
 \[
 \texttt{admin\_fanta} \rightarrow \texttt{admin\_lega} \rightarrow \texttt{proprietario\_lega} \rightarrow \texttt{utente\_semplice}
 \]
 
 \subsubsection{MOTIVAZIONE GERARCHIA}
-
-\todo[inline]{Riportare in questa sezione una motivazione per la gerarchia proposta}
 \subsection*{Gerarchia dei ruoli e motivazioni}
 
 La gerarchia dei ruoli nel sistema FantaSanremo è stata progettata seguendo i principi del \textbf{minimo privilegio} e della \textbf{modularità dei compiti}. La struttura gerarchica è la seguente:
@@ -279,42 +259,6 @@ Questa gerarchia consente di:
 
 
 \subsection{ASSEGNAZIONE PRIVILEGI SPECIFICI AI RUOLI}
-
-\begin{center}
-	\begin{footnotesize}
-		\begin{tabular}{|c|p{2.7cm}|p{2.7cm}|p{2.7cm}|p{2.7cm}|}
-			\hline
-			{\bf Relazione} & \parbox{2.7cm}{\bf Amministratore del FantaSanremo} & \parbox{2.7cm}{\bf Utente semplice} &  \parbox{2.7cm}{\bf Amministratore lega} & \parbox{2.7cm}{\bf Proprietario lega} \\
-			\hline
-			\texttt{artisti} & ALL PRIVILEGES & SELECT & SELECT & SELECT \\
-			\hline
-			\texttt{leghe} & ALL PRIVILEGES & - & INSERT, SELECT, UPDATE & INSERT, SELECT \\
-			\hline
-			\texttt{partecipazione\_leghe} & ALL PRIVILEGES & INSERT, SELECT & INSERT, SELECT, UPDATE & INSERT, SELECT \\
-			\hline
-			\texttt{squadre} & ALL PRIVILEGES & INSERT, SELECT & SELECT, UPDATE & INSERT, SELECT \\
-			\hline
-			\texttt{utenti} & ALL PRIVILEGES & SELECT ON SELF & - & - \\
-			\hline
-			\texttt{serate} & ALL PRIVILEGES & - & - & SELECT \\
-			\hline
-			\texttt{brani} & ALL PRIVILEGES & - & - & SELECT \\
-			\hline
-			\texttt{formazioni} & ALL PRIVILEGES & - & - & - \\
-			\hline
-			\texttt{gestione\_leghe} & ALL PRIVILEGES & SELECT, INSERT, UPDATE, DELETE & SELECT & - \\
-			\hline
-			\texttt{bonus\_assegnati} & ALL PRIVILEGES & - & - & - \\
-			\hline
-			\texttt{esibizioni} & ALL PRIVILEGES & - & - & - \\
-			\hline
-			\texttt{voti} & ALL PRIVILEGES & - & - & - \\
-			\hline
-			\texttt{contributi\_brani} & ALL PRIVILEGES & - & - & - \\
-			\hline
-		\end{tabular}
-	\end{footnotesize}
-\end{center}
 
 \begin{center}
 	\begin{footnotesize}
